@@ -36,7 +36,6 @@ class SignUp extends Component {
     const userObject = { name, email, password };
     console.log(`${name} signed up`);
     this.props.signUpUser(userObject, this.props.history);
-//    this.props.history.push('/home');
   }
   render() {
     return (
