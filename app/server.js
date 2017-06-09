@@ -2,6 +2,15 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import path from 'path';
+import mongoose from 'mongoose';
+import apiRouter from './router';
+
+// DB Setup
+const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/quantiteam';
+mongoose.connect(mongoURI);
+
+// set mongoose promises to es6 default
+mongoose.Promise = global.Promise;
 
 // initialize
 const app = express();
@@ -19,10 +28,12 @@ app.set('views', path.join(__dirname, '../app/views'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// prefix all routes with '/api'
+app.use('/api', apiRouter);
 
 // default index route
 app.get('/', (req, res) => {
-  res.send('hi');
+  res.send('This is the Quantiteam API');
 });
 
 // START THE SERVER
