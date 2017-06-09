@@ -3,7 +3,7 @@ import LocalStrategy from 'passport-local';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import User from '../models/user-model';
 
-const localOptions = { userNameField: 'email' };
+const localOptions = { usernameField: 'email' };
 
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromHeader('authorization'),

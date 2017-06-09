@@ -1,23 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { signUpUser } from '../actions';
+import { signInUser } from '../actions';
 
-class SignUp extends Component {
+class SignIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
       email: '',
       password: '',
     };
-    this.onNameChange = this.onNameChange.bind(this);
     this.onEmailChange = this.onEmailChange.bind(this);
     this.onPasswordChange = this.onPasswordChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-  }
-  onNameChange(event) {
-    this.setState({ name: event.target.value });
   }
   onEmailChange(event) {
     this.setState({ email: event.target.value });
@@ -26,29 +21,22 @@ class SignUp extends Component {
     this.setState({ password: event.target.value });
   }
   onSubmit(event) {
-    console.log('Sign up request submitted');
+    console.log('Sign in request submitted');
     event.preventDefault();
-    event.stopPropagation();
+//    event.stopPropagation();
 
-    const name = this.state.name;
     const email = this.state.email;
     const password = this.state.password;
 
-    const userObject = { name, email, password };
-    this.props.signUpUser(userObject, this.props.history);
+    const userObject = { email, password };
+    this.props.signInUser(userObject, this.props.history);
   }
   render() {
     return (
       <div>
-        <form className="signup-form" onSubmit={this.onSubmit}>
-          <h2>Sign Up</h2>
-          <div id="name-field">
-            <h3>Name</h3>
-            <input onChange={this.onNameChange} value={this.state.name}
-              type="text" required
-            />
-          </div>
-          <div className="email-field">
+        <form className="signin-form" onSubmit={this.onSubmit}>
+          <h2>Sign In</h2>
+          <div id="email-field">
             <h3>Email</h3>
             <input onChange={this.onEmailChange} value={this.state.email}
               type="text" required
@@ -60,11 +48,11 @@ class SignUp extends Component {
               type="text" required
             />
           </div>
-          <button type="submit" className="signup-button">Sign Up</button>
+          <button type="submit" className="signin-button">Sign In</button>
         </form>
       </div>
     );
   }
 }
 
-export default withRouter(connect(null, { signUpUser })(SignUp));
+export default withRouter(connect(null, { signInUser })(SignIn));

@@ -3,33 +3,32 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { fetchUser } from '../actions';
 
-
 const mapStateToProps = state => (
   {
     user: state.profile.user,
   }
 );
 
-class HomePage extends Component {
+class Profile extends Component {
   constructor(props) {
     super(props);
-    this.displayFeed = this.displayFeed.bind(this);
+    this.displayInfo = this.displayInfo.bind(this);
   }
   componentDidMount() {
     this.props.fetchUser(this.props.match.params.userId);
   }
-  displayFeed() {
+  displayInfo() {
     return (
-      <div>This is the workout feed for {this.props.user.name}.</div>
+      <div> This is the profile for {this.props.user.name}.</div>
     );
   }
   render() {
     return (
       <div>
-        This is the homepage.
+        This is the profile page.
       </div>
     );
   }
 }
 
-export default withRouter(connect(mapStateToProps, { fetchUser })(HomePage));
+export default withRouter(connect(mapStateToProps, { fetchUser })(Profile));

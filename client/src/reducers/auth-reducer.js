@@ -21,7 +21,8 @@ const AuthReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         authenticated: false,
       });
-    default: return state;
+    default:
+      return state;
   }
 };
 
