@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { signUpUser } from '../actions';
 
 class SignUp extends Component {
   constructor(props) {
@@ -27,8 +30,13 @@ class SignUp extends Component {
     event.stopPropagation();
 
     const name = this.state.name;
+    const email = this.state.email;
+    const password = this.state.password;
+
+    const userObject = { name, email, password };
     console.log(`${name} signed up`);
-    this.props.history.push('/');
+    this.props.signUpUser(userObject, this.props.history);
+//    this.props.history.push('/home');
   }
   render() {
     return (
@@ -60,4 +68,4 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp;
+export default withRouter(connect(null, { signUpUser })(SignUp));
