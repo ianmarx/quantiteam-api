@@ -13,4 +13,4 @@ Quantiteam uses these web tools:
 * Express
 
 ## Acknowledgements
-The API server was built on top of an Express starterpack provided by Tim Trebugov to CS 52 students at Dartmouth College. It shares a lot of its design with the backend for Dartmouth Roomate Finder, the final project group I was in for CS 52.
+The backend was built on top of an [Express starterpack](https://github.com/dartmouth-cs52/express-babel-starter) from Dartmouth College's CS52 class. It shares much of its initial design with the backend for Dartmouth Roomate Finder, a CS52 final project that Ian Marx worked on.
