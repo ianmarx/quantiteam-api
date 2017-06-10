@@ -29,13 +29,13 @@
           0,
           "DebuggerStatement"
         ],
-        "no-debugger": "warn"
+        "no-debugger": "warn",
     },
     "plugins": [
         "react"
     ],
     "ecmaFeatures": {
         "jsx": true,
-        "modules": true
+        "modules": true,
     }
 }

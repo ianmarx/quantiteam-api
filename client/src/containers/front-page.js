@@ -1,10 +1,23 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+
+const mapStateToProps = state => (
+  {
+    authenticated: state.auth.authenticated,
+  }
+);
 
 class FrontPage extends Component {
   constructor(props) {
     super(props);
     this.onSignUpClick = this.onSignUpClick.bind(this);
     this.onSignInClick = this.onSignInClick.bind(this);
+  }
+  componentWillMount() {
+    if (this.props.authenticated) {
+      this.props.history.push(`/home/${localStorage.getItem('userId')}`);
+    }
   }
   onSignUpClick() {
     this.props.history.push('/signup');
@@ -29,4 +42,4 @@ class FrontPage extends Component {
   }
 }
 
-export default FrontPage;
+export default withRouter(connect(mapStateToProps, null)(FrontPage));

@@ -7,6 +7,7 @@ import { fetchUser } from '../actions';
 const mapStateToProps = state => (
   {
     user: state.profile.user,
+    authenticated: state.auth.authenticated,
   }
 );
 
