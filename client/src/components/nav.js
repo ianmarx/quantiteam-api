@@ -27,13 +27,8 @@ class Nav extends Component {
       return (
         <ul className="navigation">
           <li id="logo">
-            <NavLink to="/">
-              <i className="fa fa-heartbeat" aria-hidden="true" />
-            </NavLink>
-          </li>
-          <li>
             <NavLink to={`/home/${localStorage.getItem('userId')}`}>
-              <div id="home" className="nav-button">Home</div>
+              <i className="fa fa-home" aria-hidden="true" />
             </NavLink>
           </li>
           <li>
@@ -53,7 +48,7 @@ class Nav extends Component {
         <ul className="navigation">
           <li id="logo">
             <NavLink to="/">
-              <i className="fa fa-heartbeat" aria-hidden="true" />
+              <i className="fa fa-home" aria-hidden="true" />
             </NavLink>
           </li>
           <li>

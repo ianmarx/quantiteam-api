@@ -6,6 +6,7 @@ import { fetchUser } from '../actions';
 const mapStateToProps = state => (
   {
     user: state.profile.user,
+    authenticated: state.auth.authenticated,
   }
 );
 
@@ -13,6 +14,12 @@ class Profile extends Component {
   constructor(props) {
     super(props);
     this.displayInfo = this.displayInfo.bind(this);
+  }
+  componentWillMount() {
+    if (!this.props.authenticated) {
+      console.log('should redirect to signin');
+      this.props.history.replace('/signin');
+    }
   }
   componentDidMount() {
     this.props.fetchUser(this.props.match.params.userId);
