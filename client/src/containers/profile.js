@@ -31,7 +31,7 @@ class Profile extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="active">
         This is the profile page.
       </div>
     );

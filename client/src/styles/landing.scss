@@ -1,0 +1,59 @@
+body {
+  background: url("/img/rowing.png") no-repeat center center fixed;
+  background-size: cover;
+}
+
+.site-welcome {
+  position: absolute;
+  top: 200px;
+  right: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+
+  .tagline {
+    color: white;
+    margin: 25px;
+    font-size: 42px;
+    display: flex;
+    justify-content: left;
+    background-color: rgba(50,50,50,0.4);
+    background-repeat: no-repeat;
+    border-style: none;
+    border-radius: 10px;
+    padding: 5px;
+  }
+  .button-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+
+    #signup-button {
+      border: none;
+      border-radius: 8px;
+      padding: 5px;
+      font-size: 35px;
+      background-color: #1da55f;
+      color: white;
+      margin: 10px;
+      width: 350px;
+    }
+  }
+}
+
+@media only screen and (max-width: 1229px) {
+  .site-welcome {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+
+    .tagline {
+      background-color: rgba(50,50,50,0.5);
+    }
+  }
+}

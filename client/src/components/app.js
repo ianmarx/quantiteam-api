@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Nav from './nav';
 import PrivateRoute from './private-route';
-import FrontPage from '../containers/front-page';
+import LandingPage from '../containers/landing-page';
 import SignUp from '../containers/sign-up';
 import SignIn from '../containers/sign-in';
 import HomePage from '../containers/home-page';
@@ -22,12 +22,12 @@ const App = (props) => {
       <div>
         <Nav />
         <Switch>
-          <Route exact path="/" component={FrontPage} />
+          <Route exact path="/" component={LandingPage} />
           <Route path="/signup" component={SignUp} />
           <Route path="/signin" component={SignIn} />
           <PrivateRoute path="/home/:userId" component={HomePage} isAuthenticated={props.authenticated} />
           <PrivateRoute path="/profile/:userId" component={Profile} isAuthenticated={props.authenticated} />
-          <Route render={() => (<FrontPage />)} />
+          <Route render={() => (<div>Page not found.</div>)} />
         </Switch>
       </div>
     </Router>

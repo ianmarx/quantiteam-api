@@ -26,39 +26,39 @@ class Nav extends Component {
     if (this.props.authenticated) {
       return (
         <ul className="navigation">
-          <li id="logo">
+          <li>
             <NavLink to={`/home/${localStorage.getItem('userId')}`}>
-              <i className="fa fa-home" aria-hidden="true" />
+              <div id="home-button" className="nav-button">Home</div>
             </NavLink>
           </li>
           <li>
             <NavLink to={`/profile/${localStorage.getItem('userId')}`}>
-              <div id="profile" className="nav-button">Profile</div>
+              <div id="profile-button" className="nav-button">Profile</div>
             </NavLink>
           </li>
           <li>
-            <button id="sign-out-button" onClick={this.signOut} className="nav-button">
-              Sign out
-            </button>
+            <div id="signout-button" onClick={this.signOut} className="nav-button">
+              Sign Out
+            </div>
           </li>
         </ul>
       );
     } else {
       return (
         <ul className="navigation">
-          <li id="logo">
+          <li>
             <NavLink to="/">
-              <i className="fa fa-home" aria-hidden="true" />
+              <div id="home-button" className="nav-button">Home</div>
             </NavLink>
           </li>
           <li>
             <NavLink to="/signin">
-              <div id="signin" className="nav-button">Sign In</div>
+              <div id="signin-button" className="nav-button">Sign In</div>
             </NavLink>
           </li>
           <li>
             <NavLink to="/signup">
-              <div id="signup" className="nav-button">Sign Up</div>
+              <div id="signup-button" className="nav-button">Sign Up</div>
             </NavLink>
           </li>
         </ul>
