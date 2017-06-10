@@ -47,7 +47,7 @@ class Nav extends Component {
       return (
         <ul className="navigation">
           <li>
-            <NavLink to="/">
+            <NavLink to={'/'}>
               <div id="home-button" className="nav-button">Home</div>
             </NavLink>
           </li>

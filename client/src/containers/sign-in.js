@@ -23,7 +23,6 @@ class SignIn extends Component {
   onSubmit(event) {
     console.log('Sign in request submitted');
     event.preventDefault();
-//    event.stopPropagation();
 
     const email = this.state.email;
     const password = this.state.password;
@@ -33,8 +32,8 @@ class SignIn extends Component {
   }
   render() {
     return (
-      <div>
-        <form className="signin-form" onSubmit={this.onSubmit}>
+      <div className="signin-form">
+        <form onSubmit={this.onSubmit}>
           <h2>Sign In</h2>
           <div id="email-field">
             <h3>Email</h3>
@@ -45,7 +44,7 @@ class SignIn extends Component {
           <div className="password-field">
             <h3>Password</h3>
             <input onChange={this.onPasswordChange} value={this.state.password}
-              type="text" required
+              type="password" required
             />
           </div>
           <button type="submit" className="signin-button">Sign In</button>

@@ -39,8 +39,8 @@ class SignUp extends Component {
   }
   render() {
     return (
-      <div>
-        <form className="signup-form" onSubmit={this.onSubmit}>
+      <div className="signup-form">
+        <form onSubmit={this.onSubmit}>
           <h2>Sign Up</h2>
           <div id="name-field">
             <h3>Name</h3>
@@ -57,7 +57,7 @@ class SignUp extends Component {
           <div className="password-field">
             <h3>Password</h3>
             <input onChange={this.onPasswordChange} value={this.state.password}
-              type="text" required
+              type="password" required
             />
           </div>
           <button type="submit" className="signup-button">Sign Up</button>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 
 const mapStateToProps = state => (
   {
@@ -29,10 +29,13 @@ class LandingPage extends Component {
     return (
       <div className="site-welcome">
         <div className="tagline">
-          Make your training records work for you.
+          Make your workouts work for you.
         </div>
         <div className="button-group">
           <button id="signup-button" onClick={this.onSignUpClick}>Join Quantiteam</button>
+        </div>
+        <div className="already-user">
+          Already a user? <NavLink to="/signin">Sign in here.</NavLink>
         </div>
       </div>
     );
