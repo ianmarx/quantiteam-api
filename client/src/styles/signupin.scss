@@ -44,3 +44,14 @@
     }
   }
 }
+
+@media only screen and (max-width: 1000px) {
+  .signup-form, form, .signin-form {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 60px;
+  }
+}
