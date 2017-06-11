@@ -20,8 +20,6 @@ class Profile extends Component {
       console.log('should redirect to signin');
       this.props.history.replace('/signin');
     }
-  }
-  componentDidMount() {
     this.props.fetchUser(this.props.match.params.userId);
   }
   displayInfo() {
@@ -31,8 +29,8 @@ class Profile extends Component {
   }
   render() {
     return (
-      <div className="active">
-        This is the profile page.
+      <div>
+        {this.displayInfo()}
       </div>
     );
   }

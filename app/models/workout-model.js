@@ -29,13 +29,23 @@ WorkoutSchema.pre('save', function timeToString(next) {
   const remainder = workout.time % 3600;
   const minutes = Math.floor(remainder / 60);
   const seconds = remainder % 60;
-  const dec = seconds % 1;
+  let dec = seconds % 1;
+
+  if (dec === 0) {
+    dec = '.0';
+  } else {
+    dec = '';
+  }
 
   /* format string representation of workout time */
   if (hours === 0) {
-    workout.timeString = `${minutes}:${seconds}.${dec}`;
+    if (seconds < 10) {
+      workout.timeString = `${minutes}:0${seconds}${dec}`;
+    } else {
+      workout.timeString = `${minutes}:${seconds}${dec}`;
+    }
   } else {
-    workout.timeString = `${hours}:${minutes}:${seconds}.${dec}`;
+    workout.timeString = `${hours}:${minutes}:${seconds}${dec}`;
   }
   next();
 });

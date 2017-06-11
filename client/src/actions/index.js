@@ -7,7 +7,7 @@ export const ActionTypes = {
   DEAUTH_USER: 'DEAUTH_USER',
   AUTH_ERROR: 'AUTH_ERROR',
   FETCH_USER: 'FETCH_USER',
-  FETCH_WORKOUTS: 'FETCH_WORKOUTS',
+  FETCH_WORKOUT: 'FETCH_WORKOUT',
 };
 
 export function authError(error) {
@@ -85,6 +85,51 @@ export function updateUser(userId, user) {
       dispatch({ type: ActionTypes.FETCH_USER, payload: response.data });
     }).catch((error) => {
       console.log('Failed to update post');
+    });
+  };
+}
+
+/* Add workout */
+export function addWorkout({ activity, distance, distUnit, time,
+  split, splitDist, splitUnit, strokeRate, watts, avgHR }, history) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios POST call */
+  return (dispatch) => {
+    const info = { activity, distance, distUnit, time, split, splitDist,
+      splitUnit, strokeRate, watts, avgHR,
+    };
+    axios.post(`${ROOT_URL}/workouts/add`, info, headers).then((response) => {
+      console.log('Workout added successfully');
+      dispatch({ type: ActionTypes.FETCH_WORKOUT, payload: response.data });
+      localStorage.setItem('workoutId', response.data.id);
+    }).catch((error) => {
+      console.log('Failed to fetch workout');
+    });
+  };
+}
+
+export function fetchWorkout(workoutId) {
+  console.log(workoutId);
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios GET call */
+  return (dispatch) => {
+    axios.get(`${ROOT_URL}/workouts/${workoutId}`, headers).then((response) => {
+      console.log('Workout fetched successfully');
+      dispatch({ type: ActionTypes.FETCH_WORKOUT, payload: response.data });
+    }).catch((error) => {
+      console.log('Failed to fetch workout');
+    });
+  };
+}
+
+export function updateWorkout(workoutId, workout) {
+  /* axios PUT call */
+  return (dispatch) => {
+    axios.put(`${ROOT_URL}/workouts/${workoutId}`, workout).then((response) => {
+      console.log('Workout updated successfully');
+      dispatch({ type: ActionTypes.FETCH_WORKOUT, payload: response.data });
+    }).catch((error) => {
+      console.log('Workout update failed');
     });
   };
 }
