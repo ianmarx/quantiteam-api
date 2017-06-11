@@ -2,6 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 
 /* Schema for the Workout model */
 const WorkoutSchema = new Schema({
+  _creator: { type: Schema.Types.ObjectId, ref: 'User' }, // match id type to User model
   activity: String,
   distance: Number,
   distUnit: String,

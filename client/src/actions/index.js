@@ -70,7 +70,7 @@ export function fetchUser(userId) {
       console.log('User successfully fetched');
       dispatch({ type: ActionTypes.FETCH_USER, payload: response.data });
     }).catch((error) => {
-      console.log('Failed to retrieve user');
+      console.log(`fetchUser() failed: ${error.response.data}`);
     });
   };
 }
@@ -84,26 +84,27 @@ export function updateUser(userId, user) {
       console.log('User successfully updated');
       dispatch({ type: ActionTypes.FETCH_USER, payload: response.data });
     }).catch((error) => {
-      console.log('Failed to update post');
+      console.log('updateUser() failed:');
+      console.log(error.response.data);
     });
   };
 }
 
 /* Add workout */
 export function addWorkout({ activity, distance, distUnit, time,
-  split, splitDist, splitUnit, strokeRate, watts, avgHR }, history) {
+  split, splitDist, splitUnit, strokeRate, watts, avgHR }, userId, history) {
   const headers = { headers: { authorization: localStorage.getItem('token') } };
+  console.log(`userId: ${userId}`);
   /* axios POST call */
   return (dispatch) => {
     const info = { activity, distance, distUnit, time, split, splitDist,
-      splitUnit, strokeRate, watts, avgHR,
+      splitUnit, strokeRate, watts, avgHR, userId,
     };
     axios.post(`${ROOT_URL}/workouts/add`, info, headers).then((response) => {
       console.log('Workout added successfully');
       dispatch({ type: ActionTypes.FETCH_WORKOUT, payload: response.data });
-      localStorage.setItem('workoutId', response.data.id);
     }).catch((error) => {
-      console.log('Failed to fetch workout');
+      console.log(`addWorkout() failed: ${error.response.data}`);
     });
   };
 }
@@ -117,7 +118,7 @@ export function fetchWorkout(workoutId) {
       console.log('Workout fetched successfully');
       dispatch({ type: ActionTypes.FETCH_WORKOUT, payload: response.data });
     }).catch((error) => {
-      console.log('Failed to fetch workout');
+      console.log(`fetchWorkout failed: ${error.response.data}`);
     });
   };
 }
@@ -129,7 +130,7 @@ export function updateWorkout(workoutId, workout) {
       console.log('Workout updated successfully');
       dispatch({ type: ActionTypes.FETCH_WORKOUT, payload: response.data });
     }).catch((error) => {
-      console.log('Workout update failed');
+      console.log(`updateWorkout() failed: ${error.response.data}`);
     });
   };
 }
