@@ -1,7 +1,7 @@
 import { ActionTypes } from '../actions';
 
 const initialState = {
-  list: {},
+  workoutId: {},
 };
 
 /* Take in the workout and add it to an array of workouts in the redux state */

@@ -7,7 +7,6 @@ import { fetchUser, addWorkout, fetchWorkout } from '../actions';
 const mapStateToProps = state => (
   {
     user: state.profile.user,
-    workouts: state.workouts.list,
     authenticated: state.auth.authenticated,
   }
 );
@@ -26,7 +25,6 @@ class HomePage extends Component {
   }
   componentWillMount() {
     this.props.fetchUser(this.props.match.params.userId);
-    this.props.fetchWorkout(localStorage.getItem('workoutId'));
   }
   onDistanceChange(event) {
     this.setState({ distance: event.target.value });
@@ -36,20 +34,19 @@ class HomePage extends Component {
   }
   onSubmit(event) {
     console.log('Workout add submitted');
-    event.preventDefault();
     event.stopPropagation();
 
     const distance = this.state.distance;
     const time = this.state.time;
 
     const workoutObject = { distance, time };
-    this.props.addWorkout(workoutObject, this.props.history);
+    this.props.addWorkout(workoutObject, this.props.match.params.userId, this.props.history);
+    this.props.fetchUser(this.props.match.params.userId);
   }
   displayFeed() {
     return (
       <div>
-        <div>{this.props.workouts.distance}</div>
-        <div>{this.props.workouts.timeString}</div>
+        <div>{this.props.user.workouts}</div>
       </div>
     );
   }
