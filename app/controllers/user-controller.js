@@ -47,10 +47,7 @@ export const signup = (req, res, next) => {
 
 /* Call to fetch a user from the db */
 export const fetchUser = (req, res) => {
-  User.findById(req.params.userId)
-  .catch((error) => {
-    res.status(500).json({ error });
-  })
+  User.find({ _id: req.params.userId })
   .then((result) => {
     res.json(result[0]);
   })
@@ -61,7 +58,7 @@ export const fetchUser = (req, res) => {
 
 /* Call to update a user in the db */
 export const updateUser = (req, res) => {
-  User.findById(req.params.userId)
+  User.find({ _id: req.params.userId })
   .then((result) => {
     result.name = req.body.name || result.name;
     result.email = req.body.email || result.email;
