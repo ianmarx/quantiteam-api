@@ -8,6 +8,7 @@ export const ActionTypes = {
   AUTH_ERROR: 'AUTH_ERROR',
   FETCH_USER: 'FETCH_USER',
   FETCH_WORKOUT: 'FETCH_WORKOUT',
+  FETCH_WORKOUTS: 'FETCH_WORKOUTS',
 };
 
 export function authError(error) {
@@ -70,7 +71,7 @@ export function fetchUser(userId) {
       console.log('User successfully fetched');
       dispatch({ type: ActionTypes.FETCH_USER, payload: response.data });
     }).catch((error) => {
-      console.log(`fetchUser() failed: ${error.response.data}`);
+      console.log('fetchUser() failed'); // : ${error.response.data}`);
     });
   };
 }
@@ -94,7 +95,6 @@ export function updateUser(userId, user) {
 export function addWorkout({ activity, distance, distUnit, time,
   split, splitDist, splitUnit, strokeRate, watts, avgHR }, userId, history) {
   const headers = { headers: { authorization: localStorage.getItem('token') } };
-  console.log(`userId: ${userId}`);
   /* axios POST call */
   return (dispatch) => {
     const info = { activity, distance, distUnit, time, split, splitDist,
@@ -102,7 +102,7 @@ export function addWorkout({ activity, distance, distUnit, time,
     };
     axios.post(`${ROOT_URL}/workouts/add`, info, headers).then((response) => {
       console.log('Workout added successfully');
-      dispatch({ type: ActionTypes.FETCH_WORKOUT, payload: response.data });
+      dispatch({ type: ActionTypes.FETCH_USER, payload: response.data });
     }).catch((error) => {
       console.log(`addWorkout() failed: ${error.response.data}`);
     });
@@ -110,7 +110,6 @@ export function addWorkout({ activity, distance, distUnit, time,
 }
 
 export function fetchWorkout(workoutId) {
-  console.log(workoutId);
   const headers = { headers: { authorization: localStorage.getItem('token') } };
   /* axios GET call */
   return (dispatch) => {
@@ -119,6 +118,19 @@ export function fetchWorkout(workoutId) {
       dispatch({ type: ActionTypes.FETCH_WORKOUT, payload: response.data });
     }).catch((error) => {
       console.log(`fetchWorkout failed: ${error.response.data}`);
+    });
+  };
+}
+
+export function fetchUserWorkouts(userId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios GET call */
+  return (dispatch) => {
+    axios.get(`${ROOT_URL}/feed/${userId}`, headers).then((response) => {
+      console.log('Workouts fetched successfully');
+      dispatch({ type: ActionTypes.FETCH_WORKOUTS, payload: response.data });
+    }).catch((error) => {
+      console.log(`fetchUserWorkouts failed: ${error.response.data}`);
     });
   };
 }

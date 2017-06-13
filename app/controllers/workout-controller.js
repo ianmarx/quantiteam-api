@@ -1,5 +1,7 @@
+// import mongoose from 'mongoose';
 import Workout from '../models/workout-model';
 import User from '../models/user-model';
+
 
 /* Save workout into database */
 export const addWorkout = (req, res, next) => {
@@ -50,7 +52,7 @@ export const addWorkout = (req, res, next) => {
     .catch((error) => {
       res.status(506).json({ error });
     });
-    res.send({ id: result._id });
+    res.send({ id: result._creator });
   })
   .catch((error) => {
     res.status(507).json({ error });
@@ -62,6 +64,17 @@ export const fetchWorkout = (req, res) => {
   Workout.find({ _id: req.params.workoutId })
   .then((result) => {
     res.json(result);
+  })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+};
+
+export const fetchUserWorkouts = (req, res) => {
+  User.findById(req.params.userId)
+  .populate('workouts')
+  .then((result) => {
+    res.json(result.workouts);
   })
   .catch((error) => {
     res.status(500).json({ error });

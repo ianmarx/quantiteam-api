@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { fetchUser, addWorkout, fetchWorkout } from '../actions';
+import { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts } from '../actions';
 
 
 const mapStateToProps = state => (
   {
     user: state.profile.user,
+    workouts: state.workouts.list,
     authenticated: state.auth.authenticated,
   }
 );
@@ -18,13 +19,14 @@ class HomePage extends Component {
       distance: '',
       time: '',
     };
-    this.displayFeed = this.displayFeed.bind(this);
     this.onDistanceChange = this.onDistanceChange.bind(this);
     this.onTimeChange = this.onTimeChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.displayFeed = this.displayFeed.bind(this);
   }
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchUser(this.props.match.params.userId);
+    this.props.fetchUserWorkouts(this.props.match.params.userId);
   }
   onDistanceChange(event) {
     this.setState({ distance: event.target.value });
@@ -34,30 +36,35 @@ class HomePage extends Component {
   }
   onSubmit(event) {
     console.log('Workout add submitted');
-    event.stopPropagation();
-
     const distance = this.state.distance;
     const time = this.state.time;
-
     const workoutObject = { distance, time };
     this.props.addWorkout(workoutObject, this.props.match.params.userId, this.props.history);
-    this.props.fetchUser(this.props.match.params.userId);
   }
   displayFeed() {
     return (
       <div>
-        <div>{this.props.user.workouts}</div>
+        <h1>Workout Feed: {this.props.user.name}</h1>
+        {this.props.workouts.map((workout, i) => {
+          return (
+            <div className="workout-div" key={`workout-${i}`}>
+              <div className="distance">{workout.distance}</div>
+              <div className="timeString">{workout.timeString}</div>
+            </div>
+          );
+        })}
       </div>
     );
   }
   render() {
     return (
       <div>
-        This is the homepage for {this.props.user.name}.
-        {this.displayFeed()}
-
+        <div className="workout-feed">
+          {this.displayFeed()}
+        </div>
         <div className="testForm">
           <form onSubmit={this.onSubmit}>
+            <h2>Add a Workout</h2>
             <div id="distance-field">
               <h3>Distance</h3>
               <input onChange={this.onDistanceChange} value={this.state.distance}
@@ -78,4 +85,5 @@ class HomePage extends Component {
   }
 }
 
-export default withRouter(connect(mapStateToProps, { fetchUser, addWorkout, fetchWorkout })(HomePage));
+export default withRouter(connect(mapStateToProps,
+  { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts })(HomePage));
