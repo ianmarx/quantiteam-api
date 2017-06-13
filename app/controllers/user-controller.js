@@ -58,7 +58,7 @@ export const fetchUser = (req, res) => {
 
 /* Call to update a user in the db */
 export const updateUser = (req, res) => {
-  User.findById(req.params.userId)
+  User.find({ _id: req.params.userId })
   .then((result) => {
     result.name = req.body.name || result.name;
     result.email = req.body.email || result.email;

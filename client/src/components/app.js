@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, browserHistory, Switch, Route } from 'react-router-dom';
 import Nav from './nav';
 import PrivateRoute from './private-route';
 import LandingPage from '../containers/landing-page';
@@ -18,7 +18,7 @@ const mapStateToProps = state => (
 
 const App = (props) => {
   return (
-    <Router>
+    <Router history={browserHistory}>
       <div>
         <Nav />
         <Switch>

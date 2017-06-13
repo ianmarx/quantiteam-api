@@ -7,6 +7,7 @@ export const ActionTypes = {
   DEAUTH_USER: 'DEAUTH_USER',
   AUTH_ERROR: 'AUTH_ERROR',
   FETCH_USER: 'FETCH_USER',
+  FETCH_WORKOUT: 'FETCH_WORKOUT',
   FETCH_WORKOUTS: 'FETCH_WORKOUTS',
 };
 
@@ -70,7 +71,7 @@ export function fetchUser(userId) {
       console.log('User successfully fetched');
       dispatch({ type: ActionTypes.FETCH_USER, payload: response.data });
     }).catch((error) => {
-      console.log('Failed to retrieve user');
+      console.log('fetchUser() failed'); // : ${error.response.data}`);
     });
   };
 }
@@ -84,7 +85,64 @@ export function updateUser(userId, user) {
       console.log('User successfully updated');
       dispatch({ type: ActionTypes.FETCH_USER, payload: response.data });
     }).catch((error) => {
-      console.log('Failed to update post');
+      console.log('updateUser() failed:');
+      console.log(error.response.data);
+    });
+  };
+}
+
+/* Add workout */
+export function addWorkout({ activity, distance, distUnit, time,
+  split, splitDist, splitUnit, strokeRate, watts, avgHR }, userId, history) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios POST call */
+  return (dispatch) => {
+    const info = { activity, distance, distUnit, time, split, splitDist,
+      splitUnit, strokeRate, watts, avgHR, userId,
+    };
+    axios.post(`${ROOT_URL}/workouts/add`, info, headers).then((response) => {
+      console.log('Workout added successfully');
+      dispatch({ type: ActionTypes.FETCH_USER, payload: response.data });
+    }).catch((error) => {
+      console.log(`addWorkout() failed: ${error.response.data}`);
+    });
+  };
+}
+
+export function fetchWorkout(workoutId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios GET call */
+  return (dispatch) => {
+    axios.get(`${ROOT_URL}/workouts/${workoutId}`, headers).then((response) => {
+      console.log('Workout fetched successfully');
+      dispatch({ type: ActionTypes.FETCH_WORKOUT, payload: response.data });
+    }).catch((error) => {
+      console.log(`fetchWorkout failed: ${error.response.data}`);
+    });
+  };
+}
+
+export function fetchUserWorkouts(userId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios GET call */
+  return (dispatch) => {
+    axios.get(`${ROOT_URL}/feed/${userId}`, headers).then((response) => {
+      console.log('Workouts fetched successfully');
+      dispatch({ type: ActionTypes.FETCH_WORKOUTS, payload: response.data });
+    }).catch((error) => {
+      console.log(`fetchUserWorkouts failed: ${error.response.data}`);
+    });
+  };
+}
+
+export function updateWorkout(workoutId, workout) {
+  /* axios PUT call */
+  return (dispatch) => {
+    axios.put(`${ROOT_URL}/workouts/${workoutId}`, workout).then((response) => {
+      console.log('Workout updated successfully');
+      dispatch({ type: ActionTypes.FETCH_WORKOUT, payload: response.data });
+    }).catch((error) => {
+      console.log(`updateWorkout() failed: ${error.response.data}`);
     });
   };
 }

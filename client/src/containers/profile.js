@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { fetchUser } from '../actions';
+import { fetchUser, fetchUserWorkouts } from '../actions';
 
 const mapStateToProps = state => (
   {
     user: state.profile.user,
+    workouts: state.workouts.list,
     authenticated: state.auth.authenticated,
   }
 );
@@ -20,9 +21,8 @@ class Profile extends Component {
       console.log('should redirect to signin');
       this.props.history.replace('/signin');
     }
-  }
-  componentDidMount() {
     this.props.fetchUser(this.props.match.params.userId);
+    this.props.fetchUserWorkouts(this.props.match.params.userId);
   }
   displayInfo() {
     return (
@@ -31,11 +31,11 @@ class Profile extends Component {
   }
   render() {
     return (
-      <div className="active">
-        This is the profile page.
+      <div>
+        {this.displayInfo()}
       </div>
     );
   }
 }
 
-export default withRouter(connect(mapStateToProps, { fetchUser })(Profile));
+export default withRouter(connect(mapStateToProps, { fetchUser, fetchUserWorkouts })(Profile));

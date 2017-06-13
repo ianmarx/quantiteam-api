@@ -12,6 +12,7 @@
         "react/prop-types": 0,
         "react/jsx-first-prop-new-line": 0,
         "react/jsx-filename-extension": 0,
+        "react/no-array-index-key": 0,
         "import/no-unresolved": [2, { "commonjs": true, "caseSensitive": false}],
         "jsx-a11y/no-static-element-interactions": 0,
         "strict": 0,
@@ -24,6 +25,7 @@
         "arrow-body-style": 0,
         "one-var": ["error", { "uninitialized": "always", "initialized": "never" }],
         "one-var-declaration-per-line": ["error", "initializations"],
+        "object-property-newline": 0,
         "max-len": ["error", 200],
         "no-extra-parens": 0,
         "no-restricted-syntax": [
