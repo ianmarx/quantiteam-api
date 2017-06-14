@@ -5,7 +5,7 @@
   "author": "",
   "main": "app/server.js",
   "scripts": {
-    "test": "mocha --require babel-register",
+    "test": "mocha --require ./test/test-helper.js",
     "dev": "nodemon app/server.js --exec babel-node",
     "start": "babel-node app/server.js",
     "build": "babel app -d build",
@@ -17,12 +17,6 @@
   },
   "bugs": {
     "url": "https://github.com/ianmarx/quantiteam/issues"
-  },
-  "babel": {
-    "presets": [
-      "es2015",
-      "es2016"
-    ]
   },
   "homepage": "https://github.com/ianmarx/quantiteam#readme",
   "dependencies": {
