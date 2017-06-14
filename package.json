@@ -20,7 +20,8 @@
   },
   "babel": {
     "presets": [
-      "es2015"
+      "es2015",
+      "es2016"
     ]
   },
   "homepage": "https://github.com/ianmarx/quantiteam#readme",
