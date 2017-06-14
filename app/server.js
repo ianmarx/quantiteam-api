@@ -36,6 +36,8 @@ app.get('/', (req, res) => {
   res.send('This is the Quantiteam API');
 });
 
+module.exports = app;
+
 // START THE SERVER
 // =============================================================================
 const port = process.env.PORT || 9090;

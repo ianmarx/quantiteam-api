@@ -56,6 +56,17 @@ export const fetchUser = (req, res) => {
   });
 };
 
+/* Call to fetch all users from the db */
+export const fetchUsers = (req, res) => {
+  User.find()
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+};
+
 /* Call to update a user in the db */
 export const updateUser = (req, res) => {
   User.find({ _id: req.params.userId })

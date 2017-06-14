@@ -14,6 +14,8 @@ router.post('/signup', UserController.signup);
 router.post('/signin', requireSignIn, UserController.signin);
 
 // Return/update user information
+router.get('/users', requireAuth, UserController.fetchUsers);
+
 router.route('/users/:userId')
   .get(requireAuth, UserController.fetchUser)
   .put(requireAuth, UserController.updateUser);
