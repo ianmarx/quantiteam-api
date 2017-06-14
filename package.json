@@ -18,6 +18,11 @@
   "bugs": {
     "url": "https://github.com/ianmarx/quantiteam/issues"
   },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  },
   "homepage": "https://github.com/ianmarx/quantiteam#readme",
   "dependencies": {
     "babel-cli": "^6.24.1",
