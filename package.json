@@ -5,7 +5,7 @@
   "author": "",
   "main": "app/server.js",
   "scripts": {
-    "test": "mocha --require babel-register",
+    "test": "mocha",
     "dev": "nodemon app/server.js --exec babel-node",
     "start": "babel-node app/server.js",
     "build": "babel app -d build",
