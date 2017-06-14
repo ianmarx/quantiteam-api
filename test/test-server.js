@@ -1,6 +1,7 @@
 const expect = require('expect.js');
 const request = require('supertest');
 const app = require('../app/server');
+require('babel-core/register');
 
 const port = process.env.PORT || 9090;
 
