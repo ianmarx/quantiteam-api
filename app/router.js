@@ -13,9 +13,10 @@ router.get('/', (req, res) => {
 router.post('/signup', UserController.signup);
 router.post('/signin', requireSignIn, UserController.signin);
 
-// Return/update user information
-router.get('/users', requireAuth, UserController.fetchUsers);
+// Return all users in the db
+router.get('/users', requireAuth, UserController.fetchAllUsers);
 
+// Return/update user information
 router.route('/users/:userId')
   .get(requireAuth, UserController.fetchUser)
   .put(requireAuth, UserController.updateUser);

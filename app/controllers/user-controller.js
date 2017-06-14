@@ -57,7 +57,7 @@ export const fetchUser = (req, res) => {
 };
 
 /* Call to fetch all users from the db */
-export const fetchUsers = (req, res) => {
+export const fetchAllUsers = (req, res) => {
   User.find()
   .then((result) => {
     res.json(result);
