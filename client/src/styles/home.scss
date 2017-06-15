@@ -1,14 +1,78 @@
-.workout-feed {
+$div-background: #e8e8e8;
 
-  .workout-div {
+.workout-page {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+
+  margin-top: 40px;
+  margin-left: 80px;
+  margin-right: 80px;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: $div-background;
+  color: black;
+
+  .workout-feed {
+
+    .headers {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+
+    .workout-div {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      background-color: #f4f4f4;
+      margin: 5px;
+      border-radius: 3px;
+      border-style: solid;
+      border-color: #d6d6d6;
+      border-width: thin;
+
+      li {
+        margin-left: 5px;
+        margin-right: 5px;
+      }
+    }
+  }
+
+  form {
+    position: fixed;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #b7b7b7;
+    padding: 20px;
+    border-radius: 5px;
+    border: none;
+    margin-top: 30px;
+    margin-right: 75px;
 
-    div {
-      margin-top: 5px;
-      margin-bottom: 5px;
-      margin-left: 3px;
-      margin-right: 3px;
+    input {
+      width: 75%;
+      height: 30px;
+      font-size: 20px;
+      border-style: none;
+      border-radius: 5px;
+    }
+
+    button {
+      margin-top: 25px;
+      margin-bottom: 25px;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 20px;
+      background-color: #1da55f;
+      color: white;
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 }

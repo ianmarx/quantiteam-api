@@ -23,8 +23,13 @@ li {
 }
 
 nav {
+  position: fixed;
+  top: 0px;
+  right: 0px;
   width: 100%;
   z-index: 0;
+  margin-bottom: 80px;
+  background-color: black;
 
   .navigation {
     margin: 0px;

@@ -43,12 +43,20 @@ class HomePage extends Component {
   displayFeed() {
     return (
       <div>
-        <h1>Workout Feed: {this.props.user.name}</h1>
         {this.props.workouts.map((workout, i) => {
           return (
             <div className="workout-div" key={`workout-${i}`}>
-              <div className="distance">{workout.distance}</div>
-              <div className="timeString">{workout.timeString}</div>
+              <div className="description">
+                {workout._creator}
+              </div>
+              <ul className="headers">
+                <li>
+                  <h4>Distance</h4>
+                </li>
+                <li>
+                  <h4>Time</h4>
+                </li>
+              </ul>
             </div>
           );
         })}
@@ -57,11 +65,12 @@ class HomePage extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="workout-page">
         <div className="workout-feed">
+          <h1>Workout Feed: {this.props.user.name}</h1>
           {this.displayFeed()}
         </div>
-        <div className="testForm">
+        <div className="indiv-workout-form">
           <form onSubmit={this.onSubmit}>
             <h2>Add a Workout</h2>
             <div id="distance-field">
