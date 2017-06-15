@@ -1,5 +1,6 @@
 .signin-form, .signup-form {
   position: absolute;
+  z-index: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -1,10 +1,12 @@
 @import '/styles/landing.scss';
 @import '/styles/signupin.scss';
+@import '/styles/home.scss';
 
 body {
   font-family: "Open Sans", sans-serif;
   padding: 10px;
   color: white;
+  background-color: #242628;
 }
 
 .active div:not(#home-button-deauth) {
@@ -22,6 +24,7 @@ li {
 
 nav {
   width: 100%;
+  z-index: 0;
 
   .navigation {
     margin: 0px;

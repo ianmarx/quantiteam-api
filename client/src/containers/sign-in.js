@@ -14,6 +14,10 @@ class SignIn extends Component {
     this.onPasswordChange = this.onPasswordChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
+  componentDidMount() {
+    document.body.style.background = 'url("/img/rowing.png") no-repeat center center fixed';
+    document.body.style.backgroundSize = 'cover';
+  }
   onEmailChange(event) {
     this.setState({ email: event.target.value });
   }

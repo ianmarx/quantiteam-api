@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts } from '../actions';
 
-
 const mapStateToProps = state => (
   {
     user: state.profile.user,

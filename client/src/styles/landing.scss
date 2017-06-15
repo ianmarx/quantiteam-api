@@ -1,10 +1,6 @@
-body {
-  background: url("/img/rowing.png") no-repeat center center fixed;
-  background-size: cover;
-}
-
 .site-welcome {
   position: absolute;
+  z-index: 0;
   top: 200px;
   right: 5px;
   display: flex;
@@ -42,7 +38,7 @@ body {
     }
     .already-user {
       margin-top: 10px;
-      font-size: 25px;
+      font-size: 30px;
     }
   }
 }

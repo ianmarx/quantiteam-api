@@ -19,6 +19,10 @@ class LandingPage extends Component {
       this.props.history.push(`/home/${localStorage.getItem('userId')}`);
     }
   }
+  componentDidMount() {
+    document.body.style.background = 'url("/img/rowing.png") no-repeat center center fixed';
+    document.body.style.backgroundSize = 'cover';
+  }
   onSignUpClick() {
     this.props.history.push('/signup');
   }
@@ -35,7 +39,7 @@ class LandingPage extends Component {
           <button id="signup-button" onClick={this.onSignUpClick}>Join Quantiteam</button>
         </div>
         <div className="already-user">
-          Already a user? <NavLink to="/signin">Sign in here.</NavLink>
+          Already a user? <NavLink to="/signin"><strong>Sign in here.</strong></NavLink>
         </div>
       </div>
     );
