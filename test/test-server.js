@@ -1,4 +1,3 @@
-/*
 const expect = require('expect.js');
 const request = require('supertest');
 const app = require('../app/server');
@@ -29,4 +28,3 @@ describe('API server', () => {
     server.close(done);
   });
 });
-*/
