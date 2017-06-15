@@ -13,4 +13,4 @@ Quantiteam uses these web tools:
 * Express
 
 ## Acknowledgements
-The backend was built on top of an [Express starterpack](https://github.com/dartmouth-cs52/express-babel-starter) from Dartmouth College's CS52 class, and its initial design was influenced by the backend for Dartmouth Roomate Finder, a CS52 final project that Ian Marx worked on.
+The backend was built on top of an [Express starterpack](https://github.com/dartmouth-cs52/express-babel-starter) from Dartmouth College's CS52 class.
