@@ -13,6 +13,9 @@ router.get('/', (req, res) => {
 router.post('/signup', UserController.signup);
 router.post('/signin', requireSignIn, UserController.signin);
 
+// Return all users in the db
+router.get('/users', requireAuth, UserController.fetchAllUsers);
+
 // Return/update user information
 router.route('/users/:userId')
   .get(requireAuth, UserController.fetchUser)
