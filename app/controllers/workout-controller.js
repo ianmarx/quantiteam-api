@@ -46,22 +46,27 @@ export const addWorkout = (req, res, next) => {
       user.workouts.push(result._id);
       user.save()
       .catch((error) => {
-        res.status(504).json({ error });
+        res.status(500).json({ error });
+      });
+      result.creatorName = user.name;
+      result.save()
+      .catch((error) => {
+        res.status(500).json({ error });
       });
     })
     .catch((error) => {
-      res.status(506).json({ error });
+      res.status(500).json({ error });
     });
     res.send({ id: result._creator });
   })
   .catch((error) => {
-    res.status(507).json({ error });
+    res.status(500).json({ error });
   });
 };
 
 /* Fetch a workout by id from the db */
 export const fetchWorkout = (req, res) => {
-  Workout.find({ _id: req.params.workoutId })
+  Workout.findById(req.params.workoutId)
   .then((result) => {
     res.json(result);
   })

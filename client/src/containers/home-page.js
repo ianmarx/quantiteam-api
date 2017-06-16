@@ -16,11 +16,16 @@ class HomePage extends Component {
     super(props);
     this.state = {
       distance: '',
-      time: '',
+      hours: '',
+      minutes: '',
+      seconds: '',
     };
     this.onDistanceChange = this.onDistanceChange.bind(this);
-    this.onTimeChange = this.onTimeChange.bind(this);
+    this.onHoursChange = this.onHoursChange.bind(this);
+    this.onMinutesChange = this.onMinutesChange.bind(this);
+    this.onSecondsChange = this.onSecondsChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.timeConvert = this.timeConvert.bind(this);
     this.displayFeed = this.displayFeed.bind(this);
   }
   componentDidMount() {
@@ -30,15 +35,26 @@ class HomePage extends Component {
   onDistanceChange(event) {
     this.setState({ distance: event.target.value });
   }
-  onTimeChange(event) {
-    this.setState({ time: event.target.value });
+  onHoursChange(event) {
+    this.setState({ hours: event.target.value });
+  }
+  onMinutesChange(event) {
+    this.setState({ minutes: event.target.value });
+  }
+  onSecondsChange(event) {
+    this.setState({ seconds: event.target.value });
   }
   onSubmit(event) {
     console.log('Workout add submitted');
     const distance = this.state.distance;
-    const time = this.state.time;
+    const time = this.timeConvert();
     const workoutObject = { distance, time };
     this.props.addWorkout(workoutObject, this.props.match.params.userId, this.props.history);
+  }
+  timeConvert() {
+    return ((parseFloat(this.state.hours, 10) * 3600) +
+            (parseFloat(this.state.minutes, 10) * 60) +
+            (parseFloat(this.state.seconds, 10).toPrecision(3) * 1));
   }
   displayFeed() {
     return (
@@ -47,14 +63,14 @@ class HomePage extends Component {
           return (
             <div className="workout-div" key={`workout-${i}`}>
               <div className="description">
-                {workout._creator}
+                {workout.creatorName}
               </div>
-              <ul className="headers">
+              <ul>
                 <li>
-                  <h4>Distance</h4>
+                  <div>{workout.distance}m</div>
                 </li>
                 <li>
-                  <h4>Time</h4>
+                  <div>{workout.timeString}</div>
                 </li>
               </ul>
             </div>
@@ -72,20 +88,32 @@ class HomePage extends Component {
         </div>
         <div className="indiv-workout-form">
           <form onSubmit={this.onSubmit}>
-            <h2>Add a Workout</h2>
-            <div id="distance-field">
-              <h3>Distance</h3>
-              <input onChange={this.onDistanceChange} value={this.state.distance}
-                type="text" required
-              />
-            </div>
-            <div id="time-field">
-              <h3>Time</h3>
-              <input onChange={this.onTimeChange} value={this.state.time}
-                type="text" required
-              />
-            </div>
-            <button type="submit" className="workout-submit">Add Workout</button>
+            <ul>
+              <li>
+                <div>Add a Workout</div>
+              </li>
+              <li id="distance-field">
+                <h3>Distance</h3>
+                <input onChange={this.onDistanceChange} value={this.state.distance}
+                  type="text" required
+                />
+              </li>
+              <li id="time-field">
+                <h3>Hours</h3>
+                <input onChange={this.onHoursChange} value={this.state.hours}
+                  type="text" required
+                />
+                <h3>Minutes</h3>
+                <input onChange={this.onMinutesChange} value={this.state.minutes}
+                  type="text" required
+                />
+                <h3>Seconds</h3>
+                <input onChange={this.onSecondsChange} value={this.state.seconds}
+                  type="text" required
+                />
+              </li>
+              <button type="submit" className="workout-submit">Add Workout</button>
+            </ul>
           </form>
         </div>
       </div>
