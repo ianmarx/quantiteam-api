@@ -6,38 +6,32 @@ import User from '../models/user-model';
 /* Save workout into database */
 export const addWorkout = (req, res, next) => {
   /* Get workout info from user input */
-//  const activity = req.body.activity;
-  const distance = req.body.distance;
-//  const distUnit = req.body.distUnit;
-  const time = req.body.time;
   const creatorId = req.body.userId;
-//  const split = req.body.split;
-//  const splitDist = req.body.splitDist;
-//  const splitUnit = req.body.splitUnit;
-//  const strokeRate = req.body.strokeRate;
-//  const watts = req.body.watts;
-//  const avgHR = req.body.avgHR;
+  const activity = req.body.activity;
+  const distance = req.body.distance;
+  const distUnit = req.body.distUnit;
+  const time = req.body.time;
+  const strokeRate = req.body.strokeRate;
+  const watts = req.body.watts;
+  const avgHR = req.body.avgHR;
 
   /* Check for required fields */
-  if (!time || !distance || !creatorId) { // || !distUnit || !time || !split || !splitDist
-//      || !splitUnit || !strokeRate || !watts || !avgHR) {
+  if (!creatorId || !activity || !distance || !distUnit || !time ||
+      !strokeRate || !watts || !avgHR) {
     return res.status(422).send('All fields are required.');
   }
 
   /* Create workout object and save to db */
   const workout = new Workout();
 
-//  workout.activity = activity;
-  workout.distance = distance;
- // workout.distUnit = distUnit;
-  workout.time = time;
   workout._creator = creatorId;
- // workout.split = split;
- // workout.splitDist = splitDist;
- // workout.splitUnit = splitUnit;
- // workout.strokeRate = strokeRate;
- // workout.watts = watts;
- // workout.avgHR = avgHR;
+  workout.activity = activity;
+  workout.distance = distance;
+  workout.distUnit = distUnit;
+  workout.time = time;
+  workout.strokeRate = strokeRate;
+  workout.watts = watts;
+  workout.avgHR = avgHR;
   workout.save()
   .then((result) => {
     /* Add the workout to its creator's list of workouts */
