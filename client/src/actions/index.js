@@ -150,9 +150,10 @@ export function updateWorkout(workoutId, workout) {
 }
 
 export function deleteWorkout(workoutId, userId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
   /* axios DELETE call */
   return (dispatch) => {
-    axios.delete(`${ROOT_URL}/workouts/${workoutId}/${userId}`).then((response) => {
+    axios.delete(`${ROOT_URL}/workouts/${workoutId}/${userId}`, headers).then((response) => {
       console.log('Workout deleted successfully');
       dispatch({ type: ActionTypes.FETCH_WORKOUTS, payload: response.data });
     }).catch((error) => {
