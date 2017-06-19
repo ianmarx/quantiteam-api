@@ -16,8 +16,7 @@ export const addWorkout = (req, res, next) => {
   const avgHR = req.body.avgHR;
 
   /* Check for required fields */
-  if (!creatorId || !activity || !distance || !distUnit || !time ||
-      !strokeRate || !watts || !avgHR) {
+  if (!creatorId || !activity || !distance || !distUnit || !time) {
     return res.status(422).send('All fields are required.');
   }
 
@@ -75,6 +74,22 @@ export const fetchUserWorkouts = (req, res) => {
   .then((result) => {
     res.json(result.workouts);
   })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+};
+
+export const deleteWorkout = (req, res) => {
+  /* remove the workout document */
+  Workout.remove({ _id: req.params.workoutId })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+
+  User.update(
+    { _id: req.params.userId },
+    { $pull: { workouts: req.params.workoutId } },
+  )
   .catch((error) => {
     res.status(500).json({ error });
   });

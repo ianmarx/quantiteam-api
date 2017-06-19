@@ -9,6 +9,7 @@ export const ActionTypes = {
   FETCH_USER: 'FETCH_USER',
   FETCH_WORKOUT: 'FETCH_WORKOUT',
   FETCH_WORKOUTS: 'FETCH_WORKOUTS',
+  DELETE_WORKOUT: 'DELETE_WORKOUT',
 };
 
 export function authError(error) {
@@ -130,19 +131,32 @@ export function fetchUserWorkouts(userId) {
       console.log('Workouts fetched successfully');
       dispatch({ type: ActionTypes.FETCH_WORKOUTS, payload: response.data });
     }).catch((error) => {
-      console.log(`fetchUserWorkouts failed: ${error.response.data}`);
+      console.log(`fetchUserWorkouts failed: ${error.message}`);
     });
   };
 }
 
 export function updateWorkout(workoutId, workout) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
   /* axios PUT call */
   return (dispatch) => {
-    axios.put(`${ROOT_URL}/workouts/${workoutId}`, workout).then((response) => {
+    axios.put(`${ROOT_URL}/workouts/${workoutId}`, workout, headers).then((response) => {
       console.log('Workout updated successfully');
       dispatch({ type: ActionTypes.FETCH_WORKOUT, payload: response.data });
     }).catch((error) => {
-      console.log(`updateWorkout() failed: ${error.response.data}`);
+      console.log(`updateWorkout failed: ${error.response.data}`);
+    });
+  };
+}
+
+export function deleteWorkout(workoutId, userId) {
+  /* axios DELETE call */
+  return (dispatch) => {
+    axios.delete(`${ROOT_URL}/workouts/${workoutId}/${userId}`).then((response) => {
+      console.log('Workout deleted successfully');
+      dispatch({ type: ActionTypes.FETCH_WORKOUTS, payload: response.data });
+    }).catch((error) => {
+      console.log(`deleteWorkout failed: ${error.message}`);
     });
   };
 }

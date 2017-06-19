@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts } from '../actions';
+import { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts,
+  updateWorkout, updateUser, deleteWorkout } from '../actions';
+import WorkoutPost from './workout-post';
 
 const mapStateToProps = state => (
   {
@@ -34,6 +36,8 @@ class HomePage extends Component {
     this.onSecondsChange = this.onSecondsChange.bind(this);
     this.onStrokeRateChange = this.onStrokeRateChange.bind(this);
     this.onWattsChange = this.onWattsChange.bind(this);
+//    this.onEditClick = this.onEditClick.bind(this);
+    this.onDeleteClick = this.onDeleteClick.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.timeConvert = this.timeConvert.bind(this);
     this.displayFeed = this.displayFeed.bind(this);
@@ -69,6 +73,17 @@ class HomePage extends Component {
   onHeartRateChange(event) {
     this.setState({ avgHR: event.target.value });
   }
+  /*
+  onEditClick(event) {
+
+  }
+  */
+  // this is called in WorkoutPost by onThisDeleteClick(event)
+  onDeleteClick(workoutId, userId) {
+    this.props.deleteWorkout(workoutId, userId);
+    console.log('Workout deleted successfully');
+    this.props.fetchUserWorkouts(this.props.match.params.userId);
+  }
   onSubmit(event) {
     event.stopPropagation();
     console.log('Workout add submitted');
@@ -94,16 +109,10 @@ class HomePage extends Component {
       <div>
         {this.props.workouts.map((workout, i) => {
           return (
-            <div className="workout-div" key={`workout-${i}`}>
-              <div className="description">
-                <strong>{workout.creatorName}</strong>
-              </div>
-              <div>{workout.activity}</div>
-              <div>{workout.distance}{workout.distUnit}</div>
-              <div>{workout.timeString}</div>
-              <div>{workout.strokeRate} s/m</div>
-              <div>{workout.watts} watts</div>
-              <div>{workout.avgHR} bpm</div>
+            <div key={`workout-${i}`}>
+              <WorkoutPost userId={workout._creator} workout={workout} index={i}
+                onDeleteClick={this.onDeleteClick}
+              />
             </div>
           );
         })}
@@ -145,7 +154,7 @@ class HomePage extends Component {
                 <li>
                   <h3>Average HR (bpm)</h3>
                   <input onChange={this.onHeartRateChange} value={this.state.avgHR}
-                    type="text" required
+                    type="text"
                   />
                 </li>
               </ul>
@@ -153,6 +162,7 @@ class HomePage extends Component {
                 <li>
                   <h3>Activity</h3>
                   <select value={this.state.activity} onChange={this.onActivityChange}>
+                    <option default>Select</option>
                     <option value="erg">Ergometer</option>
                     <option value="row">Rowing</option>
                     <option value="run">Running</option>
@@ -162,6 +172,7 @@ class HomePage extends Component {
                 <li>
                   <h3>Distance Units</h3>
                   <select value={this.state.distUnit} onChange={this.onDistUnitChange}>
+                    <option default>Select</option>
                     <option value="m">m</option>
                     <option value="km">km</option>
                     <option value="mi">mi</option>
@@ -170,13 +181,13 @@ class HomePage extends Component {
                 <li>
                   <h3>Stroke Rate</h3>
                   <input onChange={this.onStrokeRateChange} value={this.state.strokeRate}
-                    type="text" required
+                    type="text"
                   />
                 </li>
                 <li>
                   <h3>Watts</h3>
                   <input onChange={this.onWattsChange} value={this.state.watts}
-                    type="text" required
+                    type="text"
                   />
                 </li>
                 <button type="submit" className="workout-submit">Add Workout</button>
@@ -190,4 +201,5 @@ class HomePage extends Component {
 }
 
 export default withRouter(connect(mapStateToProps,
-  { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts })(HomePage));
+  { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts,
+    updateWorkout, updateUser, deleteWorkout })(HomePage));

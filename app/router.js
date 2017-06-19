@@ -29,6 +29,10 @@ router.route('/workouts/:workoutId')
   .get(requireAuth, WorkoutController.fetchWorkout)
   .put(requireAuth, WorkoutController.updateWorkout);
 
+router.route('/workouts/:workoutId/:userId')
+  .delete(WorkoutController.deleteWorkout);
+
+
 router.get('/feed/:userId', requireAuth, WorkoutController.fetchUserWorkouts);
 
 export default router;
