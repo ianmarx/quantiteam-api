@@ -80,6 +80,7 @@ class HomePage extends Component {
     console.log('Workout deleted successfully'); // added b/c message in deleteWorkout action not showing up
     this.props.fetchUserWorkouts(this.props.match.params.userId);
   }
+  /* Add a workout using the form */
   onSubmit(event) {
     console.log('Workout add submitted');
     const activity = this.state.activity;
@@ -115,7 +116,7 @@ class HomePage extends Component {
   }
   render() {
     return (
-      <div className="workout-page">
+      <div className="home-page">
         <div className="workout-feed">
           <div id="feed-title">Workout Feed</div>
           {this.displayFeed()}

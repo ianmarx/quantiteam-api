@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { fetchUser, fetchUserWorkouts } from '../actions';
+import { fetchUser, fetchUserWorkouts, updateWorkout, deleteWorkout } from '../actions';
+import WorkoutPost from './workout-post';
 
 const mapStateToProps = state => (
   {
@@ -14,9 +15,11 @@ const mapStateToProps = state => (
 class Profile extends Component {
   constructor(props) {
     super(props);
+    this.displayFeed = this.displayFeed.bind(this);
     this.displayInfo = this.displayInfo.bind(this);
+    this.onDeleteClick = this.onDeleteClick.bind(this);
   }
-  componentWillMount() {
+  componentDidMount() {
     if (!this.props.authenticated) {
       console.log('should redirect to signin');
       this.props.history.replace('/signin');
@@ -24,18 +27,47 @@ class Profile extends Component {
     this.props.fetchUser(this.props.match.params.userId);
     this.props.fetchUserWorkouts(this.props.match.params.userId);
   }
+  onDeleteClick(workoutId, userId) {
+    this.props.deleteWorkout(workoutId, userId);
+    console.log('Workout deleted successfully'); // added b/c message in deleteWorkout action not showing up
+    this.props.fetchUserWorkouts(this.props.match.params.userId);
+  }
+  displayFeed() {
+    return (
+      <div className="workout-feed">
+        {this.props.workouts.map((workout, i) => {
+          return (
+            <div key={`workout-${i}`}>
+              <WorkoutPost userId={workout._creator} workout={workout} index={i}
+                onDeleteClick={this.onDeleteClick} updateWorkout={this.props.updateWorkout}
+              />
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
   displayInfo() {
     return (
-      <div> This is the profile for {this.props.user.name}.</div>
+      <div className="profile-header">
+        <div className="profile-name">{this.props.user.name}</div>
+      </div>
     );
   }
   render() {
     return (
-      <div>
-        {this.displayInfo()}
+      <div className="profile-page">
+        <div className="profile-column">
+          {this.displayInfo()}
+        </div>
+        <div className="profile-column">
+          <div id="feed-title">My Workouts</div>
+          {this.displayFeed()}
+        </div>
       </div>
     );
   }
 }
 
-export default withRouter(connect(mapStateToProps, { fetchUser, fetchUserWorkouts })(Profile));
+export default withRouter(connect(mapStateToProps, { fetchUser, fetchUserWorkouts,
+  updateWorkout, deleteWorkout })(Profile));
