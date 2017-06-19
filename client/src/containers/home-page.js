@@ -36,7 +36,6 @@ class HomePage extends Component {
     this.onSecondsChange = this.onSecondsChange.bind(this);
     this.onStrokeRateChange = this.onStrokeRateChange.bind(this);
     this.onWattsChange = this.onWattsChange.bind(this);
-//    this.onEditClick = this.onEditClick.bind(this);
     this.onDeleteClick = this.onDeleteClick.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.timeConvert = this.timeConvert.bind(this);
