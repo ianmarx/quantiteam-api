@@ -10,7 +10,7 @@ const mapStateToProps = state => (
   }
 );
 
-/* Nav bar component */
+/* Navbar component */
 class Nav extends Component {
   constructor(props) {
     super(props);
@@ -26,6 +26,9 @@ class Nav extends Component {
     if (this.props.authenticated) {
       return (
         <ul className="navigation">
+          <li>
+            <div id="name-logo">Quantiteam</div>
+          </li>
           <li>
             <NavLink to={`/home/${localStorage.getItem('userId')}`}>
               <div id="home-button" className="nav-button">Home</div>
@@ -46,6 +49,9 @@ class Nav extends Component {
     } else {
       return (
         <ul className="navigation">
+          <li>
+            <div id="name-logo">Quantiteam</div>
+          </li>
           <li>
             <NavLink to={'/'}>
               <div id="home-button-deauth" className="nav-button">Home</div>

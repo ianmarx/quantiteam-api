@@ -1,8 +1,10 @@
 import mongoose, { Schema } from 'mongoose';
+import round from 'lodash.round';
 
 /* Schema for the Workout model */
 const WorkoutSchema = new Schema({
   _creator: { type: Schema.Types.ObjectId, ref: 'User' }, // match id type to User model
+  creatorName: String,
   activity: String,
   distance: Number,
   distUnit: String,
@@ -26,10 +28,11 @@ WorkoutSchema.pre('save', function timeToString(next) {
   /* exit function if time value hasn't been changed */
   if (!workout.isModified('time')) return next();
 
+  /* divide up total number of seconds into time units */
   const hours = Math.floor(workout.time / 3600);
   const remainder = workout.time % 3600;
   const minutes = Math.floor(remainder / 60);
-  const seconds = remainder % 60;
+  const seconds = round((remainder % 60), 1);
   let dec = seconds % 1;
 
   if (dec === 0) {
@@ -45,6 +48,14 @@ WorkoutSchema.pre('save', function timeToString(next) {
     } else {
       workout.timeString = `${minutes}:${seconds}${dec}`;
     }
+  } else if (seconds < 10 && seconds !== 0) {
+    if (minutes < 10) {
+      workout.timeString = `${hours}:0${minutes}:0${seconds}${dec}`;
+    } else {
+      workout.timeString = `${hours}:${minutes}:0${seconds}${dec}`;
+    }
+  } else if (minutes < 10) {
+    workout.timeString = `${hours}:0${minutes}:${seconds}${dec}`;
   } else {
     workout.timeString = `${hours}:${minutes}:${seconds}${dec}`;
   }

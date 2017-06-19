@@ -18,6 +18,10 @@ class SignIn extends Component {
     document.body.style.background = 'url("/img/rowing.png") no-repeat center center fixed';
     document.body.style.backgroundSize = 'cover';
   }
+  componentWillUnmount() {
+    document.body.style.background = null;
+    document.body.style.backgroundSize = null;
+  }
   onEmailChange(event) {
     this.setState({ email: event.target.value });
   }

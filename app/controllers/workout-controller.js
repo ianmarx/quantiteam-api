@@ -2,42 +2,33 @@
 import Workout from '../models/workout-model';
 import User from '../models/user-model';
 
-
-/* Save workout into database */
 export const addWorkout = (req, res, next) => {
   /* Get workout info from user input */
-//  const activity = req.body.activity;
-  const distance = req.body.distance;
-//  const distUnit = req.body.distUnit;
-  const time = req.body.time;
   const creatorId = req.body.userId;
-//  const split = req.body.split;
-//  const splitDist = req.body.splitDist;
-//  const splitUnit = req.body.splitUnit;
-//  const strokeRate = req.body.strokeRate;
-//  const watts = req.body.watts;
-//  const avgHR = req.body.avgHR;
+  const activity = req.body.activity;
+  const distance = req.body.distance;
+  const distUnit = req.body.distUnit;
+  const time = req.body.time;
+  const strokeRate = req.body.strokeRate;
+  const watts = req.body.watts;
+  const avgHR = req.body.avgHR;
 
   /* Check for required fields */
-  if (!time || !distance || !creatorId) { // || !distUnit || !time || !split || !splitDist
-//      || !splitUnit || !strokeRate || !watts || !avgHR) {
+  if (!creatorId || !activity || !distance || !distUnit || !time) {
     return res.status(422).send('All fields are required.');
   }
 
   /* Create workout object and save to db */
   const workout = new Workout();
 
-//  workout.activity = activity;
-  workout.distance = distance;
- // workout.distUnit = distUnit;
-  workout.time = time;
   workout._creator = creatorId;
- // workout.split = split;
- // workout.splitDist = splitDist;
- // workout.splitUnit = splitUnit;
- // workout.strokeRate = strokeRate;
- // workout.watts = watts;
- // workout.avgHR = avgHR;
+  workout.activity = activity;
+  workout.distance = distance;
+  workout.distUnit = distUnit;
+  workout.time = time;
+  workout.strokeRate = strokeRate;
+  workout.watts = watts;
+  workout.avgHR = avgHR;
   workout.save()
   .then((result) => {
     /* Add the workout to its creator's list of workouts */
@@ -46,22 +37,26 @@ export const addWorkout = (req, res, next) => {
       user.workouts.push(result._id);
       user.save()
       .catch((error) => {
-        res.status(504).json({ error });
+        res.status(500).json({ error });
+      });
+      result.creatorName = user.name;
+      result.save()
+      .catch((error) => {
+        res.status(500).json({ error });
       });
     })
     .catch((error) => {
-      res.status(506).json({ error });
+      res.status(500).json({ error });
     });
     res.send({ id: result._creator });
   })
   .catch((error) => {
-    res.status(507).json({ error });
+    res.status(500).json({ error });
   });
 };
 
-/* Fetch a workout by id from the db */
 export const fetchWorkout = (req, res) => {
-  Workout.find({ _id: req.params.workoutId })
+  Workout.findById(req.params.workoutId)
   .then((result) => {
     res.json(result);
   })
@@ -70,6 +65,7 @@ export const fetchWorkout = (req, res) => {
   });
 };
 
+/* Fetch all workouts belonging to a user */
 export const fetchUserWorkouts = (req, res) => {
   User.findById(req.params.userId)
   .populate('workouts')
@@ -81,7 +77,23 @@ export const fetchUserWorkouts = (req, res) => {
   });
 };
 
-/* Update a workout in the db */
+export const deleteWorkout = (req, res) => {
+  /* remove the workout document */
+  Workout.remove({ _id: req.params.workoutId })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+
+  /* remove the workoutId from the user's list of workout IDs */
+  User.update(
+    { _id: req.params.userId },
+    { $pull: { workouts: req.params.workoutId } },
+  )
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+};
+
 export const updateWorkout = (req, res) => {
   Workout.findById(req.params.workoutId)
   .then((result) => {

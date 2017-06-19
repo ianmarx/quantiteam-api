@@ -36,6 +36,7 @@ UserSchema.pre('save', function hashPassword(next) {
   });
 });
 
+/* Check the hash of a candidate password against the stored password hash */
 UserSchema.methods.validatePassword = function validatePassword(candidate, callback) {
   bcrypt.compare(candidate, this.password, (err, result) => {
     if (err) return callback(err);
