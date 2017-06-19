@@ -138,7 +138,7 @@ export function updateWorkout(workoutId, workout) {
       console.log('Workout updated successfully');
       dispatch({ type: ActionTypes.FETCH_WORKOUT, payload: response.data });
     }).catch((error) => {
-      console.log(`updateWorkout failed: ${error.response.data}`);
+      console.log(`updateWorkout failed: ${error.message}`);
     });
   };
 }

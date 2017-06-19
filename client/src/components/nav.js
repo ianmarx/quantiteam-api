@@ -27,6 +27,9 @@ class Nav extends Component {
       return (
         <ul className="navigation">
           <li>
+            <div id="name-logo">Quantiteam</div>
+          </li>
+          <li>
             <NavLink to={`/home/${localStorage.getItem('userId')}`}>
               <div id="home-button" className="nav-button">Home</div>
             </NavLink>
@@ -46,6 +49,9 @@ class Nav extends Component {
     } else {
       return (
         <ul className="navigation">
+          <li>
+            <div id="name-logo">Quantiteam</div>
+          </li>
           <li>
             <NavLink to={'/'}>
               <div id="home-button-deauth" className="nav-button">Home</div>

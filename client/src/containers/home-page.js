@@ -46,6 +46,7 @@ class HomePage extends Component {
     this.props.fetchUser(this.props.match.params.userId);
     this.props.fetchUserWorkouts(this.props.match.params.userId);
   }
+  /* Handle changes in the add workout fields */
   onActivityChange(event) {
     this.setState({ activity: event.target.value });
   }
@@ -78,7 +79,7 @@ class HomePage extends Component {
 
   }
   */
-  // this is called in WorkoutPost by onThisDeleteClick(event)
+  // this is called in <WorkoutPost> by onLocalDeleteClick(event)
   // did it this way so two IDs could be passed in
   onDeleteClick(workoutId, userId) {
     this.props.deleteWorkout(workoutId, userId);
@@ -110,7 +111,7 @@ class HomePage extends Component {
           return (
             <div key={`workout-${i}`}>
               <WorkoutPost userId={workout._creator} workout={workout} index={i}
-                onDeleteClick={this.onDeleteClick}
+                onDeleteClick={this.onDeleteClick} updateWorkout={this.props.updateWorkout}
               />
             </div>
           );
@@ -126,7 +127,7 @@ class HomePage extends Component {
           {this.displayFeed()}
         </div>
         <div className="indiv-workout-form">
-          <form onSubmit={this.onSubmit}>
+          <form className="workout-add-form" onSubmit={this.onSubmit}>
             <div className="form-title">Add Workout</div>
             <div className="column-group">
               <ul className="form-column">
