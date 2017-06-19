@@ -106,7 +106,7 @@ class HomePage extends Component {
   }
   displayFeed() {
     return (
-      <div>
+      <div className="workout-posts">
         {this.props.workouts.map((workout, i) => {
           return (
             <div key={`workout-${i}`}>
