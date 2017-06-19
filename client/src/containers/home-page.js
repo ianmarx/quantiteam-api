@@ -74,11 +74,6 @@ class HomePage extends Component {
   onHeartRateChange(event) {
     this.setState({ avgHR: event.target.value });
   }
-  /*
-  onEditClick(event) {
-
-  }
-  */
   // this is called in <WorkoutPost> by onLocalDeleteClick(event)
   // did it this way so two IDs could be passed in
   onDeleteClick(workoutId, userId) {
