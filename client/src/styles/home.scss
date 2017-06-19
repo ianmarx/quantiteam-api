@@ -35,7 +35,7 @@ $div-background: #e8e8e8;
       justify-content: space-between;
       align-items: flex-start;
       background-color: #f4f4f4;
-      margin: 5px;
+      margin: 10px;
       border-radius: 3px;
       border-style: solid;
       border-color: #d6d6d6;
@@ -44,6 +44,10 @@ $div-background: #e8e8e8;
 
       .workout-div-creator {
         font-size: 20px;
+      }
+
+      .workout-div-column {
+        margin: 10px;
       }
 
       i {

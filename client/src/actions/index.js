@@ -19,9 +19,7 @@ export function authError(error) {
   };
 }
 
-/* User signup */
 export function signUpUser({ name, email, password }, history) {
-  /* axios POST call */
   return (dispatch) => {
     const info = { name, email, password };
     axios.post(`${ROOT_URL}/signup`, info).then((response) => {
@@ -36,9 +34,7 @@ export function signUpUser({ name, email, password }, history) {
   };
 }
 
-/* User sign in */
 export function signInUser({ email, password }, history) {
-  /* axios POST */
   return (dispatch) => {
     const info = { email, password };
     axios.post(`${ROOT_URL}/signin`, info).then((response) => {
@@ -53,7 +49,6 @@ export function signInUser({ email, password }, history) {
   };
 }
 
-/* User sign out */
 export function signOutUser(history) {
   return (dispatch) => {
     localStorage.removeItem('token');
@@ -63,10 +58,10 @@ export function signOutUser(history) {
   };
 }
 
-/* Fetch user */
 export function fetchUser(userId) {
+  /* use token for authenticated route (repeated in all authenticated routes) */
   const headers = { headers: { authorization: localStorage.getItem('token') } };
-  /* axios GET */
+  /* axios GET call */
   return (dispatch) => {
     axios.get(`${ROOT_URL}/users/${userId}`, headers).then((response) => {
       console.log('User successfully fetched');
@@ -77,10 +72,9 @@ export function fetchUser(userId) {
   };
 }
 
-/* Update user */
 export function updateUser(userId, user) {
   const headers = { headers: { authorization: localStorage.getItem('token') } };
-  /* axios PUT */
+  /* axios PUT call */
   return (dispatch) => {
     axios.put(`${ROOT_URL}/users/${userId}`, user, headers).then((response) => {
       console.log('User successfully updated');
@@ -92,12 +86,12 @@ export function updateUser(userId, user) {
   };
 }
 
-/* Add workout */
 export function addWorkout({ activity, distance, distUnit, time,
   split, splitDist, splitUnit, strokeRate, watts, avgHR }, userId, history) {
   const headers = { headers: { authorization: localStorage.getItem('token') } };
   /* axios POST call */
   return (dispatch) => {
+    /* organize parameters into a single object to pass into POST request */
     const info = { activity, distance, distUnit, time, split, splitDist,
       splitUnit, strokeRate, watts, avgHR, userId,
     };

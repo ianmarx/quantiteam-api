@@ -79,13 +79,13 @@ class HomePage extends Component {
   }
   */
   // this is called in WorkoutPost by onThisDeleteClick(event)
+  // did it this way so two IDs could be passed in
   onDeleteClick(workoutId, userId) {
     this.props.deleteWorkout(workoutId, userId);
-    console.log('Workout deleted successfully');
+    console.log('Workout deleted successfully'); // added b/c message in deleteWorkout action not showing up
     this.props.fetchUserWorkouts(this.props.match.params.userId);
   }
   onSubmit(event) {
-    event.stopPropagation();
     console.log('Workout add submitted');
     const activity = this.state.activity;
     const distance = this.state.distance;
@@ -94,11 +94,10 @@ class HomePage extends Component {
     const strokeRate = this.state.strokeRate;
     const watts = this.state.watts;
     const avgHR = this.state.avgHR;
-    const workoutObject = { activity, distance, distUnit, time, strokeRate,
-      watts, avgHR };
+    const workoutObject = { activity, distance, distUnit, time, strokeRate, watts, avgHR };
     this.props.addWorkout(workoutObject, this.props.match.params.userId, this.props.history);
   }
-  /* convert the strings of time values into the total number of seconds */
+  /* convert the strings of each time values into the total number of seconds */
   timeConvert() {
     return ((parseFloat(this.state.hours, 10) * 3600) +
             (parseFloat(this.state.minutes, 10) * 60) +
