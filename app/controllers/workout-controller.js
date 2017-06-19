@@ -2,8 +2,6 @@
 import Workout from '../models/workout-model';
 import User from '../models/user-model';
 
-
-/* Save workout into database */
 export const addWorkout = (req, res, next) => {
   /* Get workout info from user input */
   const creatorId = req.body.userId;
@@ -57,7 +55,6 @@ export const addWorkout = (req, res, next) => {
   });
 };
 
-/* Fetch a workout by id from the db */
 export const fetchWorkout = (req, res) => {
   Workout.findById(req.params.workoutId)
   .then((result) => {
@@ -68,6 +65,7 @@ export const fetchWorkout = (req, res) => {
   });
 };
 
+/* Fetch all workouts belonging to a user */
 export const fetchUserWorkouts = (req, res) => {
   User.findById(req.params.userId)
   .populate('workouts')
@@ -86,6 +84,7 @@ export const deleteWorkout = (req, res) => {
     res.status(500).json({ error });
   });
 
+  /* remove the workoutId from the user's list of workout IDs */
   User.update(
     { _id: req.params.userId },
     { $pull: { workouts: req.params.workoutId } },
@@ -95,7 +94,6 @@ export const deleteWorkout = (req, res) => {
   });
 };
 
-/* Update a workout in the db */
 export const updateWorkout = (req, res) => {
   Workout.findById(req.params.workoutId)
   .then((result) => {

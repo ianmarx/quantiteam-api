@@ -28,6 +28,7 @@ WorkoutSchema.pre('save', function timeToString(next) {
   /* exit function if time value hasn't been changed */
   if (!workout.isModified('time')) return next();
 
+  /* divide up total number of seconds into time units */
   const hours = Math.floor(workout.time / 3600);
   const remainder = workout.time % 3600;
   const minutes = Math.floor(remainder / 60);
