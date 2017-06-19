@@ -205,7 +205,7 @@ class WorkoutPost extends Component {
             </div>
           </div>
           <div className="workout-div-column">
-            <div>{this.props.workout.distance}{this.props.workout.distUnit} {this.props.workout.activity}</div>
+            <div>{this.props.workout.distance} {this.props.workout.distUnit} {this.props.workout.activity}</div>
             {this.displayStrokeRate()}
             {this.displayAvgHR()}
           </div>

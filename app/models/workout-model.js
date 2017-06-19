@@ -48,7 +48,13 @@ WorkoutSchema.pre('save', function timeToString(next) {
     } else {
       workout.timeString = `${minutes}:${seconds}${dec}`;
     }
-  } else if (seconds < 10) {
+  } else if (seconds < 10 && seconds !== 0) {
+    if (minutes < 10) {
+      workout.timeString = `${hours}:0${minutes}:0${seconds}${dec}`;
+    } else {
+      workout.timeString = `${hours}:${minutes}:0${seconds}${dec}`;
+    }
+  } else if (minutes < 10) {
     workout.timeString = `${hours}:0${minutes}:${seconds}${dec}`;
   } else {
     workout.timeString = `${hours}:${minutes}:${seconds}${dec}`;
