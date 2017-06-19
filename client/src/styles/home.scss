@@ -29,7 +29,7 @@ $div-background: #e8e8e8;
       justify-content: flex-start;
     }
 
-    .workout-div {
+    .workout-content, .workout-edit-form {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -61,7 +61,7 @@ $div-background: #e8e8e8;
     }
   }
 
-  form {
+  .workout-add-form {
     position: absolute;
     top: 120px;
     right: 80px;

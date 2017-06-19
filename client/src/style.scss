@@ -25,6 +25,7 @@ li {
 nav {
   position: fixed;
   top: 0px;
+  left: 0px;
   right: 0px;
   width: 100%;
   z-index: 0;
@@ -47,6 +48,13 @@ nav {
     }
     div:hover, #signout-button:hover {
       border-color: white;
+    }
+    #name-logo {
+      position: fixed;
+      left: 10px;
+      border-style: none;
+      font-size: 30px;
+      margin: 0px;
     }
     #signout-button {
       color: white;
