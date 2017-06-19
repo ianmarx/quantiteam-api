@@ -31,6 +31,7 @@ class WorkoutPost extends Component {
     this.displayStrokeRate = this.displayStrokeRate.bind(this);
     this.displayWatts = this.displayWatts.bind(this);
     this.timeConvert = this.timeConvert.bind(this);
+    this.onCancelClick = this.onCancelClick.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
   componentWillMount() {
@@ -79,8 +80,10 @@ class WorkoutPost extends Component {
   onHeartRateChange(event) {
     this.setState({ avgHR: event.target.value });
   }
+  onCancelClick(event) {
+    this.setState({ isEditing: false });
+  }
   onSubmit(event) {
-    event.stopPropagation();
     const activity = this.state.activity;
     const distance = this.state.distance;
     const distUnit = this.state.distUnit;
@@ -89,27 +92,26 @@ class WorkoutPost extends Component {
     const watts = this.state.watts;
     const avgHR = this.state.avgHR;
     const workoutObject = { activity, distance, distUnit, time, strokeRate, watts, avgHR };
-    console.log(workoutObject);
     this.props.updateWorkout(this.props.workout._id, workoutObject);
   }
   /* Only display HR, stroke rate, and watts if the values exist */
   displayAvgHR() {
     if (this.props.workout.avgHR) {
-      return <div>{this.props.workout.avgHR} bpm</div>;
+      return <div><hr />{this.props.workout.avgHR} bpm</div>;
     } else {
       return <div />;
     }
   }
   displayStrokeRate() {
     if (this.props.workout.strokeRate) {
-      return <div>{this.props.workout.strokeRate} s/m</div>;
+      return <div><hr />{this.props.workout.strokeRate} s/m</div>;
     } else {
       return <div />;
     }
   }
   displayWatts() {
     if (this.props.workout.watts) {
-      return <div>{this.props.workout.watts} watts</div>;
+      return <div><hr />{this.props.workout.watts} watts</div>;
     } else {
       return <div />;
     }
@@ -188,7 +190,8 @@ class WorkoutPost extends Component {
                   type="text"
                 />
               </li>
-              <button type="submit" className="workout-submit">Save</button>
+              <button type="button" className="workout-edit-cancel" onClick={this.onCancelClick}>Cancel</button>
+              <button type="submit" className="workout-edit-submit">Save</button>
             </ul>
           </div>
         </form>
@@ -203,14 +206,11 @@ class WorkoutPost extends Component {
           </div>
           <div className="workout-div-column">
             <div>{this.props.workout.distance}{this.props.workout.distUnit} {this.props.workout.activity}</div>
-            <hr />
             {this.displayStrokeRate()}
-            <hr />
             {this.displayAvgHR()}
           </div>
           <div className="workout-div-column">
             <div>{this.props.workout.timeString}</div>
-            <hr />
             {this.displayWatts()}
           </div>
           <div className="workout-div-column">
