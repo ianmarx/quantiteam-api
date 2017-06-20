@@ -36,7 +36,6 @@ class HomePage extends Component {
     this.onSecondsChange = this.onSecondsChange.bind(this);
     this.onStrokeRateChange = this.onStrokeRateChange.bind(this);
     this.onWattsChange = this.onWattsChange.bind(this);
-//    this.onEditClick = this.onEditClick.bind(this);
     this.onDeleteClick = this.onDeleteClick.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.timeConvert = this.timeConvert.bind(this);
@@ -81,6 +80,7 @@ class HomePage extends Component {
     console.log('Workout deleted successfully'); // added b/c message in deleteWorkout action not showing up
     this.props.fetchUserWorkouts(this.props.match.params.userId);
   }
+  /* Add a workout using the form */
   onSubmit(event) {
     console.log('Workout add submitted');
     const activity = this.state.activity;
@@ -116,7 +116,7 @@ class HomePage extends Component {
   }
   render() {
     return (
-      <div className="workout-page">
+      <div className="home-page">
         <div className="workout-feed">
           <div id="feed-title">Workout Feed</div>
           {this.displayFeed()}

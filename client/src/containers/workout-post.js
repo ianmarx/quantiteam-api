@@ -227,7 +227,7 @@ class WorkoutPost extends Component {
   }
   render() {
     return (
-      <div className="workout-div" key={`workout-${this.props.index}`}>
+      <div className="workout-post">
         {this.renderContent()}
       </div>
     );

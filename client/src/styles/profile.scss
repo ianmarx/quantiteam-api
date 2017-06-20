@@ -1,0 +1,39 @@
+$div-background: #e8e8e8;
+
+.profile-page {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+
+  margin-top: 40px;
+  margin-left: 80px;
+  margin-right: 80px;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: $div-background;
+  color: black;
+  height: 93%;
+
+  .profile-header {
+
+    .profile-name {
+      font-size: 48px;
+      margin: 30px;
+    }
+  }
+
+  .profile-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+
+    #feed-title {
+      display: fixed;
+      font-size: 32px;
+    }
+  }
+
+}
