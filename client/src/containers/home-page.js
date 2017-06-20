@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import ReactModal from 'react-modal';
 import { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts,
   updateWorkout, updateUser, deleteWorkout } from '../actions';
 import WorkoutPost from './workout-post';
@@ -26,6 +27,7 @@ class HomePage extends Component {
       strokeRate: '',
       watts: '',
       avgHR: '',
+      showModal: false,
     };
     this.onActivityChange = this.onActivityChange.bind(this);
     this.onDistanceChange = this.onDistanceChange.bind(this);
@@ -37,6 +39,8 @@ class HomePage extends Component {
     this.onStrokeRateChange = this.onStrokeRateChange.bind(this);
     this.onWattsChange = this.onWattsChange.bind(this);
     this.onDeleteClick = this.onDeleteClick.bind(this);
+    this.onModalOpen = this.onModalOpen.bind(this);
+    this.onModalClose = this.onModalClose.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.timeConvert = this.timeConvert.bind(this);
     this.displayFeed = this.displayFeed.bind(this);
@@ -80,6 +84,12 @@ class HomePage extends Component {
     console.log('Workout deleted successfully'); // added b/c message in deleteWorkout action not showing up
     this.props.fetchUserWorkouts(this.props.match.params.userId);
   }
+  onModalOpen(event) {
+    this.setState({ showModal: true });
+  }
+  onModalClose(event) {
+    this.setState({ showModal: false });
+  }
   /* Add a workout using the form */
   onSubmit(event) {
     console.log('Workout add submitted');
@@ -119,77 +129,86 @@ class HomePage extends Component {
       <div className="home-page">
         <div className="workout-feed">
           <div id="feed-title">Workout Feed</div>
+          <button className="modal-open-button" onClick={this.onModalOpen}>Add Workout</button>
           {this.displayFeed()}
         </div>
-        <div className="indiv-workout-form">
-          <form className="workout-add-form" onSubmit={this.onSubmit}>
-            <div className="form-title">Add Workout</div>
-            <div className="column-group">
-              <ul className="form-column">
-                <li id="distance-field">
-                  <h3>Distance</h3>
-                  <input onChange={this.onDistanceChange} value={this.state.distance}
-                    type="text" required
-                  />
-                </li>
-                <li id="time-field">
-                  <h3>Hours</h3>
-                  <input onChange={this.onHoursChange} value={this.state.hours}
-                    type="text" required
-                  />
-                  <h3>Minutes</h3>
-                  <input onChange={this.onMinutesChange} value={this.state.minutes}
-                    type="text" required
-                  />
-                  <h3>Seconds</h3>
-                  <input onChange={this.onSecondsChange} value={this.state.seconds}
-                    type="text" required
-                  />
-                </li>
-                <li>
-                  <h3>Average HR (bpm)</h3>
-                  <input onChange={this.onHeartRateChange} value={this.state.avgHR}
-                    type="text"
-                  />
-                </li>
-              </ul>
-              <ul className="form-column">
-                <li>
-                  <h3>Activity</h3>
-                  <select value={this.state.activity} onChange={this.onActivityChange}>
-                    <option default>Select</option>
-                    <option value="erg">Ergometer</option>
-                    <option value="row">Rowing</option>
-                    <option value="run">Running</option>
-                    <option value="bike">Cycling</option>
-                  </select>
-                </li>
-                <li>
-                  <h3>Distance Units</h3>
-                  <select value={this.state.distUnit} onChange={this.onDistUnitChange}>
-                    <option default>Select</option>
-                    <option value="m">m</option>
-                    <option value="km">km</option>
-                    <option value="mi">mi</option>
-                  </select>
-                </li>
-                <li>
-                  <h3>Stroke Rate</h3>
-                  <input onChange={this.onStrokeRateChange} value={this.state.strokeRate}
-                    type="text"
-                  />
-                </li>
-                <li>
-                  <h3>Watts</h3>
-                  <input onChange={this.onWattsChange} value={this.state.watts}
-                    type="text"
-                  />
-                </li>
-                <button type="submit" className="workout-submit">Add Workout</button>
-              </ul>
-            </div>
-          </form>
-        </div>
+        <ReactModal
+          isOpen={this.state.showModal}
+          contentLabel="Add Workout"
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <div className="indiv-workout-form">
+            <form className="workout-add-form" onSubmit={this.onSubmit}>
+              <div className="form-title">Add Workout</div>
+              <div className="column-group">
+                <ul className="form-column">
+                  <li id="distance-field">
+                    <h3>Distance</h3>
+                    <input onChange={this.onDistanceChange} value={this.state.distance}
+                      type="text" required
+                    />
+                  </li>
+                  <li id="time-field">
+                    <h3>Hours</h3>
+                    <input onChange={this.onHoursChange} value={this.state.hours}
+                      type="text" required
+                    />
+                    <h3>Minutes</h3>
+                    <input onChange={this.onMinutesChange} value={this.state.minutes}
+                      type="text" required
+                    />
+                    <h3>Seconds</h3>
+                    <input onChange={this.onSecondsChange} value={this.state.seconds}
+                      type="text" required
+                    />
+                  </li>
+                  <li>
+                    <h3>Average HR (bpm)</h3>
+                    <input onChange={this.onHeartRateChange} value={this.state.avgHR}
+                      type="text"
+                    />
+                  </li>
+                </ul>
+                <ul className="form-column">
+                  <li>
+                    <h3>Activity</h3>
+                    <select value={this.state.activity} onChange={this.onActivityChange}>
+                      <option default>Select</option>
+                      <option value="erg">Ergometer</option>
+                      <option value="row">Rowing</option>
+                      <option value="run">Running</option>
+                      <option value="bike">Cycling</option>
+                    </select>
+                  </li>
+                  <li>
+                    <h3>Distance Units</h3>
+                    <select value={this.state.distUnit} onChange={this.onDistUnitChange}>
+                      <option default>Select</option>
+                      <option value="m">m</option>
+                      <option value="km">km</option>
+                      <option value="mi">mi</option>
+                    </select>
+                  </li>
+                  <li>
+                    <h3>Stroke Rate</h3>
+                    <input onChange={this.onStrokeRateChange} value={this.state.strokeRate}
+                      type="text"
+                    />
+                  </li>
+                  <li>
+                    <h3>Watts</h3>
+                    <input onChange={this.onWattsChange} value={this.state.watts}
+                      type="text"
+                    />
+                  </li>
+                  <button type="submit" className="workout-submit">Submit</button>
+                  <button className="modal-close" onClick={this.onModalClose}>Close</button>
+                </ul>
+              </div>
+            </form>
+          </div>
+        </ReactModal>
       </div>
     );
   }
