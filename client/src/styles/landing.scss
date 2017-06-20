@@ -35,6 +35,10 @@
       color: white;
       margin: 10px;
       width: 350px;
+
+      &:hover {
+        cursor: pointer;
+      }
     }
     .already-user {
       margin-top: 10px;
