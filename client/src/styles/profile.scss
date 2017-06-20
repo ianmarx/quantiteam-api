@@ -15,11 +15,27 @@ $div-background: #e8e8e8;
   color: black;
   height: 93%;
 
-  .profile-header {
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
 
-    .profile-name {
+    div:not(.user-name) {
+      margin-top: 10px;
+      font-size: 18px;
+      background-color: #f4f4f4;
+      padding: 5px;
+      border-style: none;
+      border-radius: 5px;
+    }
+
+    .user-name {
       font-size: 48px;
-      margin: 30px;
+      margin-top: 30px;
+    }
+    .team-name {
+      font-weight: bold;
     }
   }
 
@@ -29,10 +45,14 @@ $div-background: #e8e8e8;
     justify-content: flex-start;
     align-items: center;
 
+    .workout-feed {
+      overflow: auto;
+    }
 
     #feed-title {
       display: fixed;
-      font-size: 32px;
+      font-size: 35px;
+      margin-top: 40px;
     }
   }
 

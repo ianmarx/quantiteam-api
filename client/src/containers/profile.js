@@ -49,8 +49,15 @@ class Profile extends Component {
   }
   displayInfo() {
     return (
-      <div className="profile-header">
-        <div className="profile-name">{this.props.user.name}</div>
+      <div className="user-info">
+        <div className="user-name">{this.props.user.name}</div>
+        <div className="user-description">
+          <div className="team-name">Team Name</div>
+          <div className="user-location">Home Location</div>
+          <div className="user-bio" rows="2" cols="32">
+            This is a test user bio.
+          </div>
+        </div>
       </div>
     );
   }
