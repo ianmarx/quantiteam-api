@@ -10,6 +10,7 @@ export const ActionTypes = {
   FETCH_WORKOUT: 'FETCH_WORKOUT',
   FETCH_WORKOUTS: 'FETCH_WORKOUTS',
   DELETE_WORKOUT: 'DELETE_WORKOUT',
+  FETCH_TEAM: 'FETCH_TEAM',
 };
 
 export function authError(error) {
@@ -87,7 +88,7 @@ export function updateUser(userId, user) {
 }
 
 export function addWorkout({ activity, distance, distUnit, time,
-  split, splitDist, splitUnit, strokeRate, watts, avgHR }, userId, history) {
+  split, splitDist, splitUnit, strokeRate, watts, avgHR }, userId) {
   const headers = { headers: { authorization: localStorage.getItem('token') } };
   /* axios POST call */
   return (dispatch) => {
@@ -152,6 +153,34 @@ export function deleteWorkout(workoutId, userId) {
       dispatch({ type: ActionTypes.FETCH_WORKOUTS, payload: response.data });
     }).catch((error) => {
       console.log(`deleteWorkout failed: ${error.message}`);
+    });
+  };
+}
+
+export function addTeam({ name, userType }, userId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  const info = { name, userType, userId };
+  console.log(info);
+  /* axios POST call */
+  return (dispatch) => {
+    axios.post(`${ROOT_URL}/team/add`, info, headers).then((response) => {
+      console.log('Team created successfully');
+      dispatch({ type: ActionTypes.FETCH_TEAM, payload: response.data });
+    }).catch((error) => {
+      console.log(`addTeam failed: ${error.message}`);
+    });
+  };
+}
+
+export function fetchUserTeam(userId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios GET call */
+  return (dispatch) => {
+    axios.get(`${ROOT_URL}/team/${userId}`, headers).then((response) => {
+      console.log('Team fetched successfully');
+      dispatch({ type: ActionTypes.FETCH_TEAM, payload: response.data });
+    }).catch((error) => {
+      console.log(`fetchWorkout failed: ${error.message}`);
     });
   };
 }

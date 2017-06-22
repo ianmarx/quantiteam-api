@@ -1,4 +1,3 @@
-// import mongoose from 'mongoose';
 import Workout from '../models/workout-model';
 import User from '../models/user-model';
 
