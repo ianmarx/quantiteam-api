@@ -35,6 +35,7 @@ router.route('/workouts/:workoutId/:userId')
   .delete(requireAuth, WorkoutController.deleteWorkout);
 
 router.get('/feed/:userId', requireAuth, WorkoutController.fetchUserWorkouts);
+router.get('/teamfeed/:userId', requireAuth, WorkoutController.fetchTeamWorkouts);
 
 router.post('/team/create', requireAuth, TeamController.createTeam);
 router.post('/team/join', requireAuth, TeamController.joinTeam);

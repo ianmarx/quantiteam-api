@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ReactModal from 'react-modal';
-import { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts,
+import { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamWorkouts,
   updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam } from '../actions';
 import WorkoutPost from './workout-post';
 import AddWorkoutForm from './forms/add-workout-form';
@@ -13,6 +13,7 @@ const mapStateToProps = state => (
   {
     user: state.profile.user,
     workouts: state.workouts.list,
+    teamWorkouts: state.workouts.teamList,
     team: state.team.team,
     authenticated: state.auth.authenticated,
   }
@@ -38,10 +39,11 @@ class HomePage extends Component {
   componentDidMount() {
     this.props.fetchUser(this.props.match.params.userId);
     this.props.fetchUserWorkouts(this.props.match.params.userId);
+    this.props.fetchTeamWorkouts(this.props.match.params.userId);
     this.props.fetchUserTeam(this.props.match.params.userId);
   }
-  // this is called in <WorkoutPost> by onLocalDeleteClick(event)
-  // did it this way so two IDs could be passed in
+  /* this is called in the WorkoutPost component by onLocalDeleteClick */
+  /* this setup is used so that both ID's can be passed to deleteWorkout() */
   onDeleteClick(workoutId, userId) {
     this.props.deleteWorkout(workoutId, userId);
     console.log('Workout deleted successfully'); // added b/c message in deleteWorkout action not showing up
@@ -76,6 +78,20 @@ class HomePage extends Component {
               />
             </div>
           );
+        })}
+        {this.props.teamWorkouts.map((workout, i) => {
+          /* avoid rendering duplicate workouts (in user and team lists) */
+          if (!this.props.user.workouts.includes(workout._id)) {
+            return (
+              <div key={`workout-${i}`}>
+                <WorkoutPost userId={workout._creator} workout={workout} index={i}
+                  onDeleteClick={this.onDeleteClick} updateWorkout={this.props.updateWorkout}
+                />
+              </div>
+            );
+          } else {
+            return <div key={`${i}`} />;
+          }
         })}
       </div>
     );
@@ -138,5 +154,5 @@ class HomePage extends Component {
 }
 
 export default withRouter(connect(mapStateToProps,
-  { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts,
+  { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamWorkouts,
     updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam })(HomePage));

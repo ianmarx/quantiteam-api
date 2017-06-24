@@ -90,6 +90,23 @@ export const fetchUserWorkouts = (req, res) => {
   });
 };
 
+export const fetchTeamWorkouts = (req, res) => {
+  User.findById(req.params.userId)
+  .then((result) => {
+    Team.findById(result.team)
+    .populate('workouts')
+    .then((team) => {
+      res.json(team.workouts);
+    })
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
+  })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+};
+
 export const deleteWorkout = (req, res) => {
   /* remove the workout document */
   Workout.remove({ _id: req.params.workoutId })

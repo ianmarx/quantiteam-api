@@ -11,6 +11,7 @@ export const ActionTypes = {
   FETCH_WORKOUTS: 'FETCH_WORKOUTS',
   DELETE_WORKOUT: 'DELETE_WORKOUT',
   FETCH_TEAM: 'FETCH_TEAM',
+  FETCH_TEAM_WORKOUTS: 'FETCH_TEAM_WORKOUTS',
 };
 
 export function authError(error) {
@@ -127,6 +128,19 @@ export function fetchUserWorkouts(userId) {
       dispatch({ type: ActionTypes.FETCH_WORKOUTS, payload: response.data });
     }).catch((error) => {
       console.log(`fetchUserWorkouts failed: ${error.message}`);
+    });
+  };
+}
+
+export function fetchTeamWorkouts(userId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios GET call */
+  return (dispatch) => {
+    axios.get(`${ROOT_URL}/teamfeed/${userId}`, headers).then((response) => {
+      console.log('Team workouts fetched successfully');
+      dispatch({ type: ActionTypes.FETCH_TEAM_WORKOUTS, payload: response.data });
+    }).catch((error) => {
+      console.log(`fetchTeamWorkouts failed: ${error.message}`);
     });
   };
 }
