@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class AddTeamForm extends Component {
+class JoinTeamForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,19 +18,19 @@ class AddTeamForm extends Component {
     this.setState({ userType: event.target.value });
   }
   onSubmit(event) {
-    console.log('New team submitted');
+    console.log('Team join request submitted');
     const name = this.state.name;
     const userType = this.state.userType;
     console.log(name);
     console.log(userType);
     const teamObject = { name, userType };
-    this.props.addTeam(teamObject, this.props.userId);
+    this.props.joinTeam(teamObject, this.props.userId);
   }
   render() {
     return (
       <div className="form-container">
         <form className="modal-form" id="addTeam" onSubmit={this.onSubmit}>
-          <div className="form-title">Add Team</div>
+          <div className="form-title">Join Team</div>
           <div className="column-group">
             <ul id="team-form-column">
               <li>
@@ -59,4 +59,4 @@ class AddTeamForm extends Component {
   }
 }
 
-export default AddTeamForm;
+export default JoinTeamForm;

@@ -157,7 +157,7 @@ export function deleteWorkout(workoutId, userId) {
   };
 }
 
-export function addTeam({ name, userType }, userId) {
+export function createTeam({ name, userType }, userId) {
   const headers = { headers: { authorization: localStorage.getItem('token') } };
   const info = { name, userType, userId };
   console.log(info);
@@ -167,7 +167,22 @@ export function addTeam({ name, userType }, userId) {
       console.log('Team created successfully');
       dispatch({ type: ActionTypes.FETCH_TEAM, payload: response.data });
     }).catch((error) => {
-      console.log(`addTeam failed: ${error.message}`);
+      console.log(`createTeam failed: ${error.message}`);
+    });
+  };
+}
+
+export function joinTeam({ name, userType }, userId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  const info = { name, userType, userId };
+  console.log(info);
+  /* axios POST call */
+  return (dispatch) => {
+    axios.post(`${ROOT_URL}/team/join`, info, headers).then((response) => {
+      console.log('Team joined successfully');
+      dispatch({ type: ActionTypes.FETCH_TEAM, payload: response.data });
+    }).catch((error) => {
+      console.log(`joinTeam failed: ${error.message}`);
     });
   };
 }

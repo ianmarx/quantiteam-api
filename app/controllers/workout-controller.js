@@ -1,5 +1,6 @@
 import Workout from '../models/workout-model';
 import User from '../models/user-model';
+import Team from '../models/team-model';
 
 export const addWorkout = (req, res, next) => {
   /* Get workout info from user input */
@@ -33,6 +34,19 @@ export const addWorkout = (req, res, next) => {
     /* Add the workout to its creator's list of workouts */
     User.findById(result._creator)
     .then((user) => {
+      /* Add the workout to the team's list of workouts */
+      Team.findById(user.team)
+      .then((team) => {
+        team.workouts.push(result);
+        team.save()
+        .catch((error) => {
+          res.status(500).json({ error });
+        });
+      })
+      .catch((error) => {
+        res.status(500).json({ error });
+      });
+
       user.workouts.push(result._id);
       user.save()
       .catch((error) => {

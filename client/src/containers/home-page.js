@@ -3,15 +3,17 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ReactModal from 'react-modal';
 import { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts,
-  updateWorkout, updateUser, deleteWorkout, addTeam } from '../actions';
+  updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam } from '../actions';
 import WorkoutPost from './workout-post';
 import AddWorkoutForm from './forms/add-workout-form';
-import AddTeamForm from './forms/add-team-form';
+import CreateTeamForm from './forms/create-team-form';
+import JoinTeamForm from './forms/join-team-form';
 
 const mapStateToProps = state => (
   {
     user: state.profile.user,
     workouts: state.workouts.list,
+    team: state.team.team,
     authenticated: state.auth.authenticated,
   }
 );
@@ -22,17 +24,21 @@ class HomePage extends Component {
     this.state = {
       showModal: false,
       showTeamModal: false,
+      showJoinModal: false,
     };
     this.onDeleteClick = this.onDeleteClick.bind(this);
     this.onModalOpen = this.onModalOpen.bind(this);
     this.onModalClose = this.onModalClose.bind(this);
     this.onTeamModalOpen = this.onTeamModalOpen.bind(this);
     this.onTeamModalClose = this.onTeamModalClose.bind(this);
+    this.onJoinModalOpen = this.onJoinModalOpen.bind(this);
+    this.onJoinModalClose = this.onJoinModalClose.bind(this);
     this.displayFeed = this.displayFeed.bind(this);
   }
   componentDidMount() {
     this.props.fetchUser(this.props.match.params.userId);
     this.props.fetchUserWorkouts(this.props.match.params.userId);
+    this.props.fetchUserTeam(this.props.match.params.userId);
   }
   // this is called in <WorkoutPost> by onLocalDeleteClick(event)
   // did it this way so two IDs could be passed in
@@ -52,6 +58,12 @@ class HomePage extends Component {
   }
   onTeamModalClose(event) {
     this.setState({ showTeamModal: false });
+  }
+  onJoinModalOpen(event) {
+    this.setState({ showJoinModal: true });
+  }
+  onJoinModalClose(event) {
+    this.setState({ showJoinModal: false });
   }
   displayFeed() {
     return (
@@ -74,8 +86,13 @@ class HomePage extends Component {
         <div className="workout-feed">
           <div id="feed-title">Workout Feed</div>
           <div className="button-group">
-            <button className="modal-button" onClick={this.onModalOpen}>Add Workout</button>
-            <button className="team-modal-button" onClick={this.onTeamModalOpen}>Create Team</button>
+            <button className="modal-button" id="addWorkoutForm" onClick={this.onModalOpen}>Add Workout</button>
+            {!this.props.user.team &&
+              <button className="create-modal-button" id="createTeamForm" onClick={this.onTeamModalOpen}>Create Team</button>
+            }
+            {!this.props.user.team &&
+              <button className="join-modal-button" id="joinTeamForm" onClick={this.onJoinModalOpen}>Join Team</button>
+            }
           </div>
           {this.displayFeed()}
         </div>
@@ -97,10 +114,22 @@ class HomePage extends Component {
           className="modal"
           overlayClassName="overlay"
         >
-          <AddTeamForm
-            addTeam={this.props.addTeam}
+          <CreateTeamForm
+            createTeam={this.props.createTeam}
             userId={this.props.match.params.userId}
             onTeamModalClose={this.onTeamModalClose}
+          />
+        </ReactModal>
+        <ReactModal
+          isOpen={this.state.showJoinModal}
+          contentLabel="Create Team"
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <JoinTeamForm
+            joinTeam={this.props.joinTeam}
+            userId={this.props.match.params.userId}
+            onJoinModalClose={this.onJoinModalClose}
           />
         </ReactModal>
       </div>
@@ -110,4 +139,4 @@ class HomePage extends Component {
 
 export default withRouter(connect(mapStateToProps,
   { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts,
-    updateWorkout, updateUser, deleteWorkout, addTeam })(HomePage));
+    updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam })(HomePage));
