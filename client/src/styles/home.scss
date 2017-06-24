@@ -48,7 +48,7 @@ $div-background: #e8e8e8;
       background-color: #1b3868;
     }
   }
-  .team-modal-button {
+  .create-modal-button {
     margin: 5px;
     margin-top: 10px;
     height: 40px;
@@ -63,6 +63,23 @@ $div-background: #e8e8e8;
     }
     &:active {
       background-color: #d68e08;
+    }
+  }
+  .join-modal-button {
+    margin: 5px;
+    margin-top: 10px;
+    height: 40px;
+    width: 100px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2bb8d1;
+    color: white;
+    &:hover {
+      cursor: pointer;
+    }
+    &:active {
+      background-color: #1e8496;
     }
   }
   .headers {
