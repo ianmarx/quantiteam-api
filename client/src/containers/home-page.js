@@ -2,14 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ReactModal from 'react-modal';
-import { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts,
-  updateWorkout, updateUser, deleteWorkout } from '../actions';
+import { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamWorkouts,
+  updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam } from '../actions';
 import WorkoutPost from './workout-post';
+import AddWorkoutForm from './forms/add-workout-form';
+import CreateTeamForm from './forms/create-team-form';
+import JoinTeamForm from './forms/join-team-form';
 
 const mapStateToProps = state => (
   {
     user: state.profile.user,
     workouts: state.workouts.list,
+    teamWorkouts: state.workouts.teamList,
+    team: state.team.team,
     authenticated: state.auth.authenticated,
   }
 );
@@ -18,67 +23,27 @@ class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activity: '',
-      distUnit: '',
-      distance: '',
-      hours: '',
-      minutes: '',
-      seconds: '',
-      strokeRate: '',
-      watts: '',
-      avgHR: '',
       showModal: false,
+      showTeamModal: false,
+      showJoinModal: false,
     };
-    this.onActivityChange = this.onActivityChange.bind(this);
-    this.onDistanceChange = this.onDistanceChange.bind(this);
-    this.onDistUnitChange = this.onDistUnitChange.bind(this);
-    this.onHeartRateChange = this.onHeartRateChange.bind(this);
-    this.onHoursChange = this.onHoursChange.bind(this);
-    this.onMinutesChange = this.onMinutesChange.bind(this);
-    this.onSecondsChange = this.onSecondsChange.bind(this);
-    this.onStrokeRateChange = this.onStrokeRateChange.bind(this);
-    this.onWattsChange = this.onWattsChange.bind(this);
     this.onDeleteClick = this.onDeleteClick.bind(this);
     this.onModalOpen = this.onModalOpen.bind(this);
     this.onModalClose = this.onModalClose.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.timeConvert = this.timeConvert.bind(this);
+    this.onTeamModalOpen = this.onTeamModalOpen.bind(this);
+    this.onTeamModalClose = this.onTeamModalClose.bind(this);
+    this.onJoinModalOpen = this.onJoinModalOpen.bind(this);
+    this.onJoinModalClose = this.onJoinModalClose.bind(this);
     this.displayFeed = this.displayFeed.bind(this);
   }
   componentDidMount() {
     this.props.fetchUser(this.props.match.params.userId);
     this.props.fetchUserWorkouts(this.props.match.params.userId);
+    this.props.fetchUserTeam(this.props.match.params.userId);
+    this.props.fetchTeamWorkouts(this.props.match.params.userId);
   }
-  /* Handle changes in the add workout fields */
-  onActivityChange(event) {
-    this.setState({ activity: event.target.value });
-  }
-  onDistanceChange(event) {
-    this.setState({ distance: event.target.value });
-  }
-  onDistUnitChange(event) {
-    this.setState({ distUnit: event.target.value });
-  }
-  onHoursChange(event) {
-    this.setState({ hours: event.target.value });
-  }
-  onMinutesChange(event) {
-    this.setState({ minutes: event.target.value });
-  }
-  onSecondsChange(event) {
-    this.setState({ seconds: event.target.value });
-  }
-  onStrokeRateChange(event) {
-    this.setState({ strokeRate: event.target.value });
-  }
-  onWattsChange(event) {
-    this.setState({ watts: event.target.value });
-  }
-  onHeartRateChange(event) {
-    this.setState({ avgHR: event.target.value });
-  }
-  // this is called in <WorkoutPost> by onLocalDeleteClick(event)
-  // did it this way so two IDs could be passed in
+  /* this is called in the WorkoutPost component by onLocalDeleteClick */
+  /* this setup is used so that both ID's can be passed to deleteWorkout() */
   onDeleteClick(workoutId, userId) {
     this.props.deleteWorkout(workoutId, userId);
     console.log('Workout deleted successfully'); // added b/c message in deleteWorkout action not showing up
@@ -90,46 +55,69 @@ class HomePage extends Component {
   onModalClose(event) {
     this.setState({ showModal: false });
   }
-  /* Add a workout using the form */
-  onSubmit(event) {
-    console.log('Workout add submitted');
-    const activity = this.state.activity;
-    const distance = this.state.distance;
-    const distUnit = this.state.distUnit;
-    const time = this.timeConvert();
-    const strokeRate = this.state.strokeRate;
-    const watts = this.state.watts;
-    const avgHR = this.state.avgHR;
-    const workoutObject = { activity, distance, distUnit, time, strokeRate, watts, avgHR };
-    this.props.addWorkout(workoutObject, this.props.match.params.userId, this.props.history);
+  onTeamModalOpen(event) {
+    this.setState({ showTeamModal: true });
   }
-  /* convert the strings of each time values into the total number of seconds */
-  timeConvert() {
-    return ((parseFloat(this.state.hours, 10) * 3600) +
-            (parseFloat(this.state.minutes, 10) * 60) +
-            (parseFloat(this.state.seconds, 10).toPrecision(3) * 1));
+  onTeamModalClose(event) {
+    this.setState({ showTeamModal: false });
+  }
+  onJoinModalOpen(event) {
+    this.setState({ showJoinModal: true });
+  }
+  onJoinModalClose(event) {
+    this.setState({ showJoinModal: false });
   }
   displayFeed() {
-    return (
-      <div className="workout-posts">
-        {this.props.workouts.map((workout, i) => {
-          return (
-            <div key={`workout-${i}`}>
-              <WorkoutPost userId={workout._creator} workout={workout} index={i}
-                onDeleteClick={this.onDeleteClick} updateWorkout={this.props.updateWorkout}
-              />
-            </div>
-          );
-        })}
-      </div>
-    );
+    if (!this.props.team._id) {
+      this.props.workouts.sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
+      return (
+        <div className="workout-posts">
+          {this.props.workouts.map((workout, i) => {
+            return (
+              <div key={`workout-${i}`}>
+                <WorkoutPost userId={workout._creator} workout={workout} index={i}
+                  onDeleteClick={this.onDeleteClick} updateWorkout={this.props.updateWorkout}
+                />
+              </div>
+            );
+          })}
+        </div>
+      );
+    } else {
+      this.props.teamWorkouts.sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
+      return (
+        <div className="workout-posts">
+          {this.props.teamWorkouts.map((workout, i) => {
+            return (
+              <div key={`workout-${i}`}>
+                <WorkoutPost userId={workout._creator} workout={workout} index={i}
+                  onDeleteClick={this.onDeleteClick} updateWorkout={this.props.updateWorkout}
+                />
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
   }
   render() {
     return (
       <div className="home-page">
         <div className="workout-feed">
           <div id="feed-title">Workout Feed</div>
-          <button className="modal-open-button" onClick={this.onModalOpen}>Add Workout</button>
+          <div className="button-group">
+            <button className="modal-button" id="addWorkoutForm" onClick={this.onModalOpen}>Add Workout</button>
+            {!this.props.user.team &&
+              <button className="create-modal-button" id="createTeamForm" onClick={this.onTeamModalOpen}>Create Team</button>
+            }
+            {!this.props.user.team &&
+              <button className="join-modal-button" id="joinTeamForm" onClick={this.onJoinModalOpen}>Join Team</button>
+            }
+          </div>
           {this.displayFeed()}
         </div>
         <ReactModal
@@ -138,76 +126,35 @@ class HomePage extends Component {
           className="modal"
           overlayClassName="overlay"
         >
-          <div className="indiv-workout-form">
-            <form className="workout-add-form" onSubmit={this.onSubmit}>
-              <div className="form-title">Add Workout</div>
-              <div className="column-group">
-                <ul className="form-column">
-                  <li id="distance-field">
-                    <h3>Distance</h3>
-                    <input onChange={this.onDistanceChange} value={this.state.distance}
-                      type="text" required
-                    />
-                  </li>
-                  <li id="time-field">
-                    <h3>Hours</h3>
-                    <input onChange={this.onHoursChange} value={this.state.hours}
-                      type="text" required
-                    />
-                    <h3>Minutes</h3>
-                    <input onChange={this.onMinutesChange} value={this.state.minutes}
-                      type="text" required
-                    />
-                    <h3>Seconds</h3>
-                    <input onChange={this.onSecondsChange} value={this.state.seconds}
-                      type="text" required
-                    />
-                  </li>
-                  <li>
-                    <h3>Average HR (bpm)</h3>
-                    <input onChange={this.onHeartRateChange} value={this.state.avgHR}
-                      type="text"
-                    />
-                  </li>
-                </ul>
-                <ul className="form-column">
-                  <li>
-                    <h3>Activity</h3>
-                    <select value={this.state.activity} onChange={this.onActivityChange}>
-                      <option default>Select</option>
-                      <option value="erg">Ergometer</option>
-                      <option value="row">Rowing</option>
-                      <option value="run">Running</option>
-                      <option value="bike">Cycling</option>
-                    </select>
-                  </li>
-                  <li>
-                    <h3>Distance Units</h3>
-                    <select value={this.state.distUnit} onChange={this.onDistUnitChange}>
-                      <option default>Select</option>
-                      <option value="m">m</option>
-                      <option value="km">km</option>
-                      <option value="mi">mi</option>
-                    </select>
-                  </li>
-                  <li>
-                    <h3>Stroke Rate</h3>
-                    <input onChange={this.onStrokeRateChange} value={this.state.strokeRate}
-                      type="text"
-                    />
-                  </li>
-                  <li>
-                    <h3>Watts</h3>
-                    <input onChange={this.onWattsChange} value={this.state.watts}
-                      type="text"
-                    />
-                  </li>
-                  <button type="submit" className="workout-submit">Submit</button>
-                  <button className="modal-close" onClick={this.onModalClose}>Close</button>
-                </ul>
-              </div>
-            </form>
-          </div>
+          <AddWorkoutForm
+            addWorkout={this.props.addWorkout}
+            userId={this.props.match.params.userId}
+            onModalClose={this.onModalClose}
+          />
+        </ReactModal>
+        <ReactModal
+          isOpen={this.state.showTeamModal}
+          contentLabel="Create Team"
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <CreateTeamForm
+            createTeam={this.props.createTeam}
+            userId={this.props.match.params.userId}
+            onTeamModalClose={this.onTeamModalClose}
+          />
+        </ReactModal>
+        <ReactModal
+          isOpen={this.state.showJoinModal}
+          contentLabel="Create Team"
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <JoinTeamForm
+            joinTeam={this.props.joinTeam}
+            userId={this.props.match.params.userId}
+            onJoinModalClose={this.onJoinModalClose}
+          />
         </ReactModal>
       </div>
     );
@@ -215,5 +162,5 @@ class HomePage extends Component {
 }
 
 export default withRouter(connect(mapStateToProps,
-  { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts,
-    updateWorkout, updateUser, deleteWorkout })(HomePage));
+  { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamWorkouts,
+    updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam })(HomePage));

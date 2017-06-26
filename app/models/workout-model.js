@@ -5,6 +5,7 @@ import round from 'lodash.round';
 const WorkoutSchema = new Schema({
   _creator: { type: Schema.Types.ObjectId, ref: 'User' }, // match id type to User model
   creatorName: String,
+  date: { type: Date, default: Date.now },
   activity: String,
   distance: Number,
   distUnit: String,
@@ -44,19 +45,25 @@ WorkoutSchema.pre('save', function timeToString(next) {
   /* format string representation of workout time */
   if (hours === 0) {
     if (seconds < 10) {
+      // mm:0s.d
       workout.timeString = `${minutes}:0${seconds}${dec}`;
     } else {
+      // mm:ss.d
       workout.timeString = `${minutes}:${seconds}${dec}`;
     }
-  } else if (seconds < 10 && seconds !== 0) {
+  } else if (seconds < 10 || seconds === 0) {
     if (minutes < 10) {
+      // hh:0m:0s.d
       workout.timeString = `${hours}:0${minutes}:0${seconds}${dec}`;
     } else {
+      // hh:mm:0s.d
       workout.timeString = `${hours}:${minutes}:0${seconds}${dec}`;
     }
   } else if (minutes < 10) {
+    // hh:0m:ss.d
     workout.timeString = `${hours}:0${minutes}:${seconds}${dec}`;
   } else {
+    // hh:mm:ss.d
     workout.timeString = `${hours}:${minutes}:${seconds}${dec}`;
   }
   next();

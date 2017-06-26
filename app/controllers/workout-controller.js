@@ -1,6 +1,6 @@
-// import mongoose from 'mongoose';
 import Workout from '../models/workout-model';
 import User from '../models/user-model';
+import Team from '../models/team-model';
 
 export const addWorkout = (req, res, next) => {
   /* Get workout info from user input */
@@ -34,16 +34,31 @@ export const addWorkout = (req, res, next) => {
     /* Add the workout to its creator's list of workouts */
     User.findById(result._creator)
     .then((user) => {
-      user.workouts.push(result._id);
-      user.save()
-      .catch((error) => {
-        res.status(500).json({ error });
-      });
-      result.creatorName = user.name;
-      result.save()
-      .catch((error) => {
-        res.status(500).json({ error });
-      });
+      /* Add the workout to the team's list of workouts */
+      if (user.team) {
+        Team.findById(user.team)
+        .then((team) => {
+          team.workouts.push(result);
+          team.save()
+          .catch((error) => {
+            res.status(500).json({ error });
+          });
+        })
+        .catch((error) => {
+          res.status(500).json({ error });
+        });
+
+        user.workouts.push(result._id);
+        user.save()
+        .catch((error) => {
+          res.status(500).json({ error });
+        });
+        result.creatorName = user.name;
+        result.save()
+        .catch((error) => {
+          res.status(500).json({ error });
+        });
+      }
     })
     .catch((error) => {
       res.status(500).json({ error });
@@ -69,8 +84,31 @@ export const fetchWorkout = (req, res) => {
 export const fetchUserWorkouts = (req, res) => {
   User.findById(req.params.userId)
   .populate('workouts')
+  .catch((error) => {
+    res.status(500).json({ error });
+  })
   .then((result) => {
     res.json(result.workouts);
+  })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+};
+
+export const fetchTeamWorkouts = (req, res) => {
+  User.findById(req.params.userId)
+  .then((result) => {
+    Team.findById(result.team)
+    .populate('workouts')
+    .catch((error) => {
+      res.status(500).kson({ error });
+    })
+    .then((team) => {
+      res.json(team.workouts);
+    })
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
   })
   .catch((error) => {
     res.status(500).json({ error });

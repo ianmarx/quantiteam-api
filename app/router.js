@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import * as UserController from './controllers/user-controller';
 import * as WorkoutController from './controllers/workout-controller';
+import * as TeamController from './controllers/team-controller';
 import { requireSignIn, requireAuth } from './services/passport';
 
 const router = Router();
@@ -34,5 +35,12 @@ router.route('/workouts/:workoutId/:userId')
   .delete(requireAuth, WorkoutController.deleteWorkout);
 
 router.get('/feed/:userId', requireAuth, WorkoutController.fetchUserWorkouts);
+router.get('/teamfeed/:userId', requireAuth, WorkoutController.fetchTeamWorkouts);
+
+router.post('/team/create', requireAuth, TeamController.createTeam);
+router.post('/team/join', requireAuth, TeamController.joinTeam);
+
+router.route('/team/:userId')
+  .get(requireAuth, TeamController.fetchUserTeam);
 
 export default router;
