@@ -101,7 +101,7 @@ export function addWorkout({ activity, distance, distUnit, time,
       console.log('Workout added successfully');
       dispatch({ type: ActionTypes.FETCH_USER, payload: response.data });
     }).catch((error) => {
-      console.log(`addWorkout() failed: ${error.response.data}`);
+      console.log(`addWorkout() failed: ${error.message}`);
     });
   };
 }
@@ -114,7 +114,7 @@ export function fetchWorkout(workoutId) {
       console.log('Workout fetched successfully');
       dispatch({ type: ActionTypes.FETCH_WORKOUT, payload: response.data });
     }).catch((error) => {
-      console.log(`fetchWorkout failed: ${error.response.data}`);
+      console.log(`fetchWorkout failed: ${error.message}`);
     });
   };
 }
