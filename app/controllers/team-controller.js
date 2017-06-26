@@ -86,6 +86,9 @@ export const joinTeam = (req, res) => {
 export const fetchUserTeam = (req, res) => {
   User.findById(req.params.userId)
   .populate('team')
+  .catch((error) => {
+    res.status(500).json({ error });
+  })
   .then((result) => {
     res.json(result.team);
   })
