@@ -36,6 +36,9 @@ class Profile extends Component {
     this.props.fetchUserWorkouts(this.props.match.params.userId);
   }
   displayFeed() {
+    this.props.workouts.sort((a, b) => {
+      return new Date(b.date) - new Date(a.date);
+    });
     return (
       <div className="workout-feed">
         {this.props.workouts.map((workout, i) => {
