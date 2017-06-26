@@ -68,9 +68,12 @@ class HomePage extends Component {
     this.setState({ showJoinModal: false });
   }
   displayFeed() {
+    this.props.teamWorkouts.sort((a, b) => {
+      return new Date(b.date) - new Date(a.date);
+    });
     return (
       <div className="workout-posts">
-        {this.props.workouts.map((workout, i) => {
+        {this.props.teamWorkouts.map((workout, i) => {
           return (
             <div key={`workout-${i}`}>
               <WorkoutPost userId={workout._creator} workout={workout} index={i}
@@ -78,20 +81,6 @@ class HomePage extends Component {
               />
             </div>
           );
-        })}
-        {this.props.teamWorkouts.map((workout, i) => {
-          /* avoid rendering duplicate workouts (in user and team lists) */
-          if (!this.props.user.workouts.includes(workout._id)) {
-            return (
-              <div key={`workout-${i}`}>
-                <WorkoutPost userId={workout._creator} workout={workout} index={i}
-                  onDeleteClick={this.onDeleteClick} updateWorkout={this.props.updateWorkout}
-                />
-              </div>
-            );
-          } else {
-            return <div key={`${i}`} />;
-          }
         })}
       </div>
     );
