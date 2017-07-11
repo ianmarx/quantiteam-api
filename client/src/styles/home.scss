@@ -48,6 +48,23 @@ $div-background: #e8e8e8;
       background-color: #1b3868;
     }
   }
+  .team-workout-modal-button {
+    margin: 5px;
+    margin-top: 10px;
+    height: 40px;
+    width: 180px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    background-color: #306ccc;
+    color: white;
+    &:hover {
+      cursor: pointer;
+    }
+    &:active {
+      background-color: #1b3868;
+    }
+  }
   .create-modal-button {
     margin: 5px;
     margin-top: 10px;
