@@ -11,6 +11,7 @@ export const ActionTypes = {
   FETCH_WORKOUTS: 'FETCH_WORKOUTS',
   DELETE_WORKOUT: 'DELETE_WORKOUT',
   FETCH_TEAM: 'FETCH_TEAM',
+  FETCH_TEAM_SOLO_WORKOUTS: 'FETCH_TEAM_SOLO_WORKOUTS',
   FETCH_TEAM_WORKOUTS: 'FETCH_TEAM_WORKOUTS',
 };
 
@@ -132,15 +133,15 @@ export function fetchUserWorkouts(userId) {
   };
 }
 
-export function fetchTeamWorkouts(userId) {
+export function fetchTeamSoloWorkouts(userId) {
   const headers = { headers: { authorization: localStorage.getItem('token') } };
   /* axios GET call */
   return (dispatch) => {
     axios.get(`${ROOT_URL}/teamfeed/${userId}`, headers).then((response) => {
-      console.log('Team workouts fetched successfully');
+      console.log('Team solo workouts fetched successfully');
       dispatch({ type: ActionTypes.FETCH_TEAM_WORKOUTS, payload: response.data });
     }).catch((error) => {
-      console.log(`fetchTeamWorkouts failed: ${error.message}`);
+      console.log(`fetchTeamSoloWorkouts failed: ${error.message}`);
     });
   };
 }
@@ -210,6 +211,33 @@ export function fetchUserTeam(userId) {
       dispatch({ type: ActionTypes.FETCH_TEAM, payload: response.data });
     }).catch((error) => {
       console.log(`fetchWorkout failed: ${error.message}`);
+    });
+  };
+}
+
+export function addTeamWorkout({ teamId, activity, distance, distUnit, time }, userId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  const info = { userId, teamId, activity, distance, distUnit, time };
+  /* axios POST call */
+  return (dispatch) => {
+    axios.post(`${ROOT_URL}/teamworkout/add`, info, headers).then((response) => {
+      console.log('Team workout added successfully');
+      dispatch({ type: ActionTypes.FETCH_TEAM, payload: response.data });
+    }).catch((error) => {
+      console.log(`addTeamWorkout failed: ${error.message}`);
+    });
+  };
+}
+
+export function fetchTeamWorkouts(userId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios GET call */
+  return (dispatch) => {
+    axios.get(`${ROOT_URL}/teamworkouts/${userId}`, headers).then((response) => {
+      console.log('Team workouts fetched successfully');
+      dispatch({ type: ActionTypes.FETCH_TEAM_WORKOUTS, payload: response.data });
+    }).catch((error) => {
+      console.log(`fetchTeamWorkouts failed: ${error.message}`);
     });
   };
 }

@@ -39,7 +39,7 @@ router.route('/workouts/:workoutId/:userId')
 router.get('/feed/:userId', requireAuth, WorkoutController.fetchUserWorkouts);
 
 // Fetch all individual workouts associated with a team
-router.get('/teamfeed/:userId', requireAuth, WorkoutController.fetchTeamWorkouts);
+router.get('/teamfeed/:userId', requireAuth, WorkoutController.fetchTeamSoloWorkouts);
 
 // Create and join a team
 router.post('/team/create', requireAuth, TeamController.createTeam);
@@ -49,5 +49,6 @@ router.route('/team/:userId')
   .get(requireAuth, TeamController.fetchUserTeam);
 
 router.post('/teamworkout/add', requireAuth, TeamWorkoutController.addTeamWorkout);
+router.get('/teamworkouts/:userId', requireAuth, TeamWorkoutController.fetchTeamWorkouts);
 
 export default router;

@@ -18,7 +18,7 @@ const WorkoutReducer = (state = initialState, action) => {
         list: action.payload,
       });
     }
-    case ActionTypes.FETCH_TEAM_WORKOUTS: {
+    case ActionTypes.FETCH_TEAM_SOLO_WORKOUTS: {
       return Object.assign({}, state, {
         teamList: action.payload,
       });

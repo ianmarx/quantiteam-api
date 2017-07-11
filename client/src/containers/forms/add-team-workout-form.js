@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class AddWorkoutForm extends Component {
+class AddTeamWorkoutForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -10,19 +10,13 @@ class AddWorkoutForm extends Component {
       hours: '',
       minutes: '',
       seconds: '',
-      strokeRate: '',
-      watts: '',
-      avgHR: '',
     };
     this.onActivityChange = this.onActivityChange.bind(this);
     this.onDistanceChange = this.onDistanceChange.bind(this);
     this.onDistUnitChange = this.onDistUnitChange.bind(this);
-    this.onHeartRateChange = this.onHeartRateChange.bind(this);
     this.onHoursChange = this.onHoursChange.bind(this);
     this.onMinutesChange = this.onMinutesChange.bind(this);
     this.onSecondsChange = this.onSecondsChange.bind(this);
-    this.onStrokeRateChange = this.onStrokeRateChange.bind(this);
-    this.onWattsChange = this.onWattsChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.timeConvert = this.timeConvert.bind(this);
   }
@@ -45,27 +39,16 @@ class AddWorkoutForm extends Component {
   onSecondsChange(event) {
     this.setState({ seconds: event.target.value });
   }
-  onStrokeRateChange(event) {
-    this.setState({ strokeRate: event.target.value });
-  }
-  onWattsChange(event) {
-    this.setState({ watts: event.target.value });
-  }
-  onHeartRateChange(event) {
-    this.setState({ avgHR: event.target.value });
-  }
   /* Add a workout using the form */
   onSubmit(event) {
-    console.log('Workout add submitted');
+    console.log('Team Workout add submitted');
     const activity = this.state.activity;
     const distance = this.state.distance;
     const distUnit = this.state.distUnit;
     const time = this.timeConvert();
-    const strokeRate = this.state.strokeRate;
-    const watts = this.state.watts;
-    const avgHR = this.state.avgHR;
-    const workoutObject = { activity, distance, distUnit, time, strokeRate, watts, avgHR };
-    this.props.addWorkout(workoutObject, this.props.userId);
+    const teamId = this.props.teamId;
+    const workoutObject = { activity, distance, distUnit, time, teamId };
+    this.props.addTeamWorkout(workoutObject, this.props.userId);
   }
   /* convert the strings of each time values into the total number of seconds */
   timeConvert() {
@@ -74,10 +57,11 @@ class AddWorkoutForm extends Component {
             (parseFloat(this.state.seconds, 10).toPrecision(3) * 1));
   }
   render() {
+    console.log(this.state);
     return (
       <div className="form-container">
         <form className="modal-form" onSubmit={this.onSubmit}>
-          <div className="form-title">Add Workout</div>
+          <div className="form-title">Add Team Workout</div>
           <div className="column-group">
             <ul className="form-column">
               <li id="distance-field">
@@ -89,20 +73,14 @@ class AddWorkoutForm extends Component {
               <li id="time-field">
                 <h3>Hours</h3>
                 <input onChange={this.onHoursChange} value={this.state.hours}
-                  type="text" required
+                  type="text"
                 />
                 <h3>Minutes</h3>
                 <input onChange={this.onMinutesChange} value={this.state.minutes}
-                  type="text" required
+                  type="text"
                 />
                 <h3>Seconds</h3>
                 <input onChange={this.onSecondsChange} value={this.state.seconds}
-                  type="text" required
-                />
-              </li>
-              <li>
-                <h3>Average HR (bpm)</h3>
-                <input onChange={this.onHeartRateChange} value={this.state.avgHR}
                   type="text"
                 />
               </li>
@@ -127,18 +105,6 @@ class AddWorkoutForm extends Component {
                   <option value="mi">mi</option>
                 </select>
               </li>
-              <li>
-                <h3>Stroke Rate</h3>
-                <input onChange={this.onStrokeRateChange} value={this.state.strokeRate}
-                  type="text"
-                />
-              </li>
-              <li>
-                <h3>Watts</h3>
-                <input onChange={this.onWattsChange} value={this.state.watts}
-                  type="text"
-                />
-              </li>
               <div className="button-group">
                 <button type="submit" className="modal-submit">Submit</button>
                 <button className="modal-close" onClick={this.props.onModalClose}>Close</button>
@@ -151,4 +117,4 @@ class AddWorkoutForm extends Component {
   }
 }
 
-export default AddWorkoutForm;
+export default AddTeamWorkoutForm;
