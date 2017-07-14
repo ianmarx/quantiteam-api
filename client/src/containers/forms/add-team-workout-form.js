@@ -57,7 +57,6 @@ class AddTeamWorkoutForm extends Component {
             (parseFloat(this.state.seconds, 10).toPrecision(3) * 1));
   }
   render() {
-    console.log(this.state);
     return (
       <div className="form-container">
         <form className="modal-form" onSubmit={this.onSubmit}>

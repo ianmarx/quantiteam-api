@@ -4,8 +4,9 @@ import { withRouter } from 'react-router-dom';
 import ReactModal from 'react-modal';
 import { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamSoloWorkouts,
   updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam,
-  addTeamWorkout, fetchTeamWorkouts } from '../actions';
+  addTeamWorkout, fetchTeamWorkouts, updateTeamWorkout, deleteTeamWorkout } from '../actions';
 import WorkoutPost from './workout-post';
+import TeamWorkoutPost from './team-workout-post';
 import AddWorkoutForm from './forms/add-workout-form';
 import AddTeamWorkoutForm from './forms/add-team-workout-form';
 import CreateTeamForm from './forms/create-team-form';
@@ -40,6 +41,7 @@ class HomePage extends Component {
     this.onJoinModalClose = this.onJoinModalClose.bind(this);
     this.onTeamWorkoutModalOpen = this.onTeamWorkoutModalOpen.bind(this);
     this.onTeamWorkoutModalClose = this.onTeamWorkoutModalClose.bind(this);
+    this.onTeamWorkoutDeleteClick = this.onTeamWorkoutDeleteClick.bind(this);
     this.displayFeed = this.displayFeed.bind(this);
   }
   componentDidMount() {
@@ -55,6 +57,11 @@ class HomePage extends Component {
     this.props.deleteWorkout(workoutId, userId);
     console.log('Workout deleted successfully'); // added b/c message in deleteWorkout action not showing up
     this.props.fetchUserWorkouts(this.props.match.params.userId);
+  }
+  onTeamWorkoutDeleteClick(workoutId, teamId) {
+    this.props.deleteTeamWorkout(workoutId, teamId);
+    console.log('Team workout deleted successfully');
+    this.props.fetchTeamWorkouts(this.props.match.params.userId);
   }
   onModalOpen(event) {
     this.setState({ showModal: true });
@@ -99,12 +106,12 @@ class HomePage extends Component {
         </div>
       );
     } else {
-      this.props.teamSoloWorkouts.sort((a, b) => {
+      this.props.workouts.sort((a, b) => {
         return new Date(b.date) - new Date(a.date);
       });
       return (
         <div className="workout-posts">
-          {this.props.teamSoloWorkouts.map((workout, i) => {
+          {this.props.workouts.map((workout, i) => {
             return (
               <div key={`workout-${i}`}>
                 <WorkoutPost userId={workout._creator} workout={workout} index={i}
@@ -117,16 +124,29 @@ class HomePage extends Component {
       );
     }
   }
+  displayTeamFeed() {
+    return (
+      <div className="workout-posts">
+        {this.props.teamWorkouts.map((workout, i) => {
+          return (
+            <div key={`workout-${i}`}>
+              <TeamWorkoutPost userId={workout._creator} teamWorkout={workout} index={i}
+                onDeleteClick={this.onTeamWorkoutDeleteClick}
+                updateTeamWorkout={this.props.updateTeamWorkout}
+              />
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
   render() {
     return (
       <div className="home-page">
         <div className="workout-feed">
-          <div id="feed-title">Workout Feed</div>
+          <div id="feed-title">Solo Workouts</div>
           <div className="button-group">
             <button className="modal-button" id="addWorkoutForm" onClick={this.onModalOpen}>Add Workout</button>
-            {this.props.user.team &&
-              <button className="team-workout-modal-button" onClick={this.onTeamWorkoutModalOpen}>Add Team Workout</button>
-            }
             {!this.props.user.team &&
               <button className="create-modal-button" id="createTeamForm" onClick={this.onTeamModalOpen}>Create Team</button>
             }
@@ -136,6 +156,13 @@ class HomePage extends Component {
           </div>
           {this.displayFeed()}
         </div>
+        {this.props.user.team &&
+          <div className="workout-feed">
+            <div id="feed-title">Team Workouts</div>
+            <button className="team-workout-modal-button" onClick={this.onTeamWorkoutModalOpen}>Add Team Workout</button>
+            {this.displayTeamFeed()}
+          </div>
+        }
         <ReactModal
           isOpen={this.state.showModal}
           contentLabel="Add Workout"
@@ -193,4 +220,4 @@ class HomePage extends Component {
 export default withRouter(connect(mapStateToProps,
   { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamSoloWorkouts,
     updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam,
-    addTeamWorkout, fetchTeamWorkouts })(HomePage));
+    addTeamWorkout, fetchTeamWorkouts, updateTeamWorkout, deleteTeamWorkout })(HomePage));

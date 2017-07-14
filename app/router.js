@@ -51,4 +51,10 @@ router.route('/team/:userId')
 router.post('/teamworkout/add', requireAuth, TeamWorkoutController.addTeamWorkout);
 router.get('/teamworkouts/:userId', requireAuth, TeamWorkoutController.fetchTeamWorkouts);
 
+router.route('/teamworkouts/:teamWorkoutId')
+  .post(requireAuth, TeamWorkoutController.updateTeamWorkout);
+
+router.route('/teamworkouts/:teamWorkoutId/:teamId')
+  .delete(requireAuth, TeamWorkoutController.deleteTeamWorkout);
+
 export default router;

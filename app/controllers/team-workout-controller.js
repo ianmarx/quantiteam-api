@@ -31,6 +31,11 @@ export const addTeamWorkout = (req, res, next) => {
       .catch((error) => {
         res.status(500).json({ error });
       });
+      result.teamName = team.name;
+      result.save()
+      .catch((error) => {
+        res.status(500).json({ error });
+      });
     })
     .catch((error) => {
       res.status(500).json({ error });
@@ -56,6 +61,41 @@ export const fetchTeamWorkouts = (req, res) => {
       res.status(500).json({ error });
     });
   })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+};
+
+export const updateTeamWorkout = (req, res) => {
+  TeamWorkout.findById(req.params.teamWorkoutId)
+  .then((result) => {
+    result.activity = req.body.activity || result.activity;
+    result.distance = req.body.distance || result.distance;
+    result.distUnit = req.body.distUnit || result.distUnit;
+    // save some other stuff later when you add in time functionality
+    result.save()
+    .then((teamWorkout) => {
+      res.json(teamWorkout);
+    })
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
+  })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+};
+
+export const deleteTeamWorkout = (req, res) => {
+  TeamWorkout.remove({ _id: req.params.workoutId })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+
+  Team.update(
+    { _id: req.params.teamId },
+    { $pull: { teamWorkouts: req.params.teamWorkoutId } },
+  )
   .catch((error) => {
     res.status(500).json({ error });
   });

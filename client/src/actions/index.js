@@ -139,7 +139,7 @@ export function fetchTeamSoloWorkouts(userId) {
   return (dispatch) => {
     axios.get(`${ROOT_URL}/teamfeed/${userId}`, headers).then((response) => {
       console.log('Team solo workouts fetched successfully');
-      dispatch({ type: ActionTypes.FETCH_TEAM_WORKOUTS, payload: response.data });
+      dispatch({ type: ActionTypes.FETCH_TEAM_SOLO_WORKOUTS, payload: response.data });
     }).catch((error) => {
       console.log(`fetchTeamSoloWorkouts failed: ${error.message}`);
     });
@@ -238,6 +238,32 @@ export function fetchTeamWorkouts(userId) {
       dispatch({ type: ActionTypes.FETCH_TEAM_WORKOUTS, payload: response.data });
     }).catch((error) => {
       console.log(`fetchTeamWorkouts failed: ${error.message}`);
+    });
+  };
+}
+
+export function updateTeamWorkout(teamWorkoutId, teamWorkout) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios POST call */
+  return (dispatch) => {
+    axios.post(`${ROOT_URL}/teamworkouts/${teamWorkoutId}`, teamWorkout, headers).then((response) => {
+      console.log('Team workout updated successfully');
+      dispatch({ type: ActionTypes.FETCH_TEAM_WORKOUTS, payload: response.data });
+    }).catch((error) => {
+      console.log(`updateTeamWorkout failed: ${error.message}`);
+    });
+  };
+}
+
+export function deleteTeamWorkout(teamWorkoutId, teamId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios DELETE call */
+  return (dispatch) => {
+    axios.delete(`${ROOT_URL}/teamworkouts/${teamWorkoutId}/${teamId}`, headers).then((response) => {
+      console.log('Team workout deleted successfully');
+      dispatch({ type: ActionTypes.FETCH_TEAM_WORKOUTS, payload: response.data });
+    }).catch((error) => {
+      console.log(`deleteTeamWorkout failed: ${error.message}`);
     });
   };
 }
