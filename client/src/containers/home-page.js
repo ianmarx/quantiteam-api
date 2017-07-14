@@ -146,12 +146,12 @@ class HomePage extends Component {
         <div className="workout-feed">
           <div id="feed-title">Solo Workouts</div>
           <div className="button-group">
-            <button className="modal-button" id="addWorkoutForm" onClick={this.onModalOpen}>Add Workout</button>
+            <button id="modal-button" onClick={this.onModalOpen}>Add Workout</button>
             {!this.props.user.team &&
-              <button className="create-modal-button" id="createTeamForm" onClick={this.onTeamModalOpen}>Create Team</button>
+              <button id="create-modal-button" onClick={this.onTeamModalOpen}>Create Team</button>
             }
             {!this.props.user.team &&
-              <button className="join-modal-button" id="joinTeamForm" onClick={this.onJoinModalOpen}>Join Team</button>
+              <button id="join-modal-button" onClick={this.onJoinModalOpen}>Join Team</button>
             }
           </div>
           {this.displayFeed()}
@@ -159,7 +159,7 @@ class HomePage extends Component {
         {this.props.user.team &&
           <div className="workout-feed">
             <div id="feed-title">Team Workouts</div>
-            <button className="team-workout-modal-button" onClick={this.onTeamWorkoutModalOpen}>Add Team Workout</button>
+            <button id="team-workout-modal-button" onClick={this.onTeamWorkoutModalOpen}>Add Team Workout</button>
             {this.displayTeamFeed()}
           </div>
         }
@@ -172,7 +172,7 @@ class HomePage extends Component {
           <AddWorkoutForm
             addWorkout={this.props.addWorkout}
             userId={this.props.match.params.userId}
-            onModalClosed={this.onModalClose}
+            onModalClose={this.onModalClose}
           />
         </ReactModal>
         <ReactModal

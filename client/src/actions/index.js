@@ -215,9 +215,9 @@ export function fetchUserTeam(userId) {
   };
 }
 
-export function addTeamWorkout({ teamId, activity, distance, distUnit, time }, userId) {
+export function addTeamWorkout({ teamId, activity, distance, distUnit, time, type }, userId) {
   const headers = { headers: { authorization: localStorage.getItem('token') } };
-  const info = { userId, teamId, activity, distance, distUnit, time };
+  const info = { userId, teamId, activity, distance, distUnit, time, type };
   /* axios POST call */
   return (dispatch) => {
     axios.post(`${ROOT_URL}/teamworkout/add`, info, headers).then((response) => {

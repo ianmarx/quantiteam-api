@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import round from 'lodash.round';
 
 class TeamWorkoutPost extends Component {
   constructor(props) {
@@ -22,7 +23,22 @@ class TeamWorkoutPost extends Component {
     this.onLocalEditClick = this.onLocalEditClick.bind(this);
     this.onCancelClick = this.onCancelClick.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.timeConvert = this.timeConvert.bind(this);
     this.renderContent = this.renderContent.bind(this);
+  }
+  componentWillMount() {
+    if (this.props.teamWorkout.type === 'time') {
+      /* split up the time value into separate units for editing mode */
+      const h = Math.floor(this.props.teamWorkout.time / 3600);
+      const remainder = this.props.teamWorkout.time % 3600;
+      const m = Math.floor(remainder / 60);
+      const s = round((remainder % 60), 1);
+      this.setState({
+        hours: h,
+        minutes: m,
+        seconds: s,
+      });
+    }
   }
   onLocalEditClick(event) {
     this.setState({ isEditing: true });
@@ -56,36 +72,44 @@ class TeamWorkoutPost extends Component {
     const activity = this.state.activity;
     const distance = this.state.distance;
     const distUnit = this.state.distUnit;
-    const teamWorkoutObject = { activity, distance, distUnit };
+    const time = this.timeConvert();
+    const teamWorkoutObject = { activity, distance, distUnit, time };
     this.props.updateTeamWorkout(this.props.teamWorkout._id, teamWorkoutObject);
+  }
+  /* convert the strings of each time values into the total number of seconds */
+  timeConvert() {
+    return ((parseFloat(this.state.hours, 10) * 3600) +
+            (parseFloat(this.state.minutes, 10) * 60) +
+            (parseFloat(this.state.seconds, 10).toPrecision(3) * 1));
   }
   renderContent() {
     if (this.state.isEditing) {
       return (
         <form className="workout-edit-form" onSubmit={this.onSubmit}>
           <div className="workout-div-column">
-            <div className="workout-div-creator">
-              <strong>{this.props.teamWorkout.teamName}</strong>
-            </div>
-          </div>
-          <div className="workout-div-column">
             <ul>
-              <li>
-                <div>Distance</div>
-                <input onChange={this.onDistanceChange} value={this.state.distance} type="text" />
-              </li>
-              <li>
-                <div>Hours</div>
-                <input onChange={this.onHoursChange} value={this.state.hours} type="text" />
-              </li>
-              <li>
-                <div>Minutes</div>
-                <input onChange={this.onMinutesChange} value={this.state.minutes} type="text" />
-              </li>
-              <li>
-                <div>Seconds</div>
-                <input onChange={this.onSecondsChange} value={this.state.seconds} type="text" />
-              </li>
+              {this.props.teamWorkout.type === 'distance' &&
+                <li>
+                  <div>Distance</div>
+                  <input onChange={this.onDistanceChange} value={this.state.distance} type="text" />
+                </li>
+              }
+              {this.props.teamWorkout.type === 'time' &&
+                <ul>
+                  <li>
+                    <div>Hours</div>
+                    <input onChange={this.onHoursChange} value={this.state.hours} type="text" />
+                  </li>
+                  <li>
+                    <div>Minutes</div>
+                    <input onChange={this.onMinutesChange} value={this.state.minutes} type="text" />
+                  </li>
+                  <li>
+                    <div>Seconds</div>
+                    <input onChange={this.onSecondsChange} value={this.state.seconds} type="text" />
+                  </li>
+                </ul>
+              }
             </ul>
           </div>
           <div className="workout-div-column">
@@ -119,12 +143,15 @@ class TeamWorkoutPost extends Component {
       return (
         <div className="workout-content">
           <div className="workout-div-column">
-            <div className="workout-div-creator">
-              <strong>{this.props.teamWorkout.teamName}</strong>
-            </div>
+            {this.props.teamWorkout.type === 'distance' &&
+              <div>{this.props.teamWorkout.distance} {this.props.teamWorkout.distUnit} {this.props.teamWorkout.activity}</div>
+            }
+            {this.props.teamWorkout.type === 'time' &&
+              <div>{this.props.teamWorkout.timeString} {this.props.teamWorkout.activity}</div>
+            }
           </div>
           <div className="workout-div-column">
-            <div>{this.props.teamWorkout.distance} {this.props.teamWorkout.distUnit} {this.props.teamWorkout.activity}</div>
+            <button id="result-modal-button" onClick={this.props.onResultModalOpen}>Add Result</button>
           </div>
           <div className="workout-div-column">
             <div className="icon">

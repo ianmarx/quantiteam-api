@@ -4,6 +4,7 @@ class AddTeamWorkoutForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      type: '',
       activity: '',
       distUnit: '',
       distance: '',
@@ -17,6 +18,7 @@ class AddTeamWorkoutForm extends Component {
     this.onHoursChange = this.onHoursChange.bind(this);
     this.onMinutesChange = this.onMinutesChange.bind(this);
     this.onSecondsChange = this.onSecondsChange.bind(this);
+    this.onTypeChange = this.onTypeChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.timeConvert = this.timeConvert.bind(this);
   }
@@ -39,6 +41,9 @@ class AddTeamWorkoutForm extends Component {
   onSecondsChange(event) {
     this.setState({ seconds: event.target.value });
   }
+  onTypeChange(event) {
+    this.setState({ type: event.target.value });
+  }
   /* Add a workout using the form */
   onSubmit(event) {
     console.log('Team Workout add submitted');
@@ -47,7 +52,8 @@ class AddTeamWorkoutForm extends Component {
     const distUnit = this.state.distUnit;
     const time = this.timeConvert();
     const teamId = this.props.teamId;
-    const workoutObject = { activity, distance, distUnit, time, teamId };
+    const type = this.state.type;
+    const workoutObject = { activity, distance, distUnit, time, teamId, type };
     this.props.addTeamWorkout(workoutObject, this.props.userId);
   }
   /* convert the strings of each time values into the total number of seconds */
@@ -61,55 +67,100 @@ class AddTeamWorkoutForm extends Component {
       <div className="form-container">
         <form className="modal-form" onSubmit={this.onSubmit}>
           <div className="form-title">Add Team Workout</div>
-          <div className="column-group">
-            <ul className="form-column">
-              <li id="distance-field">
-                <h3>Distance</h3>
-                <input onChange={this.onDistanceChange} value={this.state.distance}
-                  type="text" required
-                />
-              </li>
-              <li id="time-field">
-                <h3>Hours</h3>
-                <input onChange={this.onHoursChange} value={this.state.hours}
-                  type="text"
-                />
-                <h3>Minutes</h3>
-                <input onChange={this.onMinutesChange} value={this.state.minutes}
-                  type="text"
-                />
-                <h3>Seconds</h3>
-                <input onChange={this.onSecondsChange} value={this.state.seconds}
-                  type="text"
-                />
-              </li>
-            </ul>
-            <ul className="form-column">
-              <li>
-                <h3>Activity</h3>
-                <select value={this.state.activity} onChange={this.onActivityChange}>
-                  <option default>Select</option>
-                  <option value="erg">Ergometer</option>
-                  <option value="row">Rowing</option>
-                  <option value="run">Running</option>
-                  <option value="bike">Cycling</option>
-                </select>
-              </li>
-              <li>
-                <h3>Distance Units</h3>
-                <select value={this.state.distUnit} onChange={this.onDistUnitChange}>
-                  <option default>Select</option>
-                  <option value="m">m</option>
-                  <option value="km">km</option>
-                  <option value="mi">mi</option>
-                </select>
-              </li>
-              <div className="button-group">
-                <button type="submit" className="modal-submit">Submit</button>
-                <button className="modal-close" onClick={this.props.onModalClose}>Close</button>
-              </div>
-            </ul>
-          </div>
+          {this.state.type === '' &&
+            <div className="column-group">
+              <ul className="form-column">
+                <li id="type-field">
+                  <h3>Workout Type</h3>
+                  <select value={this.state.type} onChange={this.onTypeChange}>
+                    <option default>Select</option>
+                    <option value="distance">Distance</option>
+                    <option value="time">Time</option>
+                  </select>
+                </li>
+              </ul>
+            </div>
+          }
+          {this.state.type === 'distance' &&
+            <div className="column-group">
+              <ul className="form-column">
+                <li id="distance-field">
+                  <h3>Distance</h3>
+                  <input onChange={this.onDistanceChange} value={this.state.distance}
+                    type="text" required
+                  />
+                </li>
+                <li>
+                  <h3>Activity</h3>
+                  <select value={this.state.activity} onChange={this.onActivityChange}>
+                    <option default>Select</option>
+                    <option value="erg">Ergometer</option>
+                    <option value="row">Rowing</option>
+                    <option value="run">Running</option>
+                    <option value="bike">Cycling</option>
+                  </select>
+                </li>
+                <li>
+                  <h3>Distance Units</h3>
+                  <select value={this.state.distUnit} onChange={this.onDistUnitChange}>
+                    <option default>Select</option>
+                    <option value="m">m</option>
+                    <option value="km">km</option>
+                    <option value="mi">mi</option>
+                  </select>
+                </li>
+                <div className="button-group">
+                  <button type="submit" className="modal-submit">Submit</button>
+                  <button className="modal-close" onClick={this.props.onModalClose}>Close</button>
+                </div>
+              </ul>
+            </div>
+          }
+          {this.state.type === 'time' &&
+            <div className="column-group">
+              <ul className="form-column">
+                <li id="time-field">
+                  <h3>Hours</h3>
+                  <input onChange={this.onHoursChange} value={this.state.hours}
+                    type="text"
+                  />
+                  <h3>Minutes</h3>
+                  <input onChange={this.onMinutesChange} value={this.state.minutes}
+                    type="text"
+                  />
+                  <h3>Seconds</h3>
+                  <input onChange={this.onSecondsChange} value={this.state.seconds}
+                    type="text"
+                  />
+                </li>
+              </ul>
+              <ul className="form-column">
+                <li>
+                  <h3>Activity</h3>
+                  <select value={this.state.activity} onChange={this.onActivityChange}>
+                    <option default>Select</option>
+                    <option value="erg">Ergometer</option>
+                    <option value="row">Rowing</option>
+                    <option value="run">Running</option>
+                    <option value="bike">Cycling</option>
+                  </select>
+                </li>
+                <li>
+                  <h3>Distance Units</h3>
+                  <select value={this.state.distUnit} onChange={this.onDistUnitChange}>
+                    <option default>Select</option>
+                    <option value="m">m</option>
+                    <option value="km">km</option>
+                    <option value="mi">mi</option>
+                  </select>
+                </li>
+                <div className="button-group">
+                  <button type="submit" className="modal-submit">Submit</button>
+                  <button className="modal-close" onClick={this.props.onModalClose}>Close</button>
+                </div>
+              </ul>
+            </div>
+          }
         </form>
       </div>
     );

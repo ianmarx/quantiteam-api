@@ -9,6 +9,8 @@ export const addTeamWorkout = (req, res, next) => {
   const activity = req.body.activity;
   const distance = req.body.distance;
   const distUnit = req.body.distUnit;
+  const time = req.body.time;
+  const type = req.body.type;
 
   if (!creatorId || !activity || !distUnit) {
     return res.status(422).send('Enter required fields.');
@@ -21,7 +23,12 @@ export const addTeamWorkout = (req, res, next) => {
   teamWorkout.activity = activity;
   teamWorkout.distUnit = distUnit;
 
-  teamWorkout.distance = distance;
+  if (type === 'distance') {
+    teamWorkout.distance = distance;
+  } else if (type === 'time') {
+    teamWorkout.time = time;
+  }
+  teamWorkout.type = type;
   teamWorkout.save()
   .then((result) => {
     Team.findById(result._team)
@@ -72,6 +79,7 @@ export const updateTeamWorkout = (req, res) => {
     result.activity = req.body.activity || result.activity;
     result.distance = req.body.distance || result.distance;
     result.distUnit = req.body.distUnit || result.distUnit;
+    result.time = req.body.time || result.time;
     // save some other stuff later when you add in time functionality
     result.save()
     .then((teamWorkout) => {
