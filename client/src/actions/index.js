@@ -13,6 +13,8 @@ export const ActionTypes = {
   FETCH_TEAM: 'FETCH_TEAM',
   FETCH_TEAM_SOLO_WORKOUTS: 'FETCH_TEAM_SOLO_WORKOUTS',
   FETCH_TEAM_WORKOUTS: 'FETCH_TEAM_WORKOUTS',
+  FETCH_TEAM_WORKOUT: 'FETCH_TEAM_WORKOUT',
+  FETCH_RESULTS: 'FETCH_RESULTS',
 };
 
 export function authError(error) {
@@ -220,11 +222,24 @@ export function addTeamWorkout({ teamId, activity, distance, distUnit, time, typ
   const info = { userId, teamId, activity, distance, distUnit, time, type };
   /* axios POST call */
   return (dispatch) => {
-    axios.post(`${ROOT_URL}/teamworkout/add`, info, headers).then((response) => {
+    axios.post(`${ROOT_URL}/teamworkouts/add`, info, headers).then((response) => {
       console.log('Team workout added successfully');
-      dispatch({ type: ActionTypes.FETCH_TEAM, payload: response.data });
+      dispatch({ type: ActionTypes.FETCH_TEAM_WORKOUTS, payload: response.data });
     }).catch((error) => {
       console.log(`addTeamWorkout failed: ${error.message}`);
+    });
+  };
+}
+
+export function fetchTeamWorkout(teamWorkoutId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios GET call */
+  return (dispatch) => {
+    axios.get(`${ROOT_URL}/teamworkout/${teamWorkoutId}`, headers).then((response) => {
+      console.log('Team workout fetched successfully');
+      dispatch({ type: ActionTypes.FETCH_TEAM_WORKOUT, payload: response.data });
+    }).catch((error) => {
+      console.log(`fetchTeamWorkout failed: ${error.message}`);
     });
   };
 }
@@ -264,6 +279,30 @@ export function deleteTeamWorkout(teamWorkoutId, teamId) {
       dispatch({ type: ActionTypes.FETCH_TEAM_WORKOUTS, payload: response.data });
     }).catch((error) => {
       console.log(`deleteTeamWorkout failed: ${error.message}`);
+    });
+  };
+}
+
+export function addResult(result, teamWorkoutId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios POST call */
+  return (dispatch) => {
+    axios.post(`${ROOT_URL}/result/add/${teamWorkoutId}`, result, headers).then((response) => {
+      dispatch({ type: ActionTypes.FETCH_TEAM_WORKOUTS, payload: response.data });
+    }).catch((error) => {
+      console.log(`addResult failed: ${error.message}`);
+    });
+  };
+}
+
+export function fetchResults(teamWorkoutId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios GET call */
+  return (dispatch) => {
+    axios.get(`${ROOT_URL}/results/${teamWorkoutId}`, headers).then((response) => {
+      dispatch({ type: ActionTypes.FETCH_RESULTS, payload: response.data });
+    }).catch((error) => {
+      console.log(`fetchResults failed; ${error.message}`);
     });
   };
 }

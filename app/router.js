@@ -48,13 +48,16 @@ router.post('/team/join', requireAuth, TeamController.joinTeam);
 router.route('/team/:userId')
   .get(requireAuth, TeamController.fetchUserTeam);
 
-router.post('/teamworkout/add', requireAuth, TeamWorkoutController.addTeamWorkout);
+router.post('/teamworkouts/add', requireAuth, TeamWorkoutController.addTeamWorkout);
 router.get('/teamworkouts/:userId', requireAuth, TeamWorkoutController.fetchTeamWorkouts);
 
-router.route('/teamworkouts/:teamWorkoutId')
-  .post(requireAuth, TeamWorkoutController.updateTeamWorkout);
+router.post('/teamworkouts/:teamWorkoutId', requireAuth, TeamWorkoutController.updateTeamWorkout);
+router.get('/teamworkout/:teamWorkoutId', requireAuth, TeamWorkoutController.fetchTeamWorkout);
 
 router.route('/teamworkouts/:teamWorkoutId/:teamId')
   .delete(requireAuth, TeamWorkoutController.deleteTeamWorkout);
+
+router.post('/result/add/:teamWorkoutId', requireAuth, TeamWorkoutController.addResult);
+router.get('/results/:teamWorkoutId', requireAuth, TeamWorkoutController.fetchResults);
 
 export default router;

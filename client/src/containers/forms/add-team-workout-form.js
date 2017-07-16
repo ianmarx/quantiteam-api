@@ -78,6 +78,9 @@ class AddTeamWorkoutForm extends Component {
                     <option value="time">Time</option>
                   </select>
                 </li>
+                <li>
+                  <button type="button" className="modal-close" onClick={this.props.onModalClose}>Close</button>
+                </li>
               </ul>
             </div>
           }
@@ -111,7 +114,7 @@ class AddTeamWorkoutForm extends Component {
                 </li>
                 <div className="button-group">
                   <button type="submit" className="modal-submit">Submit</button>
-                  <button className="modal-close" onClick={this.props.onModalClose}>Close</button>
+                  <button type="button" className="modal-close" onClick={this.props.onModalClose}>Close</button>
                 </div>
               </ul>
             </div>
@@ -156,7 +159,7 @@ class AddTeamWorkoutForm extends Component {
                 </li>
                 <div className="button-group">
                   <button type="submit" className="modal-submit">Submit</button>
-                  <button className="modal-close" onClick={this.props.onModalClose}>Close</button>
+                  <button type="button" className="modal-close" onClick={this.props.onModalClose}>Close</button>
                 </div>
               </ul>
             </div>

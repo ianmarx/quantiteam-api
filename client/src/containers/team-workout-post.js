@@ -19,8 +19,10 @@ class TeamWorkoutPost extends Component {
     this.onHoursChange = this.onHoursChange.bind(this);
     this.onMinutesChange = this.onMinutesChange.bind(this);
     this.onSecondsChange = this.onSecondsChange.bind(this);
+    this.onLocalResultAddClick = this.onLocalResultAddClick.bind(this);
     this.onLocalDeleteClick = this.onLocalDeleteClick.bind(this);
     this.onLocalEditClick = this.onLocalEditClick.bind(this);
+    this.onLocalViewClick = this.onLocalViewClick.bind(this);
     this.onCancelClick = this.onCancelClick.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.timeConvert = this.timeConvert.bind(this);
@@ -40,11 +42,17 @@ class TeamWorkoutPost extends Component {
       });
     }
   }
+  onLocalResultAddClick(event) {
+    this.props.onResultAddClick(this.props.teamWorkout._id);
+  }
   onLocalEditClick(event) {
     this.setState({ isEditing: true });
   }
   onLocalDeleteClick(event) {
     this.props.onDeleteClick(this.props.teamWorkout._id, this.props.teamWorkout._team);
+  }
+  onLocalViewClick(event) {
+    this.props.onViewResultsClick(this.props.teamWorkout._id);
   }
   /* Handle changes in the add workout fields */
   onActivityChange(event) {
@@ -151,7 +159,8 @@ class TeamWorkoutPost extends Component {
             }
           </div>
           <div className="workout-div-column">
-            <button id="result-modal-button" onClick={this.props.onResultModalOpen}>Add Result</button>
+            <button id="result-modal-button" onClick={this.onLocalResultAddClick}>Add Result</button>
+            <button id="view-result-modal-button" onClick={this.onLocalViewClick}>View Results</button>
           </div>
           <div className="workout-div-column">
             <div className="icon">
