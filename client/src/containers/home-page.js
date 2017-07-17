@@ -13,6 +13,7 @@ import AddTeamWorkoutForm from './forms/add-team-workout-form';
 import CreateTeamForm from './forms/create-team-form';
 import JoinTeamForm from './forms/join-team-form';
 import AddResultForm from './forms/add-result-form';
+import ResultsView from './results-view';
 
 const mapStateToProps = state => (
   {
@@ -23,6 +24,7 @@ const mapStateToProps = state => (
     authenticated: state.auth.authenticated,
     teamWorkouts: state.teamWorkouts.list,
     currentTeamWorkout: state.teamWorkouts.current,
+    results: state.teamWorkouts.results,
   }
 );
 
@@ -34,7 +36,8 @@ class HomePage extends Component {
       showTeamModal: false,
       showJoinModal: false,
       showTeamWorkoutModal: false,
-      showResultModal: false,
+      showAddResultModal: false,
+      showViewResultModal: false,
     };
     this.onDeleteClick = this.onDeleteClick.bind(this);
     this.onModalOpen = this.onModalOpen.bind(this);
@@ -46,8 +49,10 @@ class HomePage extends Component {
     this.onTeamWorkoutModalOpen = this.onTeamWorkoutModalOpen.bind(this);
     this.onTeamWorkoutModalClose = this.onTeamWorkoutModalClose.bind(this);
     this.onTeamWorkoutDeleteClick = this.onTeamWorkoutDeleteClick.bind(this);
-    this.onResultModalOpen = this.onResultModalOpen.bind(this);
-    this.onResultModalClose = this.onResultModalClose.bind(this);
+    this.onAddResultModalOpen = this.onAddResultModalOpen.bind(this);
+    this.onAddResultModalClose = this.onAddResultModalClose.bind(this);
+    this.onViewResultModalOpen = this.onViewResultModalOpen.bind(this);
+    this.onViewResultModalClose = this.onViewResultModalClose.bind(this);
     this.onResultAddClick = this.onResultAddClick.bind(this);
     this.onViewResultsClick = this.onViewResultsClick.bind(this);
     this.displayFeed = this.displayFeed.bind(this);
@@ -73,10 +78,12 @@ class HomePage extends Component {
   }
   onResultAddClick(teamWorkoutId) {
     this.props.fetchTeamWorkout(teamWorkoutId);
-    this.onResultModalOpen();
+    this.onAddResultModalOpen();
   }
   onViewResultsClick(teamWorkoutId) {
+    this.props.fetchTeamWorkout(teamWorkoutId);
     this.props.fetchResults(teamWorkoutId);
+    this.onViewResultModalOpen();
   }
   onModalOpen(event) {
     this.setState({ showModal: true });
@@ -102,11 +109,17 @@ class HomePage extends Component {
   onTeamWorkoutModalClose(event) {
     this.setState({ showAddTeamWorkoutModal: false });
   }
-  onResultModalOpen(event) {
-    this.setState({ showResultModal: true });
+  onAddResultModalOpen(event) {
+    this.setState({ showAddResultModal: true });
   }
-  onResultModalClose(event) {
-    this.setState({ showResultModal: false });
+  onAddResultModalClose(event) {
+    this.setState({ showAddResultModal: false });
+  }
+  onViewResultModalOpen(event) {
+    this.setState({ showViewResultModal: true });
+  }
+  onViewResultModalClose(event) {
+    this.setState({ showViewResultModal: false });
   }
   displayFeed() {
     if (!this.props.team._id) {
@@ -230,7 +243,7 @@ class HomePage extends Component {
           />
         </ReactModal>
         <ReactModal
-          isOpen={this.state.showResultModal}
+          isOpen={this.state.showAddResultModal}
           contentLabel="Add Result"
           className="modal"
           overlayClassName="overlay"
@@ -239,7 +252,22 @@ class HomePage extends Component {
             <AddResultForm
               teamWorkout={this.props.currentTeamWorkout}
               addResult={this.props.addResult}
-              onModalClose={this.onResultModalClose}
+              onModalClose={this.onAddResultModalClose}
+            />
+          }
+        </ReactModal>
+        <ReactModal
+          isOpen={this.state.showViewResultModal}
+          contentLabel="Workout Results"
+          className="modal"
+          overlayClassName="overlay"
+        >
+          {this.props.results !== undefined &&
+            <ResultsView
+              results={this.props.results}
+              onDeleteClick={this.onDeleteClick}
+              updateWorkout={this.props.updateWorkout}
+              onModalClose={this.onViewResultModalClose}
             />
           }
         </ReactModal>
