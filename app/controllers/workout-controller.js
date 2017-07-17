@@ -95,13 +95,13 @@ export const fetchUserWorkouts = (req, res) => {
   });
 };
 
-export const fetchTeamWorkouts = (req, res) => {
+export const fetchTeamSoloWorkouts = (req, res) => {
   User.findById(req.params.userId)
   .then((result) => {
     Team.findById(result.team)
     .populate('workouts')
     .catch((error) => {
-      res.status(500).kson({ error });
+      res.status(500).json({ error });
     })
     .then((team) => {
       res.json(team.workouts);

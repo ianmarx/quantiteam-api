@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
+import round from 'lodash.round';
 
-class AddWorkoutForm extends Component {
+class AddResultForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activity: '',
-      distUnit: '',
-      distance: '',
+      type: this.props.teamWorkout.type,
+      distance: this.props.teamWorkout.distance || '',
       hours: '',
       minutes: '',
       seconds: '',
@@ -14,9 +14,7 @@ class AddWorkoutForm extends Component {
       watts: '',
       avgHR: '',
     };
-    this.onActivityChange = this.onActivityChange.bind(this);
     this.onDistanceChange = this.onDistanceChange.bind(this);
-    this.onDistUnitChange = this.onDistUnitChange.bind(this);
     this.onHeartRateChange = this.onHeartRateChange.bind(this);
     this.onHoursChange = this.onHoursChange.bind(this);
     this.onMinutesChange = this.onMinutesChange.bind(this);
@@ -26,15 +24,23 @@ class AddWorkoutForm extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.timeConvert = this.timeConvert.bind(this);
   }
-  /* Handle changes in the add workout fields */
-  onActivityChange(event) {
-    this.setState({ activity: event.target.value });
+  componentWillMount() {
+    if (this.props.teamWorkout.type === 'time') {
+      /* split up the time value into separate units for editing mode */
+      const h = Math.floor(this.props.teamWorkout.time / 3600);
+      const remainder = this.props.teamWorkout.time % 3600;
+      const m = Math.floor(remainder / 60);
+      const s = round((remainder % 60), 1);
+      this.setState({
+        hours: h,
+        minutes: m,
+        seconds: s,
+      });
+    }
   }
+  /* Handle changes in the add result fields */
   onDistanceChange(event) {
     this.setState({ distance: event.target.value });
-  }
-  onDistUnitChange(event) {
-    this.setState({ distUnit: event.target.value });
   }
   onHoursChange(event) {
     this.setState({ hours: event.target.value });
@@ -54,18 +60,17 @@ class AddWorkoutForm extends Component {
   onHeartRateChange(event) {
     this.setState({ avgHR: event.target.value });
   }
-  /* Add a workout using the form */
   onSubmit(event) {
-    console.log('Workout add submitted');
-    const activity = this.state.activity;
+    console.log('Result add submitted');
+    const activity = this.props.teamWorkout.activity;
     const distance = this.state.distance;
-    const distUnit = this.state.distUnit;
+    const distUnit = this.props.teamWorkout.distUnit;
     const time = this.timeConvert();
     const strokeRate = this.state.strokeRate;
     const watts = this.state.watts;
     const avgHR = this.state.avgHR;
-    const workoutObject = { activity, distance, distUnit, time, strokeRate, watts, avgHR };
-    this.props.addWorkout(workoutObject, this.props.userId);
+    const resultObject = { activity, distance, distUnit, time, strokeRate, watts, avgHR };
+    this.props.addResult(resultObject, this.props.teamWorkout._id);
   }
   /* convert the strings of each time values into the total number of seconds */
   timeConvert() {
@@ -77,55 +82,42 @@ class AddWorkoutForm extends Component {
     return (
       <div className="form-container">
         <form className="modal-form" onSubmit={this.onSubmit}>
-          <div className="form-title">Add Workout</div>
+          <div className="form-title">Add Result</div>
           <div className="column-group">
+            {this.state.type === 'time' &&
             <ul className="form-column">
               <li id="distance-field">
                 <h3>Distance</h3>
                 <input onChange={this.onDistanceChange} value={this.state.distance}
-                  type="text" required
+                  type="text"
                 />
               </li>
-              <li id="time-field">
-                <h3>Hours</h3>
-                <input onChange={this.onHoursChange} value={this.state.hours}
-                  type="text" required
-                />
-                <h3>Minutes</h3>
-                <input onChange={this.onMinutesChange} value={this.state.minutes}
-                  type="text" required
-                />
-                <h3>Seconds</h3>
-                <input onChange={this.onSecondsChange} value={this.state.seconds}
-                  type="text" required
-                />
-              </li>
+            </ul>
+              }
+            {this.state.type === 'distance' &&
+              <ul className="form-column">
+                <li id="time-field">
+                  <h3>Hours</h3>
+                  <input onChange={this.onHoursChange} value={this.state.hours}
+                    type="text"
+                  />
+                  <h3>Minutes</h3>
+                  <input onChange={this.onMinutesChange} value={this.state.minutes}
+                    type="text"
+                  />
+                  <h3>Seconds</h3>
+                  <input onChange={this.onSecondsChange} value={this.state.seconds}
+                    type="text"
+                  />
+                </li>
+              </ul>
+            }
+            <ul className="form-column">
               <li>
                 <h3>Average HR (bpm)</h3>
                 <input onChange={this.onHeartRateChange} value={this.state.avgHR}
                   type="text"
                 />
-              </li>
-            </ul>
-            <ul className="form-column">
-              <li>
-                <h3>Activity</h3>
-                <select value={this.state.activity} onChange={this.onActivityChange}>
-                  <option default>Select</option>
-                  <option value="erg">Ergometer</option>
-                  <option value="row">Rowing</option>
-                  <option value="run">Running</option>
-                  <option value="bike">Cycling</option>
-                </select>
-              </li>
-              <li>
-                <h3>Distance Units</h3>
-                <select value={this.state.distUnit} onChange={this.onDistUnitChange}>
-                  <option default>Select</option>
-                  <option value="m">m</option>
-                  <option value="km">km</option>
-                  <option value="mi">mi</option>
-                </select>
               </li>
               <li>
                 <h3>Stroke Rate</h3>
@@ -139,11 +131,11 @@ class AddWorkoutForm extends Component {
                   type="text"
                 />
               </li>
-              <div className="button-group">
-                <button type="submit" className="modal-submit">Submit</button>
-                <button type="button" className="modal-close" onClick={this.props.onModalClose}>Close</button>
-              </div>
             </ul>
+          </div>
+          <div className="column-group">
+            <button type="submit" className="modal-submit">Submit</button>
+            <button type="button" className="modal-close" onClick={this.props.onModalClose}>Close</button>
           </div>
         </form>
       </div>
@@ -151,4 +143,4 @@ class AddWorkoutForm extends Component {
   }
 }
 
-export default AddWorkoutForm;
+export default AddResultForm;

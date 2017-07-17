@@ -6,6 +6,7 @@ const TeamSchema = new Schema({
   athletes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   coaches: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   workouts: [{ type: Schema.Types.ObjectId, ref: 'Workout' }],
+  teamWorkouts: [{ type: Schema.Types.ObjectId, ref: 'TeamWorkout' }],
 });
 
 TeamSchema.set('toJSON', {

@@ -2,20 +2,29 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ReactModal from 'react-modal';
-import { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamWorkouts,
-  updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam } from '../actions';
+import { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamSoloWorkouts,
+  updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam,
+  addTeamWorkout, fetchTeamWorkouts, fetchTeamWorkout, updateTeamWorkout, deleteTeamWorkout,
+  addResult, fetchResults } from '../actions';
 import WorkoutPost from './workout-post';
+import TeamWorkoutPost from './team-workout-post';
 import AddWorkoutForm from './forms/add-workout-form';
+import AddTeamWorkoutForm from './forms/add-team-workout-form';
 import CreateTeamForm from './forms/create-team-form';
 import JoinTeamForm from './forms/join-team-form';
+import AddResultForm from './forms/add-result-form';
+import ResultsView from './results-view';
 
 const mapStateToProps = state => (
   {
     user: state.profile.user,
     workouts: state.workouts.list,
-    teamWorkouts: state.workouts.teamList,
+    teamSoloWorkouts: state.workouts.teamList,
     team: state.team.team,
     authenticated: state.auth.authenticated,
+    teamWorkouts: state.teamWorkouts.list,
+    currentTeamWorkout: state.teamWorkouts.current,
+    results: state.teamWorkouts.results,
   }
 );
 
@@ -26,6 +35,9 @@ class HomePage extends Component {
       showModal: false,
       showTeamModal: false,
       showJoinModal: false,
+      showTeamWorkoutModal: false,
+      showAddResultModal: false,
+      showViewResultModal: false,
     };
     this.onDeleteClick = this.onDeleteClick.bind(this);
     this.onModalOpen = this.onModalOpen.bind(this);
@@ -34,12 +46,22 @@ class HomePage extends Component {
     this.onTeamModalClose = this.onTeamModalClose.bind(this);
     this.onJoinModalOpen = this.onJoinModalOpen.bind(this);
     this.onJoinModalClose = this.onJoinModalClose.bind(this);
+    this.onTeamWorkoutModalOpen = this.onTeamWorkoutModalOpen.bind(this);
+    this.onTeamWorkoutModalClose = this.onTeamWorkoutModalClose.bind(this);
+    this.onTeamWorkoutDeleteClick = this.onTeamWorkoutDeleteClick.bind(this);
+    this.onAddResultModalOpen = this.onAddResultModalOpen.bind(this);
+    this.onAddResultModalClose = this.onAddResultModalClose.bind(this);
+    this.onViewResultModalOpen = this.onViewResultModalOpen.bind(this);
+    this.onViewResultModalClose = this.onViewResultModalClose.bind(this);
+    this.onResultAddClick = this.onResultAddClick.bind(this);
+    this.onViewResultsClick = this.onViewResultsClick.bind(this);
     this.displayFeed = this.displayFeed.bind(this);
   }
   componentDidMount() {
     this.props.fetchUser(this.props.match.params.userId);
     this.props.fetchUserWorkouts(this.props.match.params.userId);
     this.props.fetchUserTeam(this.props.match.params.userId);
+    this.props.fetchTeamSoloWorkouts(this.props.match.params.userId);
     this.props.fetchTeamWorkouts(this.props.match.params.userId);
   }
   /* this is called in the WorkoutPost component by onLocalDeleteClick */
@@ -48,6 +70,20 @@ class HomePage extends Component {
     this.props.deleteWorkout(workoutId, userId);
     console.log('Workout deleted successfully'); // added b/c message in deleteWorkout action not showing up
     this.props.fetchUserWorkouts(this.props.match.params.userId);
+  }
+  onTeamWorkoutDeleteClick(workoutId, teamId) {
+    this.props.deleteTeamWorkout(workoutId, teamId);
+    console.log('Team workout deleted successfully');
+    this.props.fetchTeamWorkouts(this.props.match.params.userId);
+  }
+  onResultAddClick(teamWorkoutId) {
+    this.props.fetchTeamWorkout(teamWorkoutId);
+    this.onAddResultModalOpen();
+  }
+  onViewResultsClick(teamWorkoutId) {
+    this.props.fetchTeamWorkout(teamWorkoutId);
+    this.props.fetchResults(teamWorkoutId);
+    this.onViewResultModalOpen();
   }
   onModalOpen(event) {
     this.setState({ showModal: true });
@@ -67,11 +103,26 @@ class HomePage extends Component {
   onJoinModalClose(event) {
     this.setState({ showJoinModal: false });
   }
+  onTeamWorkoutModalOpen(event) {
+    this.setState({ showAddTeamWorkoutModal: true });
+  }
+  onTeamWorkoutModalClose(event) {
+    this.setState({ showAddTeamWorkoutModal: false });
+  }
+  onAddResultModalOpen(event) {
+    this.setState({ showAddResultModal: true });
+  }
+  onAddResultModalClose(event) {
+    this.setState({ showAddResultModal: false });
+  }
+  onViewResultModalOpen(event) {
+    this.setState({ showViewResultModal: true });
+  }
+  onViewResultModalClose(event) {
+    this.setState({ showViewResultModal: false });
+  }
   displayFeed() {
     if (!this.props.team._id) {
-      this.props.workouts.sort((a, b) => {
-        return new Date(b.date) - new Date(a.date);
-      });
       return (
         <div className="workout-posts">
           {this.props.workouts.map((workout, i) => {
@@ -86,12 +137,9 @@ class HomePage extends Component {
         </div>
       );
     } else {
-      this.props.teamWorkouts.sort((a, b) => {
-        return new Date(b.date) - new Date(a.date);
-      });
       return (
         <div className="workout-posts">
-          {this.props.teamWorkouts.map((workout, i) => {
+          {this.props.workouts.map((workout, i) => {
             return (
               <div key={`workout-${i}`}>
                 <WorkoutPost userId={workout._creator} workout={workout} index={i}
@@ -104,22 +152,47 @@ class HomePage extends Component {
       );
     }
   }
+  displayTeamFeed() {
+    return (
+      <div className="workout-posts">
+        {this.props.teamWorkouts.map((workout, i) => {
+          return (
+            <div key={`workout-${i}`}>
+              <TeamWorkoutPost userId={workout._creator} teamWorkout={workout} index={i}
+                onDeleteClick={this.onTeamWorkoutDeleteClick}
+                updateTeamWorkout={this.props.updateTeamWorkout}
+                onResultAddClick={this.onResultAddClick}
+                onViewResultsClick={this.onViewResultsClick}
+              />
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
   render() {
     return (
       <div className="home-page">
         <div className="workout-feed">
-          <div id="feed-title">Workout Feed</div>
+          <div id="feed-title">Solo Workouts</div>
           <div className="button-group">
-            <button className="modal-button" id="addWorkoutForm" onClick={this.onModalOpen}>Add Workout</button>
+            <button id="modal-button" onClick={this.onModalOpen}>Add Workout</button>
             {!this.props.user.team &&
-              <button className="create-modal-button" id="createTeamForm" onClick={this.onTeamModalOpen}>Create Team</button>
+              <button id="create-modal-button" onClick={this.onTeamModalOpen}>Create Team</button>
             }
             {!this.props.user.team &&
-              <button className="join-modal-button" id="joinTeamForm" onClick={this.onJoinModalOpen}>Join Team</button>
+              <button id="join-modal-button" onClick={this.onJoinModalOpen}>Join Team</button>
             }
           </div>
           {this.displayFeed()}
         </div>
+        {this.props.user.team &&
+          <div className="workout-feed">
+            <div id="feed-title">Team Workouts</div>
+            <button id="team-workout-modal-button" onClick={this.onTeamWorkoutModalOpen}>Add Team Workout</button>
+            {this.displayTeamFeed()}
+          </div>
+        }
         <ReactModal
           isOpen={this.state.showModal}
           contentLabel="Add Workout"
@@ -156,11 +229,55 @@ class HomePage extends Component {
             onJoinModalClose={this.onJoinModalClose}
           />
         </ReactModal>
+        <ReactModal
+          isOpen={this.state.showAddTeamWorkoutModal}
+          contentLabel="Add Team Workout"
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <AddTeamWorkoutForm
+            addTeamWorkout={this.props.addTeamWorkout}
+            userId={this.props.match.params.userId}
+            teamId={this.props.team._id}
+            onModalClose={this.onTeamWorkoutModalClose}
+          />
+        </ReactModal>
+        <ReactModal
+          isOpen={this.state.showAddResultModal}
+          contentLabel="Add Result"
+          className="modal"
+          overlayClassName="overlay"
+        >
+          {this.props.currentTeamWorkout._id !== undefined &&
+            <AddResultForm
+              teamWorkout={this.props.currentTeamWorkout}
+              addResult={this.props.addResult}
+              onModalClose={this.onAddResultModalClose}
+            />
+          }
+        </ReactModal>
+        <ReactModal
+          isOpen={this.state.showViewResultModal}
+          contentLabel="Workout Results"
+          className="modal"
+          overlayClassName="overlay"
+        >
+          {this.props.results !== undefined &&
+            <ResultsView
+              results={this.props.results}
+              onDeleteClick={this.onDeleteClick}
+              updateWorkout={this.props.updateWorkout}
+              onModalClose={this.onViewResultModalClose}
+            />
+          }
+        </ReactModal>
       </div>
     );
   }
 }
 
 export default withRouter(connect(mapStateToProps,
-  { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamWorkouts,
-    updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam })(HomePage));
+  { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamSoloWorkouts,
+    updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam,
+    addTeamWorkout, fetchTeamWorkouts, fetchTeamWorkout,
+    updateTeamWorkout, deleteTeamWorkout, addResult, fetchResults })(HomePage));

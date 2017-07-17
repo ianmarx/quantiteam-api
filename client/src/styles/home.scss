@@ -16,12 +16,17 @@ $div-background: #e8e8e8;
   color: black;
 }
 
-.workout-feed {
+.workout-feed, .results-feed {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   height: 93%;
+
+  &:not(.workout-feed) {
+    height: 60%;
+  }
+
   .workout-posts {
     overflow-y: auto;
   }
@@ -31,7 +36,7 @@ $div-background: #e8e8e8;
     margin-top: 10px;
     margin-left: 10px;
   }
-  .modal-button {
+  #modal-button {
     margin: 5px;
     margin-top: 10px;
     height: 40px;
@@ -39,16 +44,33 @@ $div-background: #e8e8e8;
     font-size: 18px;
     border: none;
     border-radius: 5px;
-    background-color: #306ccc;
+    background-color: #2f98dc;
     color: white;
     &:hover {
       cursor: pointer;
     }
     &:active {
-      background-color: #1b3868;
+      background-color: #1c5b7f;
     }
   }
-  .create-modal-button {
+  #team-workout-modal-button {
+    margin: 5px;
+    margin-top: 10px;
+    height: 40px;
+    width: 180px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2f98dc;
+    color: white;
+    &:hover {
+      cursor: pointer;
+    }
+    &:active {
+      background-color: #1c5b7f;
+    }
+  }
+  #create-modal-button {
     margin: 5px;
     margin-top: 10px;
     height: 40px;
@@ -65,7 +87,7 @@ $div-background: #e8e8e8;
       background-color: #d68e08;
     }
   }
-  .join-modal-button {
+  #join-modal-button {
     margin: 5px;
     margin-top: 10px;
     height: 40px;
@@ -82,6 +104,38 @@ $div-background: #e8e8e8;
       background-color: #1e8496;
     }
   }
+  #result-modal-button {
+    margin: 5px;
+    height: 30px;
+    width: 100px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    background-color: #84bee0;
+    color: white;
+    &:hover {
+      cursor: pointer;
+    }
+    &:active {
+      background-color: #577d93;
+    }
+  }
+  #view-result-modal-button {
+    margin: 5px;
+    height: 30px;
+    width: 120px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    background-color: #82cc91;
+    color: white;
+    &:hover {
+      cursor: pointer;
+    }
+    &:active {
+      background-color: #54825d;
+    }
+  }
   .headers {
     display: flex;
     flex-direction: row;
@@ -90,7 +144,7 @@ $div-background: #e8e8e8;
   .workout-content, .workout-edit-form {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: flex-start;
     background-color: #f4f4f4;
     margin: 10px;
@@ -99,11 +153,9 @@ $div-background: #e8e8e8;
     border-color: #d6d6d6;
     border-width: thin;
     padding: 10px;
-    width: 575px;
+    width: 550px;
+    font-size: 20px;
 
-    .workout-div-creator {
-      font-size: 20px;
-    }
     .workout-div-column {
       margin: 10px;
       margin-left: 15px;
@@ -119,14 +171,15 @@ $div-background: #e8e8e8;
       margin: 5px;
     }
     input {
-      height: 25px;
-      font-size: 14px;
+      height: 30px;
+      width: 100px;
+      font-size: 20px;
       border-style: none;
       border-radius: 5px;
     }
     select {
-      height: 25px;
-      font-size: 14px;
+      height: 30px;
+      font-size: 20px;
       border-style: none;
       border-radius: 5px;
       background-color: white;
@@ -136,11 +189,11 @@ $div-background: #e8e8e8;
       margin-left: 5px;
       margin-right: 5px;
       border: none;
-      border-radius: 2px;
+      border-radius: 5px;
       background-color: #1da55f;
       color: white;
       padding: 5px;
-      font-size: 16px;
+      font-size: 20px;
       &:hover {
         cursor: pointer;
       }
@@ -202,31 +255,55 @@ $div-background: #e8e8e8;
       border-radius: 5px;
       background-color: white;
     }
-    .modal-submit, .modal-close {
-      margin-top: 35px;
-      margin-bottom: 15px;
-      margin-right: 10px;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      font-size: 20px;
-      background-color: #1da55f;
-      &:not(.modal-submit) {
-        background-color: #595959;
-        &:active {
-          background-color: #3d3d3d;
-        }
-      }
-      color: white;
-      &:hover {
-        cursor: pointer;
-      }
-      &:active {
-        background-color: #106b3c;
-      }
-    }
-
   }
+}
+
+.modal-submit, .modal-close {
+  margin-top: 35px;
+  margin-bottom: 15px;
+  margin-right: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  background-color: #1da55f;
+  &:not(.modal-submit) {
+    background-color: #595959;
+    &:active {
+      background-color: #3d3d3d;
+    }
+  }
+  color: white;
+  &:hover {
+    cursor: pointer;
+  }
+  &:active {
+    background-color: #106b3c;
+  }
+}
+
+.results-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+  color: black;
+  border-radius: 5px;
+  border: none;
+  width: 40%;
+
+  .results-title {
+    font-size: 40px;
+    margin-bottom: 20px;
+  }
+}
+
+.results-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 #addTeam {
