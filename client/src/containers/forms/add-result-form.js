@@ -7,6 +7,7 @@ class AddResultForm extends Component {
     this.state = {
       type: this.props.teamWorkout.type,
       distance: this.props.teamWorkout.distance || '',
+      athlete: '',
       hours: '',
       minutes: '',
       seconds: '',
@@ -14,6 +15,7 @@ class AddResultForm extends Component {
       watts: '',
       avgHR: '',
     };
+    this.onAthleteChange = this.onAthleteChange.bind(this);
     this.onDistanceChange = this.onDistanceChange.bind(this);
     this.onHeartRateChange = this.onHeartRateChange.bind(this);
     this.onHoursChange = this.onHoursChange.bind(this);
@@ -39,6 +41,12 @@ class AddResultForm extends Component {
     }
   }
   /* Handle changes in the add result fields */
+  onAthleteChange(event) {
+    this.setState({ athlete: event.target.value });
+    if (this.state.athlete !== '') {
+      this.props.matchAthlete(this.state.athlete, this.props.teamWorkout._team);
+    }
+  }
   onDistanceChange(event) {
     this.setState({ distance: event.target.value });
   }
@@ -85,17 +93,29 @@ class AddResultForm extends Component {
           <div className="form-title">Add Result</div>
           <div className="column-group">
             {this.state.type === 'time' &&
-            <ul className="form-column">
-              <li id="distance-field">
-                <h3>Distance</h3>
-                <input onChange={this.onDistanceChange} value={this.state.distance}
-                  type="text"
-                />
-              </li>
-            </ul>
-              }
+              <ul className="form-column">
+                <li id="athlete-field">
+                  <h3>Athlete</h3>
+                  <input onChange={this.onAthleteChange} value={this.state.athlete}
+                    type="text"
+                  />
+                </li>
+                <li id="distance-field">
+                  <h3>Distance</h3>
+                  <input onChange={this.onDistanceChange} value={this.state.distance}
+                    type="text"
+                  />
+                </li>
+              </ul>
+            }
             {this.state.type === 'distance' &&
               <ul className="form-column">
+                <li id="athlete-field">
+                  <h3>Athlete</h3>
+                  <input onChange={this.onAthleteChange} value={this.state.athlete}
+                    type="text"
+                  />
+                </li>
                 <li id="time-field">
                   <h3>Hours</h3>
                   <input onChange={this.onHoursChange} value={this.state.hours}

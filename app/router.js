@@ -60,4 +60,6 @@ router.route('/teamworkouts/:teamWorkoutId/:teamId')
 router.post('/result/add/:teamWorkoutId', requireAuth, TeamWorkoutController.addResult);
 router.get('/results/:teamWorkoutId', requireAuth, TeamWorkoutController.fetchResults);
 
+router.get('/athletes/:teamId/:query', requireAuth, UserController.matchAthlete);
+
 export default router;

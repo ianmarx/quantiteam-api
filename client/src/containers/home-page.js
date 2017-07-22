@@ -5,7 +5,7 @@ import ReactModal from 'react-modal';
 import { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamSoloWorkouts,
   updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam,
   addTeamWorkout, fetchTeamWorkouts, fetchTeamWorkout, updateTeamWorkout, deleteTeamWorkout,
-  addResult, fetchResults } from '../actions';
+  addResult, fetchResults, matchAthlete } from '../actions';
 import WorkoutPost from './workout-post';
 import TeamWorkoutPost from './team-workout-post';
 import AddWorkoutForm from './forms/add-workout-form';
@@ -24,7 +24,8 @@ const mapStateToProps = state => (
     authenticated: state.auth.authenticated,
     teamWorkouts: state.teamWorkouts.list,
     currentTeamWorkout: state.teamWorkouts.current,
-    results: state.teamWorkouts.results,
+    currentResults: state.teamWorkouts.results,
+    queryResults: state.profile.queryResults,
   }
 );
 
@@ -252,6 +253,8 @@ class HomePage extends Component {
             <AddResultForm
               teamWorkout={this.props.currentTeamWorkout}
               addResult={this.props.addResult}
+              matchAthlete={this.props.matchAthlete}
+              queryResults={this.props.queryResults}
               onModalClose={this.onAddResultModalClose}
             />
           }
@@ -262,9 +265,9 @@ class HomePage extends Component {
           className="modal"
           overlayClassName="overlay"
         >
-          {this.props.results !== undefined &&
+          {this.props.currentResults !== undefined &&
             <ResultsView
-              results={this.props.results}
+              results={this.props.currentResults}
               onDeleteClick={this.onDeleteClick}
               updateWorkout={this.props.updateWorkout}
               onModalClose={this.onViewResultModalClose}
@@ -279,5 +282,5 @@ class HomePage extends Component {
 export default withRouter(connect(mapStateToProps,
   { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamSoloWorkouts,
     updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam,
-    addTeamWorkout, fetchTeamWorkouts, fetchTeamWorkout,
-    updateTeamWorkout, deleteTeamWorkout, addResult, fetchResults })(HomePage));
+    addTeamWorkout, fetchTeamWorkouts, fetchTeamWorkout, updateTeamWorkout,
+    deleteTeamWorkout, addResult, fetchResults, matchAthlete })(HomePage));
