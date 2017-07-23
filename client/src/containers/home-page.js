@@ -5,7 +5,7 @@ import ReactModal from 'react-modal';
 import { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamSoloWorkouts,
   updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam,
   addTeamWorkout, fetchTeamWorkouts, fetchTeamWorkout, updateTeamWorkout, deleteTeamWorkout,
-  addResult, fetchResults } from '../actions';
+  addResult, fetchResults, matchAthlete, deleteResult } from '../actions';
 import WorkoutPost from './workout-post';
 import TeamWorkoutPost from './team-workout-post';
 import AddWorkoutForm from './forms/add-workout-form';
@@ -24,7 +24,8 @@ const mapStateToProps = state => (
     authenticated: state.auth.authenticated,
     teamWorkouts: state.teamWorkouts.list,
     currentTeamWorkout: state.teamWorkouts.current,
-    results: state.teamWorkouts.results,
+    currentResults: state.teamWorkouts.results,
+    queryResults: state.profile.queryResults,
   }
 );
 
@@ -54,6 +55,7 @@ class HomePage extends Component {
     this.onViewResultModalOpen = this.onViewResultModalOpen.bind(this);
     this.onViewResultModalClose = this.onViewResultModalClose.bind(this);
     this.onResultAddClick = this.onResultAddClick.bind(this);
+    this.onResultDeleteClick = this.onResultDeleteClick.bind(this);
     this.onViewResultsClick = this.onViewResultsClick.bind(this);
     this.displayFeed = this.displayFeed.bind(this);
   }
@@ -71,14 +73,34 @@ class HomePage extends Component {
     console.log('Workout deleted successfully'); // added b/c message in deleteWorkout action not showing up
     this.props.fetchUserWorkouts(this.props.match.params.userId);
   }
+  onResultDeleteClick(workoutId, teamWorkoutId) {
+    this.props.deleteResult(workoutId, teamWorkoutId);
+    this.props.fetchResults(teamWorkoutId);
+  }
   onTeamWorkoutDeleteClick(workoutId, teamId) {
     this.props.deleteTeamWorkout(workoutId, teamId);
     console.log('Team workout deleted successfully');
     this.props.fetchTeamWorkouts(this.props.match.params.userId);
   }
-  onResultAddClick(teamWorkoutId) {
-    this.props.fetchTeamWorkout(teamWorkoutId);
-    this.onAddResultModalOpen();
+  onResultAddClick(teamWorkoutId, prevProps) {
+    const promise = new Promise((resolve, reject) => {
+      this.props.fetchTeamWorkout(teamWorkoutId);
+
+      setTimeout(() => {
+        if (teamWorkoutId === this.props.currentTeamWorkout._id) {
+          resolve('State was changed');
+        } else {
+          reject('State was not changed');
+        }
+      }, 250);
+    });
+    promise.then((result) => {
+      console.log(result);
+      this.onAddResultModalOpen();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
   onViewResultsClick(teamWorkoutId) {
     this.props.fetchTeamWorkout(teamWorkoutId);
@@ -252,6 +274,8 @@ class HomePage extends Component {
             <AddResultForm
               teamWorkout={this.props.currentTeamWorkout}
               addResult={this.props.addResult}
+              matchAthlete={this.props.matchAthlete}
+              queryResults={this.props.queryResults}
               onModalClose={this.onAddResultModalClose}
             />
           }
@@ -262,10 +286,11 @@ class HomePage extends Component {
           className="modal"
           overlayClassName="overlay"
         >
-          {this.props.results !== undefined &&
+          {this.props.currentResults !== undefined &&
             <ResultsView
-              results={this.props.results}
-              onDeleteClick={this.onDeleteClick}
+              results={this.props.currentResults}
+              teamWorkoutId={this.props.currentTeamWorkout._id}
+              onDeleteClick={this.onResultDeleteClick}
               updateWorkout={this.props.updateWorkout}
               onModalClose={this.onViewResultModalClose}
             />
@@ -279,5 +304,5 @@ class HomePage extends Component {
 export default withRouter(connect(mapStateToProps,
   { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamSoloWorkouts,
     updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam,
-    addTeamWorkout, fetchTeamWorkouts, fetchTeamWorkout,
-    updateTeamWorkout, deleteTeamWorkout, addResult, fetchResults })(HomePage));
+    addTeamWorkout, fetchTeamWorkouts, fetchTeamWorkout, updateTeamWorkout,
+    deleteTeamWorkout, addResult, fetchResults, matchAthlete, deleteResult })(HomePage));

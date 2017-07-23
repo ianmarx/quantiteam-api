@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import WorkoutPost from './workout-post';
+import ResultPost from './result-post';
 
 class ResultsView extends Component {
   constructor(props) {
@@ -19,8 +19,8 @@ class ResultsView extends Component {
             {this.props.results.map((workout, i) => {
               return (
                 <div key={`workout-${i}`}>
-                  <WorkoutPost workout={workout} index={i}
-                    onDeleteClick={this.onDeleteClick} updateWorkout={this.props.updateWorkout}
+                  <ResultPost workout={workout} index={i} teamWorkoutId={this.props.teamWorkoutId}
+                    onDeleteClick={this.props.onDeleteClick} updateWorkout={this.props.updateWorkout}
                   />
                 </div>
               );

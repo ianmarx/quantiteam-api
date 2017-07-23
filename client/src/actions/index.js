@@ -15,6 +15,7 @@ export const ActionTypes = {
   FETCH_TEAM_WORKOUTS: 'FETCH_TEAM_WORKOUTS',
   FETCH_TEAM_WORKOUT: 'FETCH_TEAM_WORKOUT',
   FETCH_RESULTS: 'FETCH_RESULTS',
+  MATCH_ATHLETE: 'MATCH_ATHLETE',
 };
 
 export function authError(error) {
@@ -300,9 +301,37 @@ export function fetchResults(teamWorkoutId) {
   /* axios GET call */
   return (dispatch) => {
     axios.get(`${ROOT_URL}/results/${teamWorkoutId}`, headers).then((response) => {
+      console.log('Results fetched successfully');
       dispatch({ type: ActionTypes.FETCH_RESULTS, payload: response.data });
     }).catch((error) => {
-      console.log(`fetchResults failed; ${error.message}`);
+      console.log(`fetchResults failed: ${error.message}`);
+    });
+  };
+}
+
+export function deleteResult(workoutId, teamWorkoutId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios DELETE call */
+  return (dispatch) => {
+    axios.delete(`${ROOT_URL}/results/${workoutId}/${teamWorkoutId}`, headers).then((response) => {
+      console.log('Workout deleted successfully');
+      dispatch({ type: ActionTypes.FETCH_WORKOUTS, payload: response.data });
+    }).catch((error) => {
+      console.log(`deleteWorkout failed: ${error.message}`);
+    });
+  };
+}
+
+
+export function matchAthlete(query, teamId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios GET call */
+  return (dispatch) => {
+    axios.get(`${ROOT_URL}/athletes/${teamId}/${query}`, headers).then((response) => {
+      console.log('Athlete query submitted successfully');
+      dispatch({ type: ActionTypes.MATCH_ATHLETE, payload: response.data });
+    }).catch((error) => {
+      console.log(`matchAthlete failed: ${error.message}`);
     });
   };
 }

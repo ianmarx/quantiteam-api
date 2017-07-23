@@ -86,3 +86,13 @@ export const updateUser = (req, res) => {
     res.status(500).json({ error });
   });
 };
+
+export const matchAthlete = (req, res) => {
+  User.find({ name: new RegExp(req.params.query, 'i'), team: req.params.teamId })
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+};
