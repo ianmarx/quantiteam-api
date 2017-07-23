@@ -8,6 +8,7 @@ import App from './components/app';
 import { ActionTypes } from './actions/index';
 import './style.scss';
 
+
 const store = createStore(reducers, {}, compose(
   applyMiddleware(thunk),
   window.devToolsExtension ? window.devToolsExtension() : f => f,

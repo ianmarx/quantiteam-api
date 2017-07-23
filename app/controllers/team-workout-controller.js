@@ -128,6 +128,16 @@ export const addResult = (req, res) => {
   const strokeRate = req.body.strokeRate;
   const watts = req.body.watts;
   const avgHR = req.body.avgHR;
+  const athleteName = req.body.athleteName;
+  let athleteId;
+
+  User.find({ name: athleteName })
+  .then((result) => {
+    athleteId = result._id;
+  })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
 
   /* Check for required fields */
   if (!activity || !distance || !distUnit || !time) {
@@ -137,6 +147,8 @@ export const addResult = (req, res) => {
   /* Create workout object and save to db */
   const workout = new Workout();
 
+  workout._creator = athleteId;
+  workout.creatorName = athleteName;
   workout.activity = activity;
   workout.distance = distance;
   workout.distUnit = distUnit;

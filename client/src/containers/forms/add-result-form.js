@@ -7,7 +7,7 @@ class AddResultForm extends Component {
     this.state = {
       type: this.props.teamWorkout.type,
       distance: this.props.teamWorkout.distance || '',
-      athlete: '',
+      athleteName: '',
       hours: '',
       minutes: '',
       seconds: '',
@@ -15,7 +15,7 @@ class AddResultForm extends Component {
       watts: '',
       avgHR: '',
     };
-    this.onAthleteChange = this.onAthleteChange.bind(this);
+    this.onAthleteNameChange = this.onAthleteNameChange.bind(this);
     this.onDistanceChange = this.onDistanceChange.bind(this);
     this.onHeartRateChange = this.onHeartRateChange.bind(this);
     this.onHoursChange = this.onHoursChange.bind(this);
@@ -41,10 +41,10 @@ class AddResultForm extends Component {
     }
   }
   /* Handle changes in the add result fields */
-  onAthleteChange(event) {
-    this.setState({ athlete: event.target.value });
-    if (this.state.athlete !== '') {
-      this.props.matchAthlete(this.state.athlete, this.props.teamWorkout._team);
+  onAthleteNameChange(event) {
+    this.setState({ athleteName: event.target.value });
+    if (this.state.athleteName !== '') {
+      this.props.matchAthlete(this.state.athleteName, this.props.teamWorkout._team);
     }
   }
   onDistanceChange(event) {
@@ -77,7 +77,8 @@ class AddResultForm extends Component {
     const strokeRate = this.state.strokeRate;
     const watts = this.state.watts;
     const avgHR = this.state.avgHR;
-    const resultObject = { activity, distance, distUnit, time, strokeRate, watts, avgHR };
+    const athleteName = this.state.athleteName;
+    const resultObject = { athleteName, activity, distance, distUnit, time, strokeRate, watts, avgHR };
     this.props.addResult(resultObject, this.props.teamWorkout._id);
   }
   /* convert the strings of each time values into the total number of seconds */
@@ -96,9 +97,16 @@ class AddResultForm extends Component {
               <ul className="form-column">
                 <li id="athlete-field">
                   <h3>Athlete</h3>
-                  <input onChange={this.onAthleteChange} value={this.state.athlete}
+                  <input list="athletes" onChange={this.onAthleteNameChange} value={this.state.athleteName}
                     type="text"
                   />
+                  <datalist id="athletes">
+                    {this.props.queryResults.map((athlete, i) => {
+                      return (
+                        <option key={i} value={athlete.name} />
+                      );
+                    })}
+                  </datalist>
                 </li>
                 <li id="distance-field">
                   <h3>Distance</h3>
