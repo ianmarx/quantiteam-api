@@ -120,9 +120,16 @@ class AddResultForm extends Component {
               <ul className="form-column">
                 <li id="athlete-field">
                   <h3>Athlete</h3>
-                  <input onChange={this.onAthleteChange} value={this.state.athlete}
+                  <input list="athletes" onChange={this.onAthleteNameChange} value={this.state.athleteName}
                     type="text"
                   />
+                  <datalist id="athletes">
+                    {this.props.queryResults.map((athlete, i) => {
+                      return (
+                        <option key={i} value={athlete.name} />
+                      );
+                    })}
+                  </datalist>
                 </li>
                 <li id="time-field">
                   <h3>Hours</h3>

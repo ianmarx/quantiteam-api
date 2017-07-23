@@ -58,7 +58,8 @@ router.route('/teamworkouts/:teamWorkoutId/:teamId')
   .delete(requireAuth, TeamWorkoutController.deleteTeamWorkout);
 
 router.post('/result/add/:teamWorkoutId', requireAuth, TeamWorkoutController.addResult);
-router.get('/results/:teamWorkoutId', requireAuth, TeamWorkoutController.fetchResults);
+router.get('/results/dist/:teamWorkoutId', requireAuth, TeamWorkoutController.fetchDistResults);
+router.get('/results/time/:teamWorkoutId', requireAuth, TeamWorkoutController.fetchTimeResults);
 router.delete('/results/:workoutId/:teamWorkoutId', requireAuth, TeamWorkoutController.deleteResult);
 
 router.get('/athletes/:teamId/:query', requireAuth, UserController.matchAthlete);

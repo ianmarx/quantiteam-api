@@ -52,7 +52,7 @@ class TeamWorkoutPost extends Component {
     this.props.onDeleteClick(this.props.teamWorkout._id, this.props.teamWorkout._team);
   }
   onLocalViewClick(event) {
-    this.props.onViewResultsClick(this.props.teamWorkout._id);
+    this.props.onViewResultsClick(this.props.teamWorkout._id, this.props.teamWorkout.type);
   }
   /* Handle changes in the add workout fields */
   onActivityChange(event) {
