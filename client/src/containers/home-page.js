@@ -5,7 +5,7 @@ import ReactModal from 'react-modal';
 import { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamSoloWorkouts,
   updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam,
   addTeamWorkout, fetchTeamWorkouts, fetchTeamWorkout, updateTeamWorkout, deleteTeamWorkout,
-  addResult, fetchResults, matchAthlete, deleteResult } from '../actions';
+  addResult, fetchDistResults, fetchTimeResults, matchAthlete, deleteResult } from '../actions';
 import WorkoutPost from './workout-post';
 import TeamWorkoutPost from './team-workout-post';
 import AddWorkoutForm from './forms/add-workout-form';
@@ -102,9 +102,14 @@ class HomePage extends Component {
       console.log(error);
     });
   }
-  onViewResultsClick(teamWorkoutId) {
+  onViewResultsClick(teamWorkoutId, type) {
+    console.log(type);
     this.props.fetchTeamWorkout(teamWorkoutId);
-    this.props.fetchResults(teamWorkoutId);
+    if (type === 'distance') {
+      this.props.fetchTimeResults(teamWorkoutId);
+    } else if (type === 'time') {
+      this.props.fetchDistResults(teamWorkoutId);
+    }
     this.onViewResultModalOpen();
   }
   onModalOpen(event) {
@@ -305,4 +310,5 @@ export default withRouter(connect(mapStateToProps,
   { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamSoloWorkouts,
     updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam,
     addTeamWorkout, fetchTeamWorkouts, fetchTeamWorkout, updateTeamWorkout,
-    deleteTeamWorkout, addResult, fetchResults, matchAthlete, deleteResult })(HomePage));
+    deleteTeamWorkout, addResult, fetchDistResults, fetchTimeResults, matchAthlete,
+    deleteResult })(HomePage));

@@ -144,6 +144,8 @@ export const addResult = (req, res) => {
     return res.status(422).send('All fields are required.');
   }
 
+//  let type;
+
   /* Create workout object and save to db */
   const workout = new Workout();
 
@@ -160,6 +162,7 @@ export const addResult = (req, res) => {
   .then((result) => {
     TeamWorkout.findById(req.params.teamWorkoutId)
     .then((teamWorkout) => {
+ //     type = teamWorkout.type;
       teamWorkout.results.push(result._id);
       teamWorkout.save()
       .catch((error) => {
@@ -175,9 +178,23 @@ export const addResult = (req, res) => {
   });
 };
 
-export const fetchResults = (req, res) => {
+export const fetchDistResults = (req, res) => {
   TeamWorkout.findById(req.params.teamWorkoutId)
-  .populate('results')
+  .populate({ path: 'results', options: { sort: { distance: -1 } } })
+  .catch((error) => {
+    res.status(500).json({ error });
+  })
+  .then((teamWorkout) => {
+    res.json(teamWorkout.results);
+  })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+};
+
+export const fetchTimeResults = (req, res) => {
+  TeamWorkout.findById(req.params.teamWorkoutId)
+  .populate({ path: 'results', options: { sort: { time: 1 } } })
   .catch((error) => {
     res.status(500).json({ error });
   })

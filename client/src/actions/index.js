@@ -296,11 +296,24 @@ export function addResult(result, teamWorkoutId) {
   };
 }
 
-export function fetchResults(teamWorkoutId) {
+export function fetchDistResults(teamWorkoutId) {
   const headers = { headers: { authorization: localStorage.getItem('token') } };
   /* axios GET call */
   return (dispatch) => {
-    axios.get(`${ROOT_URL}/results/${teamWorkoutId}`, headers).then((response) => {
+    axios.get(`${ROOT_URL}/results/dist/${teamWorkoutId}`, headers).then((response) => {
+      console.log('Results fetched successfully');
+      dispatch({ type: ActionTypes.FETCH_RESULTS, payload: response.data });
+    }).catch((error) => {
+      console.log(`fetchResults failed: ${error.message}`);
+    });
+  };
+}
+
+export function fetchTimeResults(teamWorkoutId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios GET call */
+  return (dispatch) => {
+    axios.get(`${ROOT_URL}/results/time/${teamWorkoutId}`, headers).then((response) => {
       console.log('Results fetched successfully');
       dispatch({ type: ActionTypes.FETCH_RESULTS, payload: response.data });
     }).catch((error) => {
