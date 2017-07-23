@@ -188,3 +188,20 @@ export const fetchResults = (req, res) => {
     res.status(500).json({ error });
   });
 };
+
+export const deleteResult = (req, res) => {
+  /* remove the workout document */
+  Workout.remove({ _id: req.params.workoutId })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+
+  /* remove the workoutId from the user's list of workout IDs */
+  TeamWorkout.update(
+    { _id: req.params.teamId },
+    { $pull: { results: req.params.workoutId } },
+  )
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+};

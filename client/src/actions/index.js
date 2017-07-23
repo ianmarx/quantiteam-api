@@ -309,6 +309,20 @@ export function fetchResults(teamWorkoutId) {
   };
 }
 
+export function deleteResult(workoutId, teamWorkoutId) {
+  const headers = { headers: { authorization: localStorage.getItem('token') } };
+  /* axios DELETE call */
+  return (dispatch) => {
+    axios.delete(`${ROOT_URL}/results/${workoutId}/${teamWorkoutId}`, headers).then((response) => {
+      console.log('Workout deleted successfully');
+      dispatch({ type: ActionTypes.FETCH_WORKOUTS, payload: response.data });
+    }).catch((error) => {
+      console.log(`deleteWorkout failed: ${error.message}`);
+    });
+  };
+}
+
+
 export function matchAthlete(query, teamId) {
   const headers = { headers: { authorization: localStorage.getItem('token') } };
   /* axios GET call */

@@ -5,7 +5,7 @@ import ReactModal from 'react-modal';
 import { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamSoloWorkouts,
   updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam,
   addTeamWorkout, fetchTeamWorkouts, fetchTeamWorkout, updateTeamWorkout, deleteTeamWorkout,
-  addResult, fetchResults, matchAthlete } from '../actions';
+  addResult, fetchResults, matchAthlete, deleteResult } from '../actions';
 import WorkoutPost from './workout-post';
 import TeamWorkoutPost from './team-workout-post';
 import AddWorkoutForm from './forms/add-workout-form';
@@ -55,6 +55,7 @@ class HomePage extends Component {
     this.onViewResultModalOpen = this.onViewResultModalOpen.bind(this);
     this.onViewResultModalClose = this.onViewResultModalClose.bind(this);
     this.onResultAddClick = this.onResultAddClick.bind(this);
+    this.onResultDeleteClick = this.onResultDeleteClick.bind(this);
     this.onViewResultsClick = this.onViewResultsClick.bind(this);
     this.displayFeed = this.displayFeed.bind(this);
   }
@@ -71,6 +72,10 @@ class HomePage extends Component {
     this.props.deleteWorkout(workoutId, userId);
     console.log('Workout deleted successfully'); // added b/c message in deleteWorkout action not showing up
     this.props.fetchUserWorkouts(this.props.match.params.userId);
+  }
+  onResultDeleteClick(workoutId, teamWorkoutId) {
+    this.props.deleteResult(workoutId, teamWorkoutId);
+    this.props.fetchResults(teamWorkoutId);
   }
   onTeamWorkoutDeleteClick(workoutId, teamId) {
     this.props.deleteTeamWorkout(workoutId, teamId);
@@ -268,7 +273,8 @@ class HomePage extends Component {
           {this.props.currentResults !== undefined &&
             <ResultsView
               results={this.props.currentResults}
-              onDeleteClick={this.onDeleteClick}
+              teamWorkoutId={this.props.currentTeamWorkout._id}
+              onDeleteClick={this.onResultDeleteClick}
               updateWorkout={this.props.updateWorkout}
               onModalClose={this.onViewResultModalClose}
             />
@@ -283,4 +289,4 @@ export default withRouter(connect(mapStateToProps,
   { fetchUser, addWorkout, fetchWorkout, fetchUserWorkouts, fetchTeamSoloWorkouts,
     updateWorkout, updateUser, deleteWorkout, createTeam, joinTeam, fetchUserTeam,
     addTeamWorkout, fetchTeamWorkouts, fetchTeamWorkout, updateTeamWorkout,
-    deleteTeamWorkout, addResult, fetchResults, matchAthlete })(HomePage));
+    deleteTeamWorkout, addResult, fetchResults, matchAthlete, deleteResult })(HomePage));
