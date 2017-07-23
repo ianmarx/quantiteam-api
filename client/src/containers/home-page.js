@@ -82,9 +82,25 @@ class HomePage extends Component {
     console.log('Team workout deleted successfully');
     this.props.fetchTeamWorkouts(this.props.match.params.userId);
   }
-  onResultAddClick(teamWorkoutId) {
-    this.props.fetchTeamWorkout(teamWorkoutId);
-    this.onAddResultModalOpen();
+  onResultAddClick(teamWorkoutId, prevProps) {
+    const promise = new Promise((resolve, reject) => {
+      this.props.fetchTeamWorkout(teamWorkoutId);
+
+      setTimeout(() => {
+        if (teamWorkoutId === this.props.currentTeamWorkout._id) {
+          resolve('State was changed');
+        } else {
+          reject('State was not changed');
+        }
+      }, 250);
+    });
+    promise.then((result) => {
+      console.log(result);
+      this.onAddResultModalOpen();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
   onViewResultsClick(teamWorkoutId) {
     this.props.fetchTeamWorkout(teamWorkoutId);
