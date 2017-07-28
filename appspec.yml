@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: .
-    destination: /quantiteam/
+    destination: /var/www/html/
 hooks:
   AfterInstall:
     -location: scripts/npm-install.sh
