@@ -11,6 +11,7 @@ Quantiteam uses these web tools:
 * Webpack
 * Babel
 * Express
+* AWS EC2 and CodeDeploy
 
 ## Acknowledgements
 The backend was built on top of an [Express starterpack](https://github.com/dartmouth-cs52/express-babel-starter) from Dartmouth College's CS52 class.
