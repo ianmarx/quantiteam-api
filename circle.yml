@@ -11,3 +11,4 @@ deployment:
             bucket: quantiteam-bucket
             key-pattern: quantiteam-{BRANCH}-{SHORT_COMMIT}
         deployment-group: qt-production
+        deployment_config: CodeDeployDefault.AllAtOnce
