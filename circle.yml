@@ -4,3 +4,4 @@ deployment:
     codedeploy:
       quantiteam:
         deployment-group: qt-production
+        deployment_config: CodeDeployDefault.AllAtOnce
