@@ -9,7 +9,7 @@
     "dev": "nodemon app/server.js --exec babel-node",
     "start": "babel-node app/server.js",
     "build": "babel app -d build",
-    "postinstall" : "cd client && npm install; npm start",
+    "postinstall" : "cd client && npm install && npm start",
     "prod": "npm run build; node build/server.js"
   },
   "repository": {
