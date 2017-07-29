@@ -9,8 +9,8 @@
     "dev": "nodemon app/server.js --exec babel-node",
     "start": "babel-node app/server.js",
     "build": "babel app -d build",
-    "postinstall" : "cd client && npm install",
-    "prod": "npm run afterInstall && npm run build; node build/server.js"
+    "postinstall" : "cd client && npm install; npm start",
+    "prod": "npm run build; node build/server.js"
   },
   "repository": {
     "type": "git",
