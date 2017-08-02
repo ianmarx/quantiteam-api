@@ -1,3 +1,2 @@
-web: cd client && npm start
-server: npm run prod
+web: npm run prod
 

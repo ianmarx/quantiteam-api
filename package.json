@@ -9,7 +9,6 @@
     "dev": "nodemon app/server.js --exec babel-node",
     "start": "babel-node app/server.js",
     "build": "babel app -d build",
-    "postinstall" : "cd client && npm install",
     "prod": "npm run build; node build/server.js"
   },
   "repository": {
@@ -37,8 +36,7 @@
     "mongoose": "^4.10.5",
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1",
-    "passport-local": "^1.0.0",
-    "react-autocomplete": "^1.5.9"
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
