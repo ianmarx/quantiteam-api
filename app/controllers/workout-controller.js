@@ -47,18 +47,18 @@ export const addWorkout = (req, res, next) => {
         .catch((error) => {
           res.status(500).json({ error });
         });
-
-        user.workouts.push(result._id);
-        user.save()
-        .catch((error) => {
-          res.status(500).json({ error });
-        });
-        result.creatorName = user.name;
-        result.save()
-        .catch((error) => {
-          res.status(500).json({ error });
-        });
       }
+
+      user.workouts.push(result._id);
+      user.save()
+      .catch((error) => {
+        res.status(500).json({ error });
+      });
+      result.creatorName = user.name;
+      result.save()
+      .catch((error) => {
+        res.status(500).json({ error });
+      });
     })
     .catch((error) => {
       res.status(500).json({ error });
