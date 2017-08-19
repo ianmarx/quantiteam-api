@@ -130,7 +130,7 @@ WorkoutSchema.pre('save', function calculateWatts(next) {
   if (workout.activity !== 'erg' || workout.distUnit !== 'm') return next();
 
   // based on Concept2 watts equation
-  workout.watts = round((2.80 / ((workout.split / 500) ** 3)), 1);
+  workout.watts = round((2.80 / (Math.pow((workout.split / 500), 3), 1)));
 
   next();
 });
