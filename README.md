@@ -1,17 +1,10 @@
 # Quantiteam
 
 ## About
-Quantiteam is a website designed for athletes to track their performance data, wheteher training individually or in a team environment.
+Quantiteam is a website designed for athletes to track their performance data, whether training individually or in a team environment.
 
 ## Dependencies
-Quantiteam uses these web tools:
-* React 
-* Redux
-* Node.js
-* Webpack
-* Babel
-* Express
-* AWS EC2 and CodeDeploy
+The Quantiteam API uses Node.js and Express, and stores data using MongoDB.
 
 ## Acknowledgements
-The backend was built on top of an [Express starterpack](https://github.com/dartmouth-cs52/express-babel-starter) from Dartmouth College's CS52 class.
+This API is built on top of the [Express starterpack](https://github.com/dartmouth-cs52/express-babel-starter) from Dartmouth College's CS52 class.
