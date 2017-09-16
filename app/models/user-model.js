@@ -8,6 +8,10 @@ const UserSchema = new Schema({
   password: { type: String, select: false },
   workouts: [{ type: Schema.Types.ObjectId, ref: 'Workout' }],
   team: { type: Schema.Types.ObjectId, ref: 'Team' },
+  ergTotal: { type: Number, default: 0 },
+  rowTotal: { type: Number, default: 0 },
+  runTotal: { type: Number, default: 0 },
+  bikeTotal: { type: Number, default: 0 },
 });
 
 UserSchema.set('toJSON', {

@@ -64,4 +64,6 @@ router.delete('/results/:workoutId/:teamWorkoutId', requireAuth, TeamWorkoutCont
 
 router.get('/athletes/:teamId/:query', requireAuth, UserController.matchAthlete);
 
+router.get('/totals/:userId', requireAuth, WorkoutController.fetchUserDistTotals);
+
 export default router;
