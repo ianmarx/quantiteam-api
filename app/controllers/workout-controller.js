@@ -137,6 +137,7 @@ export const fetchTeamSoloWorkouts = (req, res) => {
 };
 
 export const deleteWorkout = (req, res) => {
+  /*
   Workout.findById(req.params.workoutId)
   .then((result) => {
     User.findById(result._creator)
@@ -176,6 +177,7 @@ export const deleteWorkout = (req, res) => {
   .catch((error) => {
     res.status(500).json({ error });
   });
+  */
 
   /* remove the workout document */
   Workout.remove({ _id: req.params.workoutId })
@@ -184,6 +186,7 @@ export const deleteWorkout = (req, res) => {
   });
 
   /* remove the workoutId from the user's list of workout IDs */
+  /*
   User.update(
     { _id: req.params.userId },
     { $pull: { workouts: req.params.workoutId } },
@@ -191,7 +194,9 @@ export const deleteWorkout = (req, res) => {
   .catch((error) => {
     res.status(500).json({ error });
   });
+  */
 
+  /*
   User.findById(req.params.userId)
   .then((result) => {
     if (result.team) {
@@ -207,6 +212,7 @@ export const deleteWorkout = (req, res) => {
   .catch((error) => {
     res.status(500).json({ error });
   });
+  */
 };
 
 export const updateWorkout = (req, res) => {
