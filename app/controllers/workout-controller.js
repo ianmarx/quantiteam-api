@@ -212,6 +212,43 @@ export const deleteWorkout = (req, res) => {
 export const updateWorkout = (req, res) => {
   Workout.findById(req.params.workoutId)
   .then((result) => {
+    if (result.distance !== req.body.distance) {
+      /* update the user's total distance value for the activity */
+      const distDelta = (req.body.distance - result.distance);
+      User.findById(result._creator)
+      .then((user) => {
+        if (result.distUnit === 'm') {
+          if (result.activity === 'erg') {
+            user.ergTotal += distDelta;
+          } else if (result.activity === 'row') {
+            user.rowTotal += distDelta;
+          } else if (result.activity === 'run') {
+            user.runTotal += distDelta;
+          } else if (result.activity === 'bike') {
+            user.bikeTotal += distDelta;
+          }
+        } else if (result.distUnit === 'km') {
+          if (result.activity === 'erg') {
+            user.ergTotal += (1000 * distDelta);
+          } else if (result.activity === 'row') {
+            user.rowTotal += (1000 * distDelta);
+          } else if (result.activity === 'run') {
+            user.runTotal += (1000 * distDelta);
+          } else if (result.activity === 'bike') {
+            user.bikeTotal += (1000 * distDelta);
+          }
+        }
+        user.save()
+        .then(() => {
+        })
+        .catch((error) => {
+          res.status(500).json({ error });
+        });
+      })
+      .catch((error) => {
+        res.status(500).json({ error });
+      });
+    }
     result.activity = req.body.activity || result.activity;
     result.distance = req.body.distance || result.distance;
     result.distUnit = req.body.distUnit || result.distUnit;
