@@ -69,11 +69,13 @@ export const fetchAllUsers = (req, res) => {
 
 /* Call to update a user in the db */
 export const updateUser = (req, res) => {
-  User.find({ _id: req.params.userId })
+  User.findById(req.params.userId)
   .then((result) => {
     result.name = req.body.name || result.name;
-    result.email = req.body.email || result.email;
-    result.password = req.body.password || result.password;
+    result.position = req.body.position || result.position;
+    result.height = req.body.height || result.height;
+    result.weight = req.body.weight || result.weight;
+    result.classYear = req.body.classYear || result.classYear;
     result.save()
     .then((user) => {
       res.json(user);

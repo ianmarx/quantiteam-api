@@ -12,6 +12,10 @@ const UserSchema = new Schema({
   rowTotal: { type: Number, default: 0 },
   runTotal: { type: Number, default: 0 },
   bikeTotal: { type: Number, default: 0 },
+  position: { type: String },
+  height: { type: Number, default: 0 },
+  weight: { type: Number, default: 0 },
+  classYear: { type: Number, default: 0 },
 });
 
 UserSchema.set('toJSON', {
