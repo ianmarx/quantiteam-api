@@ -19,26 +19,26 @@ const app = express();
 app.use(cors({ origin: '*' }));
 
 // Add headers
-// app.use((req, res, next) => {
+app.use((req, res, next) => {
   // Website you wish to allow to connect
-  // res.setHeader('Access-Control-Allow-Origin', 'http://qt-dev.surge.sh');
+  res.setHeader('Access-Control-Allow-Origin', 'https://qt-dev.surge.sh');
 
   // Request methods you wish to allow
-//  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
   // Set to true if you need the website to include cookies in the requests sent
   // to the API (e.g. in case you use sessions)
  // res.setHeader('Access-Control-Allow-Credentials', true);
 
   // Pass to next layer of middleware
-  // next();
-// });
+  next();
+});
 
-app.set('view engine', 'ejs');
-app.use(express.static('static'));
-// enables static assets from folder static
-app.set('views', path.join(__dirname, '../app/views'));
-// this just allows us to render ejs from the ../app/views directory
+// app.set('view engine', 'ejs');
+// app.use(express.static('static'));
+// // enables static assets from folder static
+// app.set('views', path.join(__dirname, '../app/views'));
+// // this just allows us to render ejs from the ../app/views directory
 
 // enable json message body for posting data to API
 app.use(bodyParser.urlencoded({ extended: true }));
