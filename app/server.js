@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import cors from 'cors';
+// import cors from 'cors';
 // import path from 'path';
 import mongoose from 'mongoose';
 import apiRouter from './router';
@@ -16,7 +16,7 @@ mongoose.Promise = global.Promise;
 const app = express();
 
 // enable/disable cross origin resource sharing if necessary
-app.use(cors({ origin: '*' }));
+// app.use(cors({ origin: '*' }));
 
 // Add headers
 app.use((req, res, next) => {

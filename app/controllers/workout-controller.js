@@ -180,10 +180,12 @@ export const deleteWorkout = (req, res) => {
   */
 
   /* remove the workout document */
+  /*
   Workout.remove({ _id: req.params.workoutId })
   .catch((error) => {
     res.status(500).json({ error });
   });
+  */
 
   /* remove the workoutId from the user's list of workout IDs */
   /*
