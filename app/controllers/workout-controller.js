@@ -186,6 +186,7 @@ export const deleteWorkout = (req, res) => {
   });
 
   /* remove the workoutId from the user's list of workout IDs */
+  /*
   User.update(
     { _id: req.params.userId },
     { $pull: { workouts: req.params.workoutId } },
