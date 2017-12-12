@@ -48,6 +48,26 @@ export const signup = (req, res, next) => {
 /* Call to fetch a user from the db */
 export const fetchUser = (req, res) => {
   User.find({ _id: req.params.userId })
+  .populate([{
+    path: 'team',
+    model: 'Team',
+    populate: [{
+      path: 'athletes',
+      model: 'User',
+    }, {
+      path: 'workouts',
+      model: 'Workout',
+    }, {
+      path: 'teamWorkouts',
+      model: 'Workout',
+    }],
+  }, {
+    path: 'workouts',
+    model: 'Workout',
+  }])
+  .catch((error) => {
+    res.status(500).json({ error });
+  })
   .then((result) => {
     res.json(result[0]);
   })
