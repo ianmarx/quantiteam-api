@@ -7,7 +7,7 @@ import apiRouter from './router';
 
 // DB Setup
 const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/quantiteam';
-mongoose.connect(mongoURI);
+mongoose.connect(mongoURI, { useMongoClient: true });
 
 // set mongoose promises to es6 default
 mongoose.Promise = global.Promise;

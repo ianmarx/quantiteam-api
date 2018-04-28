@@ -37,7 +37,8 @@
     "mongoose": "^4.10.5",
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "shortid": "^2.2.8"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",

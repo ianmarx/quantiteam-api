@@ -1,6 +1,7 @@
 import jwt from 'jwt-simple';
 import dotenv from 'dotenv';
 import User from '../models/user-model';
+import Team from '../models/team-model';
 
 dotenv.config({ silent: true });
 
@@ -16,28 +17,112 @@ export const signin = (req, res, next) => {
 };
 
 /* Call when a user signs up */
-export const signup = (req, res, next) => {
+export const signUpAthlete = (req, res, next) => {
   const name = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
+  const code = req.body.teamCode;
+  console.log(code);
 
   if (!name || !email || !password) {
     return res.status(422).send('All fields are required.');
   }
 
   User.findOne({ email })
-  .then((result) => {
-    if (!result) {
+  .then((existingUser) => {
+    if (existingUser) {
+      res.status(424).send('This email is already in use.');
+    } else {
       const user = new User();
       user.name = name;
       user.email = email;
       user.password = password;
       user.save()
-      .then((result2) => {
-        res.send({ token: tokenForUser(user), id: result2._id });
+      .then((newUser) => {
+        /* Find team using team code to connect to user */
+        Team.findOne({ teamCode: code })
+        .then((existingTeam) => {
+          newUser.team = existingTeam._id;
+          newUser.save()
+          .catch((error) => {
+            res.status(500).json({ error });
+          });
+
+          existingTeam.athletes.push(newUser._id);
+          existingTeam.save()
+          .catch((error) => {
+            res.status(500).json({ error });
+          });
+        })
+        .catch((error) => {
+          res.status(500).json({ error });
+        });
+
+        res.send({ token: tokenForUser(newUser), id: newUser._id });
+      })
+      .catch((error) => {
+        res.status(500).json({ error });
       });
-    } else {
+    }
+  })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+};
+
+export const signUpCoach = (req, res) => {
+  const name = req.body.name;
+  const email = req.body.email;
+  const password = req.body.password;
+  const userType = req.body.userType;
+  const teamName = req.body.teamName;
+  let userId;
+
+  User.findOne({ email })
+  .then((existingUser) => {
+    if (existingUser) {
       res.status(424).send('This email is already in use.');
+    } else {
+      const user = new User();
+      user.name = name;
+      user.email = email;
+      user.password = password;
+      user.userType = userType;
+      user.save()
+      .then((newUser) => {
+        userId = newUser._id;
+
+        /* Set up team */
+        Team.findOne({ teamName })
+        .then((existingTeam) => {
+          if (existingTeam) {
+            res.status(424).send('This team name is already in use.');
+          } else {
+            const team = new Team();
+            team.name = teamName;
+            team.coaches.push(userId);
+            team.save()
+            .then((newTeam) => {
+              User.findById(userId)
+              .then((coach) => {
+                coach.team = newTeam._id;
+                coach.save()
+                .catch((error) => {
+                  res.status(500).json({ error });
+                });
+              })
+              .catch((error) => {
+                res.status(500).json({ error });
+              });
+            })
+            .catch((error) => {
+              res.status(500).json({ error });
+            });
+          }
+        });
+
+        res.send({ token: tokenForUser(newUser), id: newUser._id });
+      });
     }
   })
   .catch((error) => {

@@ -12,7 +12,8 @@ router.get('/', (req, res) => {
 });
 
 // Sign up and Sign in
-router.post('/signup', UserController.signup);
+router.post('/signup/athlete', UserController.signUpAthlete);
+router.post('/signup/coach', UserController.signUpCoach);
 router.post('/signin', requireSignIn, UserController.signin);
 
 // Return all users in the db
@@ -44,6 +45,8 @@ router.get('/teamfeed/:userId', requireAuth, WorkoutController.fetchTeamSoloWork
 // Create and join a team
 router.post('/team/create', requireAuth, TeamController.createTeam);
 router.post('/team/join', requireAuth, TeamController.joinTeam);
+router.get('/team/name/:query', TeamController.checkTeamNameAvailability);
+router.get('/team/code/:teamCode', TeamController.checkTeamCodeValidity);
 
 router.route('/team/:userId')
   .get(requireAuth, TeamController.fetchUserTeam);

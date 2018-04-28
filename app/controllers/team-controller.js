@@ -103,3 +103,23 @@ export const fetchUserTeam = (req, res) => {
     res.status(500).json({ error });
   });
 };
+
+export const checkTeamNameAvailability = (req, res) => {
+  Team.findOne({ name: req.params.query })
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+};
+
+export const checkTeamCodeValidity = (req, res) => {
+  Team.findOne({ teamCode: req.params.teamCode })
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
+};
