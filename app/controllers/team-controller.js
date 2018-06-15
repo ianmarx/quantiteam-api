@@ -96,8 +96,17 @@ export const fetchUserTeam = (req, res) => {
   .catch((error) => {
     res.status(500).json({ error });
   })
-  .then((result) => {
-    res.json(result.team);
+  .then((user) => {
+    const userIsCoach = user.team.coaches.some((coach) => {
+      return coach.equals(req.params.userId);
+    });
+
+    const teamObject = {
+      team: user.team,
+      isCoach: userIsCoach,
+    };
+
+    res.json(teamObject);
   })
   .catch((error) => {
     res.status(500).json({ error });
