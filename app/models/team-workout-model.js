@@ -5,6 +5,7 @@ import round from 'lodash.round';
 const TeamWorkoutSchema = new Schema({
   _creator: { type: Schema.Types.ObjectId, ref: 'User' },
   creatorName: String,
+  date: { type: Date, default: Date.now },
   _team: { type: Schema.Types.ObjectId, ref: 'Team' },
   teamName: String,
   type: String,
