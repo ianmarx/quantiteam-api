@@ -137,46 +137,6 @@ export const fetchTeamSoloWorkouts = (req, res) => {
 };
 
 export const deleteWorkout = (req, res) => {
-  Workout.findById(req.params.workoutId)
-  .then((result) => {
-    User.findById(result._creator)
-    .then((user) => {
-      if (result.distUnit === 'm') {
-        if (result.activity === 'erg') {
-          user.ergTotal -= result.distance;
-        } else if (result.activity === 'row') {
-          user.rowTotal -= result.distance;
-        } else if (result.activity === 'run') {
-          user.runTotal -= result.distance;
-        } else if (result.activity === 'bike') {
-          user.bikeTotal -= result.distance;
-        }
-      } else if (result.distUnit === 'km') {
-        if (result.activity === 'erg') {
-          user.ergTotal -= (1000 * result.distance);
-        } else if (result.activity === 'row') {
-          user.rowTotal -= (1000 * result.distance);
-        } else if (result.activity === 'run') {
-          user.runTotal -= (1000 * result.distance);
-        } else if (result.activity === 'bike') {
-          user.bikeTotal -= (1000 * result.distance);
-        }
-      }
-      user.save()
-      .then(() => {
-      })
-      .catch((error) => {
-        res.status(500).json({ error });
-      });
-    })
-    .catch((error) => {
-      res.status(500).json({ error });
-    });
-  })
-  .catch((error) => {
-    res.status(500).json({ error });
-  });
-
   /* remove the workout document */
   Workout.remove({ _id: req.params.workoutId })
   .catch((error) => {
