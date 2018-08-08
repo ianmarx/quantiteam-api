@@ -1,7 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-// import cors from 'cors';
-// import path from 'path';
+import cors from 'cors';
 import mongoose from 'mongoose';
 import apiRouter from './router';
 
@@ -15,31 +14,7 @@ mongoose.Promise = global.Promise;
 // initialize
 const app = express();
 
-// enable/disable cross origin resource sharing if necessary
-// app.use(cors({ origin: '*' }));
-
-// Add headers
-app.use((req, res, next) => {
-  // Website you wish to allow to connect
-
-  // Request methods you wish to allow
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
- // res.setHeader('Access-Control-Allow-Credentials', true);
-
-  // Pass to next layer of middleware
-  next();
-});
-
-// app.set('view engine', 'ejs');
-// app.use(express.static('static'));
-// // enables static assets from folder static
-// app.set('views', path.join(__dirname, '../app/views'));
-// // this just allows us to render ejs from the ../app/views directory
+app.use(cors());
 
 // enable json message body for posting data to API
 app.use(bodyParser.urlencoded({ extended: true }));

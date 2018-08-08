@@ -22,7 +22,6 @@ export const signUpAthlete = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const code = req.body.teamCode;
-  console.log(code);
 
   if (!name || !email || !password) {
     return res.status(422).send('All fields are required.');
@@ -40,16 +39,13 @@ export const signUpAthlete = (req, res, next) => {
       user.save()
       .then((newUser) => {
         /* Find team using team code to connect to user */
-        Team.findOne({ teamCode: code })
+        Team.findOneAndUpdate(
+          { teamCode: code },
+          { $push: { athletes: newUser._id } },
+        )
         .then((existingTeam) => {
           newUser.team = existingTeam._id;
           newUser.save()
-          .catch((error) => {
-            res.status(500).json({ error });
-          });
-
-          existingTeam.athletes.push(newUser._id);
-          existingTeam.save()
           .catch((error) => {
             res.status(500).json({ error });
           });

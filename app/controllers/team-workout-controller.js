@@ -32,13 +32,11 @@ export const addTeamWorkout = (req, res, next) => {
   teamWorkout.type = type;
   teamWorkout.save()
   .then((result) => {
-    Team.findById(result._team)
+    Team.findOneAndUpdate(
+      { _id: result._team },
+      { $push: { teamWorkouts: result._id } },
+    )
     .then((team) => {
-      team.teamWorkouts.push(result);
-      team.save()
-      .catch((error) => {
-        res.status(500).json({ error });
-      });
       result.teamName = team.name;
       result.save()
       .catch((error) => {
@@ -106,7 +104,7 @@ export const updateTeamWorkout = (req, res) => {
 };
 
 export const deleteTeamWorkout = (req, res) => {
-  TeamWorkout.remove({ _id: req.params.teamWorkoutId })
+  TeamWorkout.deleteOne({ _id: req.params.teamWorkoutId })
   .catch((error) => {
     res.status(500).json({ error });
   });
@@ -115,6 +113,9 @@ export const deleteTeamWorkout = (req, res) => {
     { _id: req.params.teamId },
     { $pull: { teamWorkouts: req.params.teamWorkoutId } },
   )
+  .then(() => {
+    res.json();
+  })
   .catch((error) => {
     res.status(500).json({ error });
   });
@@ -159,16 +160,14 @@ export const addResult = (req, res) => {
   workout.watts = watts;
   workout.avgHR = avgHR;
   workout.save()
+  .catch((error) => {
+    res.status(500).json({ error });
+  })
   .then((result) => {
-    TeamWorkout.findById(req.params.teamWorkoutId)
-    .then((teamWorkout) => {
- //     type = teamWorkout.type;
-      teamWorkout.results.push(result._id);
-      teamWorkout.save()
-      .catch((error) => {
-        res.status(500).json({ error });
-      });
-    })
+    TeamWorkout.findOneAndUpdate(
+      { _id: req.params.teamWorkoutId },
+      { $push: { results: result._id } },
+    )
     .catch((error) => {
       res.status(500).json({ error });
     });
@@ -208,7 +207,7 @@ export const fetchTimeResults = (req, res) => {
 
 export const deleteResult = (req, res) => {
   /* remove the workout document */
-  Workout.remove({ _id: req.params.workoutId })
+  Workout.deleteOne({ _id: req.params.workoutId })
   .catch((error) => {
     res.status(500).json({ error });
   });
@@ -218,6 +217,9 @@ export const deleteResult = (req, res) => {
     { _id: req.params.teamId },
     { $pull: { results: req.params.workoutId } },
   )
+  .then(() => {
+    res.json();
+  })
   .catch((error) => {
     res.status(500).json({ error });
   });

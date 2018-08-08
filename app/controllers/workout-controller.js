@@ -30,51 +30,27 @@ export const addWorkout = (req, res, next) => {
   workout.watts = watts;
   workout.avgHR = avgHR;
   workout.save()
+  .catch((error) => {
+    res.status(500).json({ error });
+  })
   .then((result) => {
     /* Add the workout to its creator's list of workouts */
-    User.findById(result._creator)
+    User.findOneAndUpdate(
+      { _id: creatorId },
+      { $push: { workouts: result._id } },
+    )
+    .catch((error) => {
+      res.status(500).json({ error });
+    })
     .then((user) => {
-      /* Add the workout to the team's list of workouts */
-      if (user.team) {
-        Team.findById(user.team)
-        .then((team) => {
-          team.workouts.push(result);
-          team.save()
-          .catch((error) => {
-            res.status(500).json({ error });
-          });
-        })
-        .catch((error) => {
-          res.status(500).json({ error });
-        });
-      }
-
-      if (result.distUnit === 'm') {
-        if (result.activity === 'erg') {
-          user.ergTotal += result.distance;
-        } else if (result.activity === 'row') {
-          user.rowTotal += result.distance;
-        } else if (result.activity === 'run') {
-          user.runTotal += result.distance;
-        } else if (result.activity === 'bike') {
-          user.bikeTotal += result.distance;
-        }
-      } else if (result.distUnit === 'km') {
-        if (result.activity === 'erg') {
-          user.ergTotal += (1000 * result.distance);
-        } else if (result.activity === 'row') {
-          user.rowTotal += (1000 * result.distance);
-        } else if (result.activity === 'run') {
-          user.runTotal += (1000 * result.distance);
-        } else if (result.activity === 'bike') {
-          user.bikeTotal += (1000 * result.distance);
-        }
-      }
-      user.workouts.push(result._id);
-      user.save()
+      Team.findOneAndUpdate(
+        { _id: user.team },
+        { $push: { workouts: result._id } },
+      )
       .catch((error) => {
         res.status(500).json({ error });
       });
+
       result.creatorName = user.name;
       result.save()
       .catch((error) => {
@@ -84,7 +60,6 @@ export const addWorkout = (req, res, next) => {
     .catch((error) => {
       res.status(500).json({ error });
     });
-    res.send({ id: result._creator });
   })
   .catch((error) => {
     res.status(500).json({ error });
@@ -138,7 +113,7 @@ export const fetchTeamSoloWorkouts = (req, res) => {
 
 export const deleteWorkout = (req, res) => {
   /* remove the workout document */
-  Workout.remove({ _id: req.params.workoutId })
+  Workout.deleteOne({ _id: req.params.workoutId })
   .catch((error) => {
     res.status(500).json({ error });
   });
@@ -163,6 +138,7 @@ export const deleteWorkout = (req, res) => {
         res.status(500).json({ error });
       });
     }
+    res.json();
   })
   .catch((error) => {
     res.status(500).json({ error });

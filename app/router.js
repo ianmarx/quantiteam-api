@@ -33,8 +33,7 @@ router.route('/workouts/:workoutId')
   .put(requireAuth, WorkoutController.updateWorkout);
 
 // Delete workout from the db
-router.route('/workouts/:workoutId/:userId')
-  .delete(requireAuth, WorkoutController.deleteWorkout);
+router.delete('/workouts/:workoutId/:userId', requireAuth, WorkoutController.deleteWorkout);
 
 // Fetch a user's individual workouts
 router.get('/feed/:userId', requireAuth, WorkoutController.fetchUserWorkouts);
