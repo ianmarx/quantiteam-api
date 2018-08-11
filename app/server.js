@@ -14,7 +14,18 @@ mongoose.Promise = global.Promise;
 // initialize
 const app = express();
 
-app.use(cors());
+const whitelist = ['http://quantiteam.com', 'http://staging.quantiteam.surge.sh', 'http://localhost:7070', 'http://127.0.0.1:7000'];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('This request was blocked by CORS due to an unapproved origin domain'));
+    }
+  },
+};
+
+app.use(cors(corsOptions));
 
 // enable json message body for posting data to API
 app.use(bodyParser.urlencoded({ extended: true }));
