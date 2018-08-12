@@ -19,6 +19,7 @@ const WorkoutSchema = new Schema({
   watts: Number,
   avgHR: Number,
   wattsPerBeat: Number,
+  resultType: String,
 });
 
 WorkoutSchema.set('toJSON', {

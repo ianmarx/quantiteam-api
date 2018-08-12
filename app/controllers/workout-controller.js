@@ -4,7 +4,8 @@ import Team from '../models/team-model';
 
 export const addWorkout = (req, res, next) => {
   /* Get workout info from user input */
-  const creatorId = req.body.userId;
+  const creatorId = req.body.creatorId;
+  const creatorName = req.body.creatorName;
   const activity = req.body.activity;
   const distance = req.body.distance;
   const distUnit = req.body.distUnit;
@@ -22,6 +23,7 @@ export const addWorkout = (req, res, next) => {
   const workout = new Workout();
 
   workout._creator = creatorId;
+  workout.creatorName = creatorName;
   workout.activity = activity;
   workout.distance = distance;
   workout.distUnit = distUnit;
@@ -30,18 +32,12 @@ export const addWorkout = (req, res, next) => {
   workout.watts = watts;
   workout.avgHR = avgHR;
   workout.save()
-  .catch((error) => {
-    res.status(500).json({ error });
-  })
   .then((result) => {
     /* Add the workout to its creator's list of workouts */
     User.findOneAndUpdate(
       { _id: creatorId },
       { $push: { workouts: result._id } },
     )
-    .catch((error) => {
-      res.status(500).json({ error });
-    })
     .then((user) => {
       Team.findOneAndUpdate(
         { _id: user.team },
@@ -50,16 +46,11 @@ export const addWorkout = (req, res, next) => {
       .catch((error) => {
         res.status(500).json({ error });
       });
-
-      result.creatorName = user.name;
-      result.save()
-      .catch((error) => {
-        res.status(500).json({ error });
-      });
     })
     .catch((error) => {
       res.status(500).json({ error });
     });
+    res.json(result);
   })
   .catch((error) => {
     res.status(500).json({ error });
@@ -148,43 +139,6 @@ export const deleteWorkout = (req, res) => {
 export const updateWorkout = (req, res) => {
   Workout.findById(req.params.workoutId)
   .then((result) => {
-    if (result.distance !== req.body.distance) {
-      /* update the user's total distance value for the activity */
-      const distDelta = (req.body.distance - result.distance);
-      User.findById(result._creator)
-      .then((user) => {
-        if (result.distUnit === 'm') {
-          if (result.activity === 'erg') {
-            user.ergTotal += distDelta;
-          } else if (result.activity === 'row') {
-            user.rowTotal += distDelta;
-          } else if (result.activity === 'run') {
-            user.runTotal += distDelta;
-          } else if (result.activity === 'bike') {
-            user.bikeTotal += distDelta;
-          }
-        } else if (result.distUnit === 'km') {
-          if (result.activity === 'erg') {
-            user.ergTotal += (1000 * distDelta);
-          } else if (result.activity === 'row') {
-            user.rowTotal += (1000 * distDelta);
-          } else if (result.activity === 'run') {
-            user.runTotal += (1000 * distDelta);
-          } else if (result.activity === 'bike') {
-            user.bikeTotal += (1000 * distDelta);
-          }
-        }
-        user.save()
-        .then(() => {
-        })
-        .catch((error) => {
-          res.status(500).json({ error });
-        });
-      })
-      .catch((error) => {
-        res.status(500).json({ error });
-      });
-    }
     result.activity = req.body.activity || result.activity;
     result.distance = req.body.distance || result.distance;
     result.distUnit = req.body.distUnit || result.distUnit;

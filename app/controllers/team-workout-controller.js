@@ -46,6 +46,7 @@ export const addTeamWorkout = (req, res, next) => {
     .catch((error) => {
       res.status(500).json({ error });
     });
+    res.json(result);
   })
   .catch((error) => {
     res.status(500).json({ error });
@@ -145,8 +146,6 @@ export const addResult = (req, res) => {
     return res.status(422).send('All fields are required.');
   }
 
-//  let type;
-
   /* Create workout object and save to db */
   const workout = new Workout();
 
@@ -168,10 +167,17 @@ export const addResult = (req, res) => {
       { _id: req.params.teamWorkoutId },
       { $push: { results: result._id } },
     )
+    .then((teamWorkout) => {
+      workout.resultType = teamWorkout.type;
+      workout.save()
+      .catch((error) => {
+        res.status(500).json({ error });
+      });
+    })
     .catch((error) => {
       res.status(500).json({ error });
     });
-    res.json();
+    res.json(result);
   })
   .catch((error) => {
     res.status(500).json({ error });
