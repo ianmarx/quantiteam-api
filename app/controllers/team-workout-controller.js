@@ -171,6 +171,7 @@ export const addResult = (req, res) => {
     .catch((error) => {
       res.status(500).json({ error });
     });
+    res.json();
   })
   .catch((error) => {
     res.status(500).json({ error });
