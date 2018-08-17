@@ -87,9 +87,15 @@ export const fetchUserTeam = (req, res) => {
   User.findById(req.params.userId)
   .populate({
     path: 'team',
-    model: 'Team',
     populate: {
       path: 'athletes',
+      model: 'User',
+    },
+  })
+  .populate({
+    path: 'team',
+    populate: {
+      path: 'coaches',
       model: 'User',
     },
   })
