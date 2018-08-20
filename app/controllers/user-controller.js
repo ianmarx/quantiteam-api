@@ -13,7 +13,7 @@ function tokenForUser(user) {
 
 /* Call when a user signs in */
 export const signin = (req, res, next) => {
-  res.send({ token: tokenForUser(req.user), id: req.user.id });
+  res.json({ token: tokenForUser(req.user), id: req.user.id });
 };
 
 /* Call when a user signs up */
@@ -54,15 +54,9 @@ export const signUpAthlete = (req, res, next) => {
           res.status(500).json({ error });
         });
 
-        res.send({ token: tokenForUser(newUser), id: newUser._id });
-      })
-      .catch((error) => {
-        res.status(500).json({ error });
+        res.json({ token: tokenForUser(newUser), id: newUser._id });
       });
     }
-  })
-  .catch((error) => {
-    res.status(500).json({ error });
   });
 };
 
@@ -117,7 +111,7 @@ export const signUpCoach = (req, res) => {
           }
         });
 
-        res.send({ token: tokenForUser(newUser), id: newUser._id });
+        res.json({ token: tokenForUser(newUser), id: newUser._id });
       });
     }
   })
@@ -126,42 +120,28 @@ export const signUpCoach = (req, res) => {
   });
 };
 
-/* Call to fetch a user from the db */
 export const fetchUser = (req, res) => {
-  User.find({ _id: req.params.userId })
-  .populate([{
-    path: 'team',
-    model: 'Team',
-    populate: [{
-      path: 'athletes',
-      model: 'User',
-    }, {
-      path: 'workouts',
-      model: 'Workout',
-    }, {
-      path: 'teamWorkouts',
-      model: 'Workout',
-    }],
-  }, {
-    path: 'workouts',
-    model: 'Workout',
-  }])
-  .catch((error) => {
-    res.status(500).json({ error });
-  })
-  .then((result) => {
-    res.json(result[0]);
+  User.findById({ _id: req.params.userId })
+  .then((user) => {
+    res.json(user);
   })
   .catch((error) => {
     res.status(500).json({ error });
   });
 };
 
-/* Call to fetch all users from the db */
-export const fetchAllUsers = (req, res) => {
-  User.find()
-  .then((result) => {
-    res.json(result);
+export const fetchUserProfile = (req, res) => {
+  User.findById({ _id: req.params.userId })
+  .populate([{
+    path: 'team',
+    model: 'Team',
+  }])
+  .populate([{
+    path: 'workouts',
+    model: 'Workout',
+  }])
+  .then((userProfile) => {
+    res.json(userProfile);
   })
   .catch((error) => {
     res.status(500).json({ error });

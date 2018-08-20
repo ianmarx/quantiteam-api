@@ -16,13 +16,12 @@ router.post('/signup/athlete', UserController.signUpAthlete);
 router.post('/signup/coach', UserController.signUpCoach);
 router.post('/signin', requireSignIn, UserController.signin);
 
-// Return all users in the db
-router.get('/users', requireAuth, UserController.fetchAllUsers);
-
 // Return/update user information
 router.route('/users/:userId')
   .get(requireAuth, UserController.fetchUser)
   .put(requireAuth, UserController.updateUser);
+
+router.get('/profile/:userId', requireAuth, UserController.fetchUserProfile);
 
 // Add workout
 router.post('/workouts/add', requireAuth, WorkoutController.addWorkout);
@@ -41,14 +40,10 @@ router.get('/feed/:userId', requireAuth, WorkoutController.fetchUserWorkouts);
 // Fetch all individual workouts associated with a team
 router.get('/teamfeed/:userId', requireAuth, WorkoutController.fetchTeamSoloWorkouts);
 
-// Create and join a team
-router.post('/team/create', requireAuth, TeamController.createTeam);
-router.post('/team/join', requireAuth, TeamController.joinTeam);
 router.get('/team/name/:query', TeamController.checkTeamNameAvailability);
 router.get('/team/code/:teamCode', TeamController.checkTeamCodeValidity);
 
-router.route('/team/:userId')
-  .get(requireAuth, TeamController.fetchUserTeam);
+router.get('/team/:userId', requireAuth, TeamController.fetchUserTeam);
 
 router.post('/teamworkouts/add', requireAuth, TeamWorkoutController.addTeamWorkout);
 router.get('/teamworkouts/:userId', requireAuth, TeamWorkoutController.fetchTeamWorkouts);
