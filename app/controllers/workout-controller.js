@@ -132,7 +132,6 @@ export const deleteWorkout = (req, res) => {
 export const updateWorkout = (req, res) => {
   Workout.findById(req.params.workoutId)
   .then((result) => {
-    result.activity = req.body.activity || result.activity;
     result.distance = req.body.distance || result.distance;
     result.distUnit = req.body.distUnit || result.distUnit;
     result.time = req.body.time || result.time;
