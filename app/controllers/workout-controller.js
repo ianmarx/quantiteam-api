@@ -114,22 +114,15 @@ export const deleteWorkout = (req, res) => {
     { _id: req.params.userId },
     { $pull: { workouts: req.params.workoutId } },
   )
-  .catch((error) => {
-    res.status(500).json({ error });
-  });
-
-  User.findById(req.params.userId)
-  .then((result) => {
-    if (result.team) {
-      Team.update(
-        { _id: result.team },
-        { $pull: { workouts: req.params.workoutId } },
-      )
-      .catch((error) => {
-        res.status(500).json({ error });
-      });
-    }
-    res.json();
+  .then((user) => {
+    Team.update(
+      { _id: user.team },
+      { $pull: { workouts: req.params.workoutId } },
+    )
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
+    res.json(req.params.workoutId);
   })
   .catch((error) => {
     res.status(500).json({ error });
