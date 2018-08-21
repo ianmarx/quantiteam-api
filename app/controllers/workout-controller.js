@@ -136,12 +136,9 @@ export const updateWorkout = (req, res) => {
     result.distance = req.body.distance || result.distance;
     result.distUnit = req.body.distUnit || result.distUnit;
     result.time = req.body.time || result.time;
-    result.timeString = req.body.timeString || result.timeString;
-    result.split = req.body.split || result.split;
-    result.splitDist = req.body.splitDist || result.splitDist;
-    result.strokeRate = req.body.strokeRate || result.strokeRate;
-    result.watts = req.body.watts || result.watts;
-    result.avgHR = req.body.avgHR || result.avgHR;
+    result.strokeRate = req.body.strokeRate === '' ? null : (req.body.strokeRate || result.strokeRate);
+    result.watts = req.body.watts === '' ? null : (req.body.watts || result.watts);
+    result.avgHR = req.body.avgHR === '' ? null : (req.body.avgHR || result.avgHR);
     result.save()
     .then((workout) => {
       res.json(workout);
