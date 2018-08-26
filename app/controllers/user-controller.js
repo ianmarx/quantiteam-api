@@ -36,6 +36,7 @@ export const signUpAthlete = (req, res, next) => {
       user.name = name;
       user.email = email;
       user.password = password;
+      user.userType = 'athlete';
       user.save()
       .then((newUser) => {
         /* Find team using team code to connect to user */
@@ -64,7 +65,6 @@ export const signUpCoach = (req, res) => {
   const name = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
-  const userType = req.body.userType;
   const teamName = req.body.teamName;
   let userId;
 
@@ -77,7 +77,7 @@ export const signUpCoach = (req, res) => {
       user.name = name;
       user.email = email;
       user.password = password;
-      user.userType = userType;
+      user.userType = 'coach';
       user.save()
       .then((newUser) => {
         userId = newUser._id;
@@ -171,7 +171,7 @@ export const updateUser = (req, res) => {
 };
 
 export const matchAthlete = (req, res) => {
-  User.find({ name: new RegExp(req.params.query, 'i'), team: req.params.teamId })
+  User.find({ name: new RegExp(req.params.query, 'i'), team: req.params.teamId, userType: 'athlete' })
   .then((result) => {
     res.json(result);
   })
