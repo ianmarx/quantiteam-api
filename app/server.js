@@ -14,7 +14,14 @@ mongoose.Promise = global.Promise;
 // initialize
 const app = express();
 
-const whitelist = ['https://quantiteam.com', 'https://staging.quantiteam.com', 'http://localhost:7070', 'http://127.0.0.1:7070'];
+const whitelist = [
+  'https://quantiteam.com',
+  'https://www.quantiteam.com',
+  'https://staging.quantiteam.com',
+  'https://www.staging.quantiteam.com',
+  'http://localhost:7070',
+  'http://127.0.0.1:7070',
+];
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.indexOf(origin) !== -1) {
