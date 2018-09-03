@@ -153,10 +153,10 @@ export const updateUser = (req, res) => {
   User.findById(req.params.userId)
   .then((result) => {
     result.name = req.body.name || result.name;
-    result.position = req.body.position || result.position;
+    result.position = req.body.position === '' ? null : (req.body.position || result.position);
     result.height = req.body.height || result.height;
-    result.weight = req.body.weight || result.weight;
-    result.classYear = req.body.classYear || result.classYear;
+    result.weight = req.body.weight === '' ? null : (req.body.weight || result.weight);
+    result.classYear = req.body.classYear === '' ? null : (req.body.classYear || result.classYear);
     result.save()
     .then((user) => {
       res.json(user);

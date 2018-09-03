@@ -1,7 +1,10 @@
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
+import dotenv from 'dotenv';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import User from '../models/user-model';
+
+dotenv.config({ silent: true });
 
 const localOptions = { usernameField: 'email' };
 
