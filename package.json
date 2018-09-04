@@ -1,6 +1,6 @@
 {
   "name": "QuantiteamAPI",
-  "version": "0.1.1-beta",
+  "version": "0.2.1-beta",
   "description": "API server for quantiteam.com",
   "author": "",
   "main": "app/server.js",
