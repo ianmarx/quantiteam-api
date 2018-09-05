@@ -9,7 +9,7 @@
     "dev": "nodemon app/server.js --exec babel-node",
     "start": "babel-node app/server.js",
     "build": "babel app -d build",
-    "prod": "npm run build; node build/server.js"
+    "prod": "yarn build && node build/server.js"
   },
   "repository": {
     "type": "git",
