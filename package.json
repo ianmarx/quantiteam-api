@@ -1,7 +1,7 @@
 {
-  "name": "QuantiteamAPI",
+  "name": "QuantiTeam API",
   "version": "0.2.1-beta",
-  "description": "API server for quantiteam.com",
+  "description": "API backend for quantiteam.com. URL is quantiteam-api.herokuapp.com.",
   "author": "",
   "main": "app/server.js",
   "scripts": {
@@ -13,12 +13,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ianmarx/quantiteam.git"
+    "url": "git+https://github.com/ianmarx/quantiteam-api.git"
   },
   "bugs": {
-    "url": "https://github.com/ianmarx/quantiteam/issues"
+    "url": "https://github.com/ianmarx/quantiteam-api/issues"
   },
-  "homepage": "https://github.com/ianmarx/quantiteam#readme",
+  "homepage": "https://github.com/ianmarx/quantiteam-api#readme",
   "dependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
