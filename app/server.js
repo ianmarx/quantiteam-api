@@ -21,6 +21,7 @@ const whitelist = [
   'https://www.staging.quantiteam.com',
   'http://localhost:7070',
   'http://127.0.0.1:7070',
+  'https://d261cgekh3xv5v.cloudfront.net',
 ];
 const corsOptions = {
   origin: (origin, callback) => {
