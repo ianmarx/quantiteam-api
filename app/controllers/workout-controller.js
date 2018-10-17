@@ -25,6 +25,7 @@ export const addWorkout = (req, res, next) => {
   workout._creator = creatorId;
   workout.creatorName = creatorName;
   workout.activity = activity;
+  workout.date = req.body.date;
   workout.distance = distance;
   workout.distUnit = distUnit;
   workout.time = time;
