@@ -5,7 +5,8 @@ import round from 'lodash.round';
 const WorkoutSchema = new Schema({
   _creator: { type: Schema.Types.ObjectId, ref: 'User' }, // match id type to User model
   creatorName: String,
-  date: { type: Date, default: Date.now },
+  date: { type: Date },
+  dateRecorded: { type: Date, default: Date.now },
   activity: String,
   distance: Number,
   distUnit: String,
