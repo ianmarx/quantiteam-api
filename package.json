@@ -1,6 +1,6 @@
 {
   "name": "QuantiTeamAPI",
-  "version": "0.2.1-beta",
+  "version": "0.2.2-beta",
   "description": "API backend for quantiteam.com. URL is quantiteam-api.herokuapp.com.",
   "author": "",
   "main": "app/server.js",
