@@ -32,6 +32,7 @@ export const addWorkout = (req, res, next) => {
   workout.strokeRate = strokeRate;
   workout.watts = watts;
   workout.avgHR = avgHR;
+  workout.notes = req.body.notes;
   workout.save()
   .then((result) => {
     /* Add the workout to its creator's list of workouts */
@@ -139,6 +140,7 @@ export const updateWorkout = (req, res) => {
     result.strokeRate = req.body.strokeRate === '' ? null : (req.body.strokeRate || result.strokeRate);
     result.watts = req.body.watts === '' ? null : (req.body.watts || result.watts);
     result.avgHR = req.body.avgHR === '' ? null : (req.body.avgHR || result.avgHR);
+    result.notes = req.body.notes || result.notes;
     result.save()
     .then((workout) => {
       res.json(workout);
