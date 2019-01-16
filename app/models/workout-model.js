@@ -10,6 +10,7 @@ const WorkoutSchema = new Schema({
   activity: String,
   distance: Number,
   distUnit: String,
+  notes: String,
   time: Number,
   timeString: String,
   split: Number,
