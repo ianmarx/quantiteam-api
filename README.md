@@ -16,3 +16,6 @@ All changes to `master` are automatically deployed to [production](quantiteam-ap
 
 ## Deploy to staging
 All deployments to `staging` are automatically deployed to [staging](quantiteam-api-staging.herokuapp.com).
+
+## Update
+Adding text to README to trigger auto-redeploy
